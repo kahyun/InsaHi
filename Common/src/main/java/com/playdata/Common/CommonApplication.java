@@ -1,13 +1,13 @@
-package com.playdata.Front;
+package com.playdata.Common;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FrontApplication {
+public class CommonApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FrontApplication.class, args);
+        SpringApplication.run(CommonApplication.class, args);
 
     }
 }
