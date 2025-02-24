@@ -12,4 +12,4 @@ include 'BulletinBoard'
 include 'Chat'
 include 'Gateway'
 include 'Front'
-
+include 'InsaFront'
