@@ -4,6 +4,8 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,8 +24,6 @@ public class DateEntity {
     @CreationTimestamp
     private LocalDateTime createTime; // insert 시간
     @UpdateTimestamp
-    private LocalDateTime updatedTime; // 업데이트 시간
-
-
+    private LocalDateTime updateTime; // 업데이트 시간
 
 }
