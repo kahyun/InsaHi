@@ -5,6 +5,8 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -12,9 +14,16 @@ import java.util.Date;
 public class DateEntity {
 
     @CreationTimestamp
-    private Date createDate;
-
+    private LocalDate createDate; // insert 날짜
     @UpdateTimestamp
-    private Date updateDate;
+    private LocalDate updatedDate; //업데이트 날짜
+
+
+    @CreationTimestamp
+    private LocalDateTime createTime; // insert 시간
+    @UpdateTimestamp
+    private LocalDateTime updatedTime; // 업데이트 시간
+
+
 
 }
