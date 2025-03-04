@@ -1,5 +1,6 @@
 package com.playdata.HumanResourceManagement.hrmEntity;
 
+import com.playdata.Common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepartmentEntity {
+public class DepartmentEntity extends DateEntity {
 
     @Id
     @Column(name = "department_id", length = 20)  // VARCHAR(20) 설정

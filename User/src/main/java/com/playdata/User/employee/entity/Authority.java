@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class Authority {
     @Id
     @GeneratedValue
+    @Column(name = "authority_id", unique = true)
     private Long authorityId;
     @Column(length = 50)
     private String authorityName;

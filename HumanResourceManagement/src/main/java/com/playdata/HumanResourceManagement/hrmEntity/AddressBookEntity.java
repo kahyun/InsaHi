@@ -1,5 +1,7 @@
 package com.playdata.HumanResourceManagement.hrmEntity;
 
+import com.playdata.Common.publicEntity.DateEntity;
+import com.playdata.Common.publicEntity.FileEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressBookEntity {
+public class AddressBookEntity extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,8 +57,7 @@ public class AddressBookEntity {
     @Column(name = "memo", columnDefinition = "TEXT")
     private String memo;  // 메모
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;  // 생성일시
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "view_permission", nullable = false)
