@@ -1,5 +1,6 @@
 package com.playdata.ElectronicApproval.entity;
 
+import com.playdata.User.employee.entity.Employee;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +28,7 @@ public class ApprovalFileEntity {
   private String text;
   @ManyToOne
   @JoinColumn(name = "approvalform_id")// ApprovalForm의 PK를 참조하는 외래 키
-  private ApprovalFormEntity approvalFormEntity;
+  private ApprovalFormEntity approvalForm;
   @Enumerated(EnumType.STRING)
   private ApprovalStatus status;
 
@@ -35,9 +36,8 @@ public class ApprovalFileEntity {
   private DeleteStatus deleteStatus;//delete_status
 
   private boolean deleted;
-  @ManyToOne
-  @JoinColumn(name = "company_id")
-  private Company company;
+
+  private String companyCode;
 
   @ManyToOne
   @JoinColumn(name = "employee_id")

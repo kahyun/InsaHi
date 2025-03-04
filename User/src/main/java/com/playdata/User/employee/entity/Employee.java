@@ -2,14 +2,9 @@ package com.playdata.User.employee.entity;
 
 import com.playdata.User.company.entity.Company;
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,10 +12,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "employee")
 public class Employee {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "employee_id", unique = true)
     private String employeeId;
     private String password; // 1
     private String name; //2
@@ -30,7 +27,6 @@ public class Employee {
     private String departmentId;
     private String teamId;
     private String state;
-
 
     @ManyToOne
     @JoinColumn(name = "company_code", referencedColumnName = "companyCode", nullable = false)
@@ -42,8 +38,8 @@ public class Employee {
             joinColumns = {@JoinColumn(name="employee_id",
                     referencedColumnName = "employee_id" )},
             inverseJoinColumns =
-                    {@JoinColumn(name="authorityId",
-                            referencedColumnName ="authorityId" )}
+                    {@JoinColumn(name="authority_id",
+                            referencedColumnName ="authority_id" )}
     )
     private Set<Authority> authoritylist;
 
@@ -53,6 +49,7 @@ public class Employee {
             this.employeeId = UUID.randomUUID().toString().substring(0, 9);
         }
     }
+
 
     //   public Employee(String employeeId, String password, String name, String email, String gender){
 //        this.employeeId = employeeId;
