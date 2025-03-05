@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -23,7 +23,7 @@ public class Company {
     private String headCount; //4
     private Date createdAt; // 설립일 입력 받아서 저장
     private String businessNumber;
-    private Timestamp startTime;
+    private LocalTime startTime;
 
 //    public Company(String companyName, String companyCode, String headCount, String businessNumber) {
 //        this.companyName = companyName;
