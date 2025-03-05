@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name="authority")
 public class Authority {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authorityId;
     @Column(length = 50)
     private String authorityName;

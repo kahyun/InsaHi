@@ -19,8 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "employee_id", unique = true, length = 36 )
     private String employeeId;
     private String password; // 1
     private String name; //2
@@ -33,7 +32,7 @@ public class Employee {
 
 
     @ManyToOne
-    @JoinColumn(name = "company_code", referencedColumnName = "companyCode", nullable = false)
+    @JoinColumn(name = "company_code", referencedColumnName = "companyCode")
     private Company company;
 
     @ManyToMany
@@ -50,7 +49,7 @@ public class Employee {
     @PrePersist
     public void generateEmployeeId() {
         if (this.employeeId == null) {
-            this.employeeId = UUID.randomUUID().toString().substring(0, 9);
+            this.employeeId = UUID.randomUUID().toString().substring(0, 8);
         }
     }
 
