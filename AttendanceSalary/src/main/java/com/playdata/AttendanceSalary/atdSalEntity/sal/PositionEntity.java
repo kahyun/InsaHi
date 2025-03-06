@@ -1,7 +1,7 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 
 import com.playdata.Common.publicEntity.DateEntity;
-import com.playdata.User.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

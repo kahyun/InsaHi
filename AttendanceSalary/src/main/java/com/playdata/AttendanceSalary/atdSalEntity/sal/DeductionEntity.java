@@ -3,14 +3,13 @@ package com.playdata.attendanceSalary.atdSalEntity.sal;
 
 import com.playdata.Common.publicEntity.DateEntity;
 
-import com.playdata.User.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.entity.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /// 공제 항목
 @Entity

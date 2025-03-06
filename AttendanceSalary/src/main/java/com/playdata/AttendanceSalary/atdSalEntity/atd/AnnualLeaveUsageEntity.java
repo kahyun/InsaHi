@@ -1,12 +1,11 @@
 package com.playdata.attendanceSalary.atdSalEntity.atd;
 
 import com.playdata.Common.publicEntity.DateEntity;
-import com.playdata.User.company.entity.Company;
-import com.playdata.User.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity

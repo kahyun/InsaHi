@@ -1,15 +1,13 @@
 package com.playdata.attendanceSalary.atdSalDao.atd;
 
-import com.playdata.User.company.entity.Company;
-import com.playdata.User.company.repository.CompanyRepository;
-import com.playdata.User.employee.entity.Employee;
-import com.playdata.User.employee.repository.EmployeeRepository;
+import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.repository.CompanyRepository;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
 import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
 import com.playdata.attendanceSalary.atdSalRepository.atd.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 
 @Repository

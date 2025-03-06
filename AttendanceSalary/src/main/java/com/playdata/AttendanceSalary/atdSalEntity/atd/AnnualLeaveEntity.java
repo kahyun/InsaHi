@@ -1,13 +1,10 @@
 package com.playdata.attendanceSalary.atdSalEntity.atd;
 
 import com.playdata.Common.publicEntity.DateEntity;
-import com.playdata.User.company.entity.Company;
-import com.playdata.User.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.ibatis.annotations.One;
-
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "annual_leave")

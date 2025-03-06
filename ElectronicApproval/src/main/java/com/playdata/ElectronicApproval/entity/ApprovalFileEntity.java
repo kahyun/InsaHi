@@ -1,6 +1,6 @@
 package com.playdata.ElectronicApproval.entity;
 
-import com.playdata.User.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

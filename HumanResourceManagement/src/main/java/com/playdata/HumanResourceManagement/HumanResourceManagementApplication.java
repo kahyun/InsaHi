@@ -6,10 +6,15 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EntityScan(basePackages = {
-        "com.playdata.HumanResourceManagement.hrmEntity",
-        "com.playdata.Common.publicEntity",
-        "com.playdata.User.employee.entity",
-        "com.playdata.User.company.entity"})
+        "com.playdata.HumanResourceManagement.employee.entity",
+        "com.playdata.HumanResourceManagement.company.entity",
+        "com.playdata.HumanResourceManagement.department.entity"
+})
+@EnableJpaRepositories(basePackages = {
+        "com.playdata.HumanResourceManagement.company.repository",
+        "com.playdata.HumanResourceManagement.employee.repository",
+        "com.playdata.HumanResourceManagement.department.repository"
+})
 @SpringBootApplication
 public class HumanResourceManagementApplication {
 
