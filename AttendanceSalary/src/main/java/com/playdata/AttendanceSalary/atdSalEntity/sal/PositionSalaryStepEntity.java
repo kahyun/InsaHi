@@ -1,6 +1,8 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 
 import com.playdata.Common.publicEntity.DateEntity;
+import com.playdata.User.company.entity.Company;
+import com.playdata.User.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,6 +41,7 @@ public class PositionSalaryStepEntity extends DateEntity {
     @Column( precision = 10, scale = 2)
     private BigDecimal salaryIncreaseAllowance;
 
-    @Column(name = "회사코드", length = 100)
-    private BigDecimal companyCode;
+
+    private String companyCode;
+
 }

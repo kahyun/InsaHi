@@ -1,5 +1,7 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 import com.playdata.Common.publicEntity.DateEntity;
+import com.playdata.User.company.entity.Company;
+import com.playdata.User.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -12,9 +14,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class SeverancePayEntity  extends DateEntity {
 
+    private String companyCode;
+
     @Id
-    @Column(name = "직원ID", length = 50)
-    private long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+
 
     @Column(nullable = false)
     private LocalDate startDate;
@@ -25,6 +32,5 @@ public class SeverancePayEntity  extends DateEntity {
     @Column(precision = 10, scale = 2)
     private BigDecimal severanceAmount;
 
-    @Column(name = "회사코드", precision = 10)
-    private BigDecimal companyCode;
+
 }

@@ -2,14 +2,9 @@ package com.playdata.User.employee.entity;
 
 import com.playdata.User.company.entity.Company;
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,10 +12,11 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "employee")
 public class Employee {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "employee_id", unique = true, length = 36 )
     private String employeeId;
     private String password; // 1
     private String name; //2
@@ -31,9 +27,8 @@ public class Employee {
     private String teamId;
     private String state;
 
-
     @ManyToOne
-    @JoinColumn(name = "company_code", referencedColumnName = "companyCode", nullable = false)
+    @JoinColumn(name = "company_code", referencedColumnName = "companyCode")
     private Company company;
 
     @ManyToMany
@@ -42,17 +37,18 @@ public class Employee {
             joinColumns = {@JoinColumn(name="employee_id",
                     referencedColumnName = "employee_id" )},
             inverseJoinColumns =
-                    {@JoinColumn(name="authorityId",
-                            referencedColumnName ="authorityId" )}
+                    {@JoinColumn(name="authority_id",
+                            referencedColumnName ="authority_id" )}
     )
     private Set<Authority> authoritylist;
 
     @PrePersist
     public void generateEmployeeId() {
         if (this.employeeId == null) {
-            this.employeeId = UUID.randomUUID().toString().substring(0, 9);
+            this.employeeId = UUID.randomUUID().toString().substring(0, 8);
         }
     }
+
 
     //   public Employee(String employeeId, String password, String name, String email, String gender){
 //        this.employeeId = employeeId;

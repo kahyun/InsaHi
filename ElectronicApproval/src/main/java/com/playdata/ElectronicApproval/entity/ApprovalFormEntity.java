@@ -23,9 +23,7 @@ public class ApprovalFormEntity {
   private String id;
   private String name;
 
-  @ManyToOne
-  @JoinColumn(name = "company_id")
-  private Company company;
+  private String companyCode;
 
   @OneToMany(mappedBy = "approvalForm", cascade = CascadeType.ALL)
   private List<ApprovalFileEntity> approvalFileEntities;

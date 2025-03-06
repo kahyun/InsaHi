@@ -1,20 +1,16 @@
 package com.playdata.Common.publicEntity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 
 @Entity
+//@MappedSuperclass
 @Table(name = "files")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class FileEntity {
+//@NoArgsConstructor
+//@AllArgsConstructor
+public class FileEntity extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +26,6 @@ public class FileEntity {
 
     private String filePath;  // 파일 저장 경로
 
-    @ManyToOne
-    @JoinColumn(name = "company_code", referencedColumnName = "companyCode", nullable = false)
-    private CompanyEntity companyEntity;  // 회사와의 연관 관계
+    private String companyCode;
 
-    @Column(name = "upload_datetime", nullable = false, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime uploadDateTime;  // 업로드 일시
-
-    @Column(name = "update_datetime")
-    @UpdateTimestamp
-    private LocalDateTime updateDateTime;  // 마지막 수정 일시
 }

@@ -2,6 +2,8 @@ package com.playdata.attendanceSalary.atdSalEntity.sal;
 
 
 import com.playdata.Common.publicEntity.DateEntity;
+
+import com.playdata.User.company.entity.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,6 @@ public class DeductionEntity extends DateEntity {
     @Column(name = "amount", precision = 11, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "회사코드", length = 100)
-    private BigDecimal companyCode;
+    
+
 }
