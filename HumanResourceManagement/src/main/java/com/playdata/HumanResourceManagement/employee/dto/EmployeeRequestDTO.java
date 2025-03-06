@@ -1,5 +1,6 @@
 package com.playdata.HumanResourceManagement.employee.dto;
 
+import com.playdata.User.company.entity.Company;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ public class EmployeeRequestDTO {
 //    private String role; //enum
     private String companyCode;
     private String email;
-//    private String phoneNumber;
+    private String phoneNumber;
 //    private String address;
 //    private String gender;
 //    private String birthday;

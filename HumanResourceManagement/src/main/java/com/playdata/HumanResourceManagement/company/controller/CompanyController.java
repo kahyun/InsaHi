@@ -1,13 +1,16 @@
 package com.playdata.HumanResourceManagement.company.controller;
 
-import com.playdata.HumanResourceManagement.company.dto.SignupRequestDTO;
-import com.playdata.HumanResourceManagement.company.entity.Company;
-import com.playdata.HumanResourceManagement.company.service.CompanyService;
-import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
-import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
+import com.playdata.User.company.dto.CompanyRequestDTO;
+import com.playdata.User.company.dto.SignupRequestDTO;
+import com.playdata.User.company.entity.Company;
+import com.playdata.User.company.service.CompanyService;
+import com.playdata.User.employee.dto.EmployeeRequestDTO;
+import com.playdata.User.employee.entity.Employee;
+import com.playdata.User.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,18 +28,16 @@ public class CompanyController {
 //    }
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequestDTO signupRequestDTO) {
+        System.out.println("((((((((((((((((((((");
         Company savedCompany = companyService.insert(signupRequestDTO.getCompany());
-
-//        employeeService.insertEmployee(signupRequestDTO.getEmployee());
 
         EmployeeRequestDTO employeeDTO = signupRequestDTO.getEmployee();
         employeeDTO.setCompanyCode(savedCompany.getCompanyCode());
 
-        System.out.println("🔍 받은 회사 정보: " + signupRequestDTO.getCompany());
-        System.out.println("🔍 받은 직원 정보: " + signupRequestDTO.getEmployee());
 
-        employeeService.insertEmployee(employeeDTO);
+        Employee employee = employeeService.insertEmployee(employeeDTO);
 
+        employeeService.addAdminAndUserRoles(employee);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
