@@ -1,6 +1,6 @@
 package com.playdata.HumanResourceManagement.employee.repository;
 
-import com.playdata.User.employee.entity.Authority;
+import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

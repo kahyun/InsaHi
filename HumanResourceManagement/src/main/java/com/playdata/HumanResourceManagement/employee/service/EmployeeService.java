@@ -1,8 +1,8 @@
 package com.playdata.HumanResourceManagement.employee.service;
 
-import com.playdata.User.employee.dto.EmployeeRequestDTO;
-import com.playdata.User.employee.dto.LoginDTO;
-import com.playdata.User.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.Authentication;
 
@@ -13,4 +13,7 @@ public interface EmployeeService {
     void addAdminAndUserRoles(Employee employee);
 
     Authentication signin(LoginDTO employee);
+
+
+    // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 }

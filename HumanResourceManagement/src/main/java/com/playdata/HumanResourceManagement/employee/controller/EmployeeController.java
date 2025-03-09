@@ -1,9 +1,8 @@
 package com.playdata.HumanResourceManagement.employee.controller;
 
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
-import com.playdata.User.employee.dto.EmployeeRequestDTO;
-import com.playdata.User.employee.dto.LoginDTO;
-import com.playdata.User.employee.service.EmployeeService;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,5 +38,10 @@ public class EmployeeController {
 
 
     // gateway로 하면 지금만들어놓은거에서 좀 바뀌나?
+//
+//    @GetMapping("/getuser")
+//    public ResponseEntity<String> getUser(@PathVariable("employeeId")String employeeId,@RequestParam String companyCode) {
+//    }
+//
 
 }

@@ -1,12 +1,11 @@
 package com.playdata.HumanResourceManagement.company.controller;
 
-import com.playdata.User.company.dto.CompanyRequestDTO;
-import com.playdata.User.company.dto.SignupRequestDTO;
-import com.playdata.User.company.entity.Company;
-import com.playdata.User.company.service.CompanyService;
-import com.playdata.User.employee.dto.EmployeeRequestDTO;
-import com.playdata.User.employee.entity.Employee;
-import com.playdata.User.employee.service.EmployeeService;
+import com.playdata.HumanResourceManagement.company.dto.SignupRequestDTO;
+import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.service.CompanyService;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
