@@ -1,4 +1,4 @@
-package com.playdata.Common.publicEntity;
+package com.playdata.ElectronicApproval.common.publicEntity;
 
 
 import jakarta.persistence.MappedSuperclass;

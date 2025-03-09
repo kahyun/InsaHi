@@ -1,7 +1,6 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 
-import com.playdata.Common.publicEntity.DateEntity;
-import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,8 +20,6 @@ public class PositionEntity extends DateEntity {
     private String positionName;
     private String companyCode;
 
-    @OneToMany
-    private List<Employee> employee;
 
 
 }

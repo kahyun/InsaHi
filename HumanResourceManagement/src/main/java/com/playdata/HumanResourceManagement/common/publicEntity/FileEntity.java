@@ -1,4 +1,4 @@
-package com.playdata.Common.publicEntity;
+package com.playdata.HumanResourceManagement.common.publicEntity;
 
 import jakarta.persistence.*;
 import lombok.Data;

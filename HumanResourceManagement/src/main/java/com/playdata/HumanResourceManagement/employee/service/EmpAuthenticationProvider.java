@@ -1,8 +1,8 @@
 package com.playdata.HumanResourceManagement.employee.service;
 
 import com.playdata.HumanResourceManagement.employee.authentication.EmpAuthenticationToken;
-import com.playdata.User.employee.dto.LoginDTO;
-import com.playdata.User.employee.dto.MyUserDetail;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.dto.MyUserDetail;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationProvider;

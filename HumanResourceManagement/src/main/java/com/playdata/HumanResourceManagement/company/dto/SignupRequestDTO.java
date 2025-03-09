@@ -1,6 +1,6 @@
 package com.playdata.HumanResourceManagement.company.dto;
 
-import com.playdata.User.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

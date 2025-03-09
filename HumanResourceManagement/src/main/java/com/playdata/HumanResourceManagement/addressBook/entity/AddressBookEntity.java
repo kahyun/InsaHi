@@ -1,7 +1,7 @@
 package com.playdata.HumanResourceManagement.addressBook.entity;
 
-import com.playdata.Common.publicEntity.DateEntity;
-import com.playdata.Common.publicEntity.FileEntity;
+import com.playdata.ElectronicApproval.common.publicEntity.DateEntity;
+import com.playdata.ElectronicApproval.common.publicEntity.FileEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,10 +47,10 @@ public class AddressBookEntity extends DateEntity {
 
     @Column(name = "contact_person_email", length = 255)
     private String contactPersonEmail;  // 담당자 이메일
-
-    @ManyToOne
-    @JoinColumn(name = "file_id", referencedColumnName = "fileId")
-    private FileEntity fileEntity;  // 파일 아이디
+//
+//    @ManyToOne
+//    @JoinColumn(name = "file_id", referencedColumnName = "fileId")
+//    private FileEntity fileEntity;  // 파일 아이디
 
     @Column(name = "memo", columnDefinition = "TEXT")
     private String memo;  // 메모
