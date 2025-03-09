@@ -1,8 +1,8 @@
 package com.playdata.HumanResourceManagement.employee.service;
 
-import com.playdata.User.employee.dto.MyUserDetail;
-import com.playdata.User.employee.dto.UserDTO;
-import com.playdata.User.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.dto.MyUserDetail;
+import com.playdata.HumanResourceManagement.employee.dto.UserDTO;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
