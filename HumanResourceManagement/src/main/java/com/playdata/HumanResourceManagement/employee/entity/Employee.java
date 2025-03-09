@@ -1,6 +1,6 @@
 package com.playdata.HumanResourceManagement.employee.entity;
 
-import com.playdata.User.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.entity.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

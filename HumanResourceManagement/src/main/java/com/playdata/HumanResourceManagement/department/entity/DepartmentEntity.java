@@ -1,6 +1,6 @@
 package com.playdata.HumanResourceManagement.department.entity;
 
-import com.playdata.Common.publicEntity.DateEntity;
+import com.playdata.ElectronicApproval.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

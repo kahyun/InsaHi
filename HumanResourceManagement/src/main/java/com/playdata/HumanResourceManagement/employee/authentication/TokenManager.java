@@ -1,6 +1,6 @@
 package com.playdata.HumanResourceManagement.employee.authentication;
 
-import com.playdata.User.employee.dto.MyUserDetail;
+import com.playdata.HumanResourceManagement.employee.dto.MyUserDetail;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;

@@ -1,7 +1,7 @@
 package com.playdata.HumanResourceManagement.employee.repository;
 
-import com.playdata.User.company.entity.Company;
-import com.playdata.User.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
