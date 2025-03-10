@@ -15,8 +15,10 @@ import org.modelmapper.ModelMapper;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 //import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,6 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final AuthorityDAO authorityDAO;
     private final ModelMapper modelMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -47,7 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee insertEmployee(EmployeeRequestDTO employeeRequestDTO) {
 
         Employee entity = modelMapper.map(employeeRequestDTO, Employee.class);
-//        entity.setCompany(company);
+
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         employeeDAO.insert(entity);
         return entity;
     }
@@ -65,6 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setAuthoritylist(roles);
         employeeDAO.insert(employee);
     }
+
     @Override
     public Authentication signin(LoginDTO employee) {
         //스프링시큐리티의 인증이 실행되도록 처리

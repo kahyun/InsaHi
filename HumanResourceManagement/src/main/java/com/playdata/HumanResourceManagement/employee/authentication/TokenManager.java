@@ -55,13 +55,21 @@ public class TokenManager implements InitializingBean {
         long nowtime = new Date().getTime();
         Date targetTime = new Date(nowtime+tokenExpiryTime); //현재 시간과 tokenExpiryTime을 더해서 만료 시간 저장
 
-        return Jwts.builder()
+
+
+        String token =
+                Jwts.builder()
                 .setSubject(authentication.getName()) //사용자 아이디 저장
                 .claim("companyCode", myUserDetail.getCompanyCode()) // 회사 코드 추가
                 .claim("auth", authoritylist) //권한 정보를 JWT에 포함
                 .signWith(key, SignatureAlgorithm.HS256) //HS256 알고리즘을 사용하여 서명
                 .setExpiration(targetTime) //만료 시간 설정
                 .compact(); //최종 JWT 토큰 생성
+
+        System.out.println("✅ JWT 생성 완료: " + token);
+        return token;
+
+
     }
     //JWT에서 companyCode 포함하여 Authentication 생성
     public Authentication getAuthentication(String token){
@@ -69,7 +77,7 @@ public class TokenManager implements InitializingBean {
                 .parserBuilder()
                 .setSigningKey(key)
                 .build() //토큰을 파싱하여 Claims 객체 획득
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody(); //토큰에서 사용자 정보, 권한 정보를 추출
 
         List<GrantedAuthority> authorityList = Arrays.stream(claims.get("auth").toString().split(","))
