@@ -36,7 +36,7 @@ public class Company {
     @PrePersist
     public void generateCompanyCode() {
         if (this.companyCode == null) {
-            this.companyCode = UUID.randomUUID().toString().substring(0, 9);
+            this.companyCode = "2025"+UUID.randomUUID().toString().substring(0, 4);
         }
     }
 
