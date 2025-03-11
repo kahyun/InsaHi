@@ -11,6 +11,9 @@ import com.playdata.ElectronicApproval.entity.ApprovalLineDetailEntity;
 import com.playdata.ElectronicApproval.entity.ApprovalStatus;
 import com.playdata.ElectronicApproval.repository.ApprovalFormRepository;
 import jakarta.transaction.Transactional;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,35 +36,35 @@ public class ApprovalServiceImpl implements ApprovalService {
   private final ApprovalLineDetailDAO approvalLineDetailDAO;
   private final ModelMapper modelMapper;
 
-  // 결재 요청 제출 (리팩토링된 메서드)
+  // 결재 요청 제출 (나름 리팩토링된 메서드)
   public void submitApproval(String employeeId, String companyCode, RequestApprovalFileDTO dto,
       List<String> approvers, List<String> referrers) {
     log.info("Submitting Approval for DTO: {}", dto);
 
-    // 🔹 1. 문서 생성
+    // 1. 문서 생성
     ApprovalFileEntity approvalFileEntity = modelMapper.map(dto, ApprovalFileEntity.class);
     approvalFileEntity.setId(dto.getApprovalForm());
     ApprovalFileEntity savedEntity = approvalFileDao.save(approvalFileEntity);
     log.info("Approval File Created: {}", savedEntity.getId());
 
-    // 🔹 2. 결재 라인 및 참조인 생성
+    //  2. 결재 라인 및 참조인 생성
     List<ApprovalLineEntity> approverLines = createApprovalLines(savedEntity, approvers,
         companyCode, true);
     List<ApprovalLineEntity> referrerLines = createApprovalLines(savedEntity, referrers,
         companyCode, false);
 
-    // 🔹 3. 결재 라인 저장
+    //  3. 결재 라인 저장
     List<ApprovalLineEntity> savedLines = approvalLineDao.saveAll(approverLines);
     approvalLineDao.saveAll(referrerLines);
     log.info("Approval Lines Saved: {}", savedLines);
 
-    // 🔹 4. 첫 번째 결재 라인에 전체 라인 정보 설정
+    // 4. 첫 번째 결재 라인에 전체 라인 정보 설정
     if (!savedLines.isEmpty()) {
       savedLines.get(0).getApprovalFile().setApprovalLineEntities(savedLines);
     }
   }
 
-  // ✅ 결재자 및 참조인 라인을 생성하는 메서드
+  //  결재자 및 참조인 라인을 생성하는 메서드
   private List<ApprovalLineEntity> createApprovalLines(ApprovalFileEntity approvalFile,
       List<String> employees, String companyId, boolean isApprover) {
     return IntStream.range(0, employees.size())
@@ -70,7 +73,7 @@ public class ApprovalServiceImpl implements ApprovalService {
         .collect(Collectors.toList());
   }
 
-  // ✅ ApprovalLineEntity 생성 메서드 (결재자 및 참조인 겸용)
+  //  ApprovalLineEntity 생성 메서드 (결재자 및 참조인 겸용)
   private ApprovalLineEntity createApprovalLine(ApprovalFileEntity approvalFile, String employeeId,
       int order, String companyId) {
     ApprovalStatus approvalStatus =
@@ -93,70 +96,64 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     if ((approvalStatus == ApprovalStatus.REJECTED) || (approvalStatus == ApprovalStatus.APPROVED
         && lineEntity.equals(lines.get(lines.size() - 1)))) {
+      lineEntity.getApprovalFile().setStatus(approvalStatus);
 //      updateFileStatus(lineEntity, approvalStatus);
-      approvalFileDao.updateFileStatus(lineEntity.getApprovalFile(), approvalStatus);
+      approvalFileDao.save(lineEntity.getApprovalFile());
     }
 //    updateDetailStatus(lineEntity, approvalStatus, reason);
-    approvalLineDetailDAO.updateDetailStatus(lineEntity.getApprovalLineDetail(), approvalStatus,
-        reason);
+    lineEntity.getApprovalLineDetail().setStatus(approvalStatus);
+    lineEntity.getApprovalLineDetail().setReason(reason);
+    approvalLineDetailDAO.save(lineEntity.getApprovalLineDetail());
 
   }
 
-  private void updateFileStatus(ApprovalLineEntity lineEntity, ApprovalStatus approvalStatus) {
-    ApprovalFileEntity file = lineEntity.getApprovalFile();
-    approvalFileDao.updateFileStatus(file, approvalStatus);
-  }
-
-  private void updateDetailStatus(ApprovalLineEntity lineEntity, ApprovalStatus approvalStatus,
-      String reason) {
-    ApprovalLineDetailEntity lineDetail = lineEntity.getApprovalLineDetail();
-    approvalLineDetailDAO.updateDetailStatus(lineDetail, approvalStatus, reason);
-  }
 
   // 결재 문서 조회
-  public List<ApprovalFileDTO> getApprovalFile(String employeeId) {
-    // 본인이 상신한 문서 조회
-    List<ApprovalFileEntity> ownedFiles = approvalFileDao.findAllByEmployeeId(employeeId);
-    log.info("본인이 상신한 문서 : {}, 본인 :{}, lineId1 : {}", ownedFiles.get(0).getId(),
-        ownedFiles.get(0).getEmployeeId(),
-        ownedFiles.get(0).getApprovalLineEntities().get(0).getId());
+  public List<ApprovalFileDTO> getApprovalFiles(String employeeId, int menu) {
+    List<ApprovalFileEntity> files = new ArrayList<>();
+    if (menu == 1) {
+      files = approvalFileDao.findAllByEmployeeId(employeeId);
+/*
+      log.info("본인이 상신한 문서 : {}, 본인 :{}, lineId1 : {}", ownedFiles.get(0).getId(),
+          ownedFiles.get(0).getEmployeeId(),
+          ownedFiles.get(0).getApprovalLineEntities().get(0).getId());
+*/
+    } else if (menu == 2) {
+      // 결재 지정된 문서 조회 -> file에 저장된 line을 가져와서 employee_id 조회
+      files = findByAssignedApproval(employeeId);
+/*
+      findByAssignedApproval(employeeId).stream()
+          .map(file -> {
+            log.info("fileID: {}", file.getId());
+            return file.getId();
+          }).collect(Collectors.toList());
+      log.info("결재 지정된 문서 : {}", assignedFiles.get(0).getId());
+*/
+    } else if (menu == 3) {
 
-    // 결재 지정된 문서 조회 -> file에 저장된 line을 가져와서 employee_id 조회
-    List<ApprovalFileEntity> assignedFiles = findByAssignedApproval(employeeId);
-    findByAssignedApproval(employeeId).stream()
-        .map(file -> {
-          log.info("fileID: {}", file.getId());
-          return file.getId();
-        }).collect(Collectors.toList());
-    log.info("결재 지정된 문서 : {}", assignedFiles.get(0).getId());
-
-    // 결재할 문서 조회 -> file에 저장된 line을 가져와서 employee_id 조회 Pending
-    List<ApprovalFileEntity> pendingFiles = approvalFileDao.findAllByEmployeeIdAndApprovalStatus(
-        employeeId, ApprovalStatus.PENDING);
-    approvalFileDao.findAllByEmployeeIdAndApprovalStatus(
-        employeeId, ApprovalStatus.PENDING).stream().map(approvalFileEntity -> {
-      log.info("findAllByEmployeeIdAndApprovalStatus : {}", approvalFileEntity);
-      return approvalFileEntity;
-    }).collect(Collectors.toList());
+      // 결재할 문서 조회 -> file에 저장된 line을 가져와서 employee_id 조회 Pending
+/*
+      List<ApprovalFileEntity> pendingFiles = approvalFileDao.findAllByEmployeeIdAndApprovalStatus(
+          employeeId, ApprovalStatus.PENDING);
+      approvalFileDao.findAllByEmployeeIdAndApprovalStatus(
+          employeeId, ApprovalStatus.PENDING).stream().map(approvalFileEntity -> {
+        log.info("findAllByEmployeeIdAndApprovalStatus : {}", approvalFileEntity);
+        return approvalFileEntity;
+      }).collect(Collectors.toList());
+*/
 //    log.info("결재할 문서 조회 : {}", pendingFiles.get(0).getId());
-    List<ApprovalFileEntity> pendingApprovalFiles = firstpendingFiles(employeeId);
-    firstpendingFiles(employeeId).stream()
-        .map(file -> {
-          log.info("findAllByEmployeeIdAndApprovalStatus : {}", file.getId());
-          return file;
-        }).collect(Collectors.toList());
-    log.info("결재할 문서 조회2 : {}", pendingApprovalFiles.get(0).getId());
+      files = firstpendingFiles(employeeId);
+      firstpendingFiles(employeeId).stream()
+          .map(file -> {
+            log.info("findAllByEmployeeIdAndApprovalStatus : {}", file.getId());
+            return file;
+          }).collect(Collectors.toList());
+//      log.info("결재할 문서 조회2 : {}", pendingApprovalFiles.get(0).getId());
 
-    //   4. 모든 조회 결과를 합쳐 중복 제거 (Set 사용)
-    Set<ApprovalFileEntity> uniqueFiles = new HashSet<>();
-    uniqueFiles.addAll(ownedFiles);
-    uniqueFiles.addAll(pendingFiles);
-    uniqueFiles.addAll(assignedFiles);
-
-    //   5. ApprovalFileEntity → ApprovalFileDTO 변환 (Stream 활용)
-    return uniqueFiles.stream()
-        .map(this::convertToDto) // ✅ 변환 메서드 분리
+    }
+    List<ApprovalFileDTO> approvalFileDTOS = files.stream().map(file -> convertToDto(file))
         .collect(Collectors.toList());
+    return approvalFileDTOS;
 
     // 참조인으로 지정된 문서 조회 -> 파일 전체에서 참조인 컬럼을
 
@@ -168,6 +165,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 //        .orElseThrow(() -> new IllegalArgumentException("Document not found"));
 
 //    return null;
+  }
+
+  @Override
+  public ApprovalFileDTO getApprovalFile(String approvalFileId) {
+    return convertToDto(approvalFileDao.findById(approvalFileId)
+        .orElseThrow(() -> new IllegalArgumentException("Approval file not found")));
   }
 
   private ApprovalFileDTO convertToDto(ApprovalFileEntity approvalFileEntity) {

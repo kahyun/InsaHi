@@ -17,7 +17,8 @@ public class ApprovalLineDetailDAOImpl implements ApprovalLineDetailDAO {
 
   @Override
   public ApprovalLineDetailEntity save(ApprovalLineDetailEntity ApprovalLineDetailEntity) {
-    return null;
+    return approvalLineDetailRepository.save(ApprovalLineDetailEntity);
+
   }
 
   @Override
@@ -67,7 +68,7 @@ public class ApprovalLineDetailDAOImpl implements ApprovalLineDetailDAO {
     return List.of();
   }
 
-  @Override
+  //  @Override
   public void updateDetailStatus(ApprovalLineDetailEntity lineDetail, ApprovalStatus approvalStatus,
       String reason) {
     lineDetail.setStatus(approvalStatus);

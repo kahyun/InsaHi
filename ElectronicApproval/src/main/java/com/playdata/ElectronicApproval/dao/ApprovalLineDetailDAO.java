@@ -31,7 +31,6 @@ public interface ApprovalLineDetailDAO {
 
   List<ApprovalLineDetailEntity> findAll(Sort sort, Pageable pageable);
 
-
-  void updateDetailStatus(ApprovalLineDetailEntity lineDetail, ApprovalStatus approvalStatus,
-      String reason);
+//  void updateDetailStatus(ApprovalLineDetailEntity lineDetail, ApprovalStatus approvalStatus,
+//      String reason);
 }

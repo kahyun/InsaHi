@@ -41,10 +41,25 @@ class ApprovalServiceTest {
   }
 
   @Test
+  public void approveFile() {
+    String fileId = "47bd94eb-c4fc-4e86-933b-9a533d789a66";
+    approvalService.getApprovalFile(fileId);
+    System.out.println(approvalService.getApprovalFile(fileId).getClass());
+    System.out.println(approvalService.getApprovalFile(fileId));
+  }
+
+  @Test
   public void approve4() {
     String employeeId = "E002";
-    List<ApprovalFileDTO> files = approvalService.getApprovalFile(employeeId);
-    System.out.println(files);
+    System.out.println("-----------------------------------");
+    List<ApprovalFileDTO> files1 = approvalService.getApprovalFiles(employeeId, 1);
+    System.out.println(files1);
+    System.out.println("-----------------------------------");
+    List<ApprovalFileDTO> files2 = approvalService.getApprovalFiles(employeeId, 2);
+    System.out.println(files2);
+    System.out.println("---------------------------------");
+    List<ApprovalFileDTO> files3 = approvalService.getApprovalFiles(employeeId, 3);
+    System.out.println(files3);
     // 조회하고 일단 파일이 가진 라인 중 employeeId가 일치하고  return
   }
 

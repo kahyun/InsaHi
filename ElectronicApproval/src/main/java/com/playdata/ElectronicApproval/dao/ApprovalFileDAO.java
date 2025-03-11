@@ -3,6 +3,7 @@ package com.playdata.ElectronicApproval.dao;
 import com.playdata.ElectronicApproval.entity.ApprovalFileEntity;
 import com.playdata.ElectronicApproval.entity.ApprovalStatus;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -12,7 +13,7 @@ public interface ApprovalFileDAO {
 
   List<ApprovalFileEntity> saveAll(List<ApprovalFileEntity> approvalFileEntities);
 
-  void updateFileStatus(ApprovalFileEntity approvalFileEntity, ApprovalStatus approvalStatus);
+//  void updateFileStatus(ApprovalFileEntity approvalFileEntity, ApprovalStatus approvalStatus);
 
   List<ApprovalFileEntity> findAll();
 
@@ -24,7 +25,7 @@ public interface ApprovalFileDAO {
   List<ApprovalFileEntity> findAllByApprovalStatus(ApprovalStatus approvalStatus);
 
 
-  ApprovalFileEntity findById(String id);
+  Optional<ApprovalFileEntity> findById(String id);
 
   List<ApprovalFileEntity> findAll(Sort sort);
 

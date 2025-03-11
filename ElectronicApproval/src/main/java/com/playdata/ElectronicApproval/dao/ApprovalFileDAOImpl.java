@@ -4,6 +4,7 @@ import com.playdata.ElectronicApproval.entity.ApprovalFileEntity;
 import com.playdata.ElectronicApproval.entity.ApprovalStatus;
 import com.playdata.ElectronicApproval.repository.ApprovalFileRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,12 +27,12 @@ public class ApprovalFileDAOImpl implements ApprovalFileDAO {
     return approvalFileRepository.saveAll(approvalFileEntities);
   }
 
-  @Override
-  public void updateFileStatus(ApprovalFileEntity approvalFileEntity,
-      ApprovalStatus approvalStatus) {
-    approvalFileEntity.setStatus(approvalStatus);
-    approvalFileRepository.save(approvalFileEntity);
-  }
+//  @Override
+//  public void updateFileStatus(ApprovalFileEntity approvalFileEntity,
+//      ApprovalStatus approvalStatus) {
+//    approvalFileEntity.setStatus(approvalStatus);
+//    approvalFileRepository.save(approvalFileEntity);
+//  }
 
   @Override
   public List<ApprovalFileEntity> findAll() {
@@ -55,8 +56,8 @@ public class ApprovalFileDAOImpl implements ApprovalFileDAO {
   }
 
   @Override
-  public ApprovalFileEntity findById(String id) {
-    return null;
+  public Optional<ApprovalFileEntity> findById(String id) {
+    return approvalFileRepository.findById(id);
   }
 
   @Override
