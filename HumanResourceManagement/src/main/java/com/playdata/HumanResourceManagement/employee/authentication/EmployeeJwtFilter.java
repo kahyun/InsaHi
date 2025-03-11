@@ -54,8 +54,11 @@ public class EmployeeJwtFilter extends GenericFilterBean {
     public String getToken(HttpServletRequest request) {
         //Authorization헤더에서 토큰꺼내기
         String bearerToken = request.getHeader("Authorization");
+        System.out.println("🔍 요청된 Authorization 헤더: " + bearerToken);
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); //"Bearer " 제거 후 JWT 리턴
+            String token =bearerToken.substring(7);
+            System.out.println("📌 추출된 JWT 토큰: " + token);
+            return token; //"Bearer " 제거 후 JWT 리턴
         }
         return null; // 토큰이 없거나 Bearer 형식이 아닌 경우 null 리턴
     }
