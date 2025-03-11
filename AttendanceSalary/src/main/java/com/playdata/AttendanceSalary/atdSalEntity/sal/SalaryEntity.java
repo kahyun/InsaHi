@@ -1,6 +1,7 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 
-import com.playdata.Common.publicEntity.DateEntity;
+import com.playdata.attendanceSalary.atdSalDto.sal.SalaryResponseDTO;
+import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +24,14 @@ public class SalaryEntity  extends DateEntity {
     private String description;
     private String companyCode;
 
+    public SalaryResponseDTO toDTO(){
+        SalaryResponseDTO salaryResponseDTO = new SalaryResponseDTO();
+        salaryResponseDTO.setSalaryId(salaryId);
+        salaryResponseDTO.setSalaryType(salaryType);
+        salaryResponseDTO.setDescription(description);
+        salaryResponseDTO.setCompanyCode(companyCode);
+        return salaryResponseDTO;
+
+    }
 
 }

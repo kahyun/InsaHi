@@ -1,7 +1,7 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 
-import com.playdata.Common.publicEntity.DateEntity;
-import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.attendanceSalary.atdSalDto.sal.PayStubResponseDTO;
+import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,14 +41,25 @@ public class PayStubEntity extends DateEntity {
 
     @Column(precision = 11, scale = 2)
     private BigDecimal netPay;
-    @Column(precision = 10, scale = 2)
-
     private String companyCode;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @Column(name = "employee_id")
+    private String employeeId;
 
+    public PayStubResponseDTO toPayStubResponseDTO() {
+        PayStubResponseDTO payStubResponseDTO = new PayStubResponseDTO();
+        payStubResponseDTO.setPayStubId(payStubId);
+        payStubResponseDTO.setPaymentDate(paymentDate);
+        payStubResponseDTO.setBaseSalary(baseSalary);
+        payStubResponseDTO.setTotalAllowances(totalAllowances);
+        payStubResponseDTO.setOvertimePay(overtimePay);
+        payStubResponseDTO.setTotalPayment(totalPayment);
+        payStubResponseDTO.setTotalDeductions(totalDeductions);
+        payStubResponseDTO.setNetPay(netPay);
+        payStubResponseDTO.setCompanyCode(companyCode);
+        payStubResponseDTO.setEmployeeId(employeeId);
+        return payStubResponseDTO;
+    }
 
 
 }

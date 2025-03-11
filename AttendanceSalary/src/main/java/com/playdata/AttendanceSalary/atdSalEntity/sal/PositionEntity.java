@@ -1,12 +1,12 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 
+import com.playdata.attendanceSalary.atdSalDto.sal.PositionResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 @Entity
 @Table(name = "position")
 @Data
@@ -21,5 +21,12 @@ public class PositionEntity extends DateEntity {
     private String companyCode;
 
 
+    public PositionResponseDTO toDTO(){
+        PositionResponseDTO positionResponseDTO = new PositionResponseDTO();
+        positionResponseDTO.setPositionId(this.positionId);
+        positionResponseDTO.setPositionName(this.positionName);
+        positionResponseDTO.setCompanyCode(this.companyCode);
+        return positionResponseDTO;
+    }
 
 }

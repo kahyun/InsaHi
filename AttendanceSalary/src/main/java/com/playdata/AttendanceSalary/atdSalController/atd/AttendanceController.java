@@ -1,6 +1,5 @@
 package com.playdata.attendanceSalary.atdSalController.atd;
 
-import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
 import com.playdata.attendanceSalary.atdSalService.atd.AttendanceService;
 import lombok.RequiredArgsConstructor;

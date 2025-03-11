@@ -2,20 +2,30 @@ package com.playdata.HumanResourceManagement.employee.controller;
 
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
 import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final TokenManager tokenManager;
+
+    @GetMapping("/find")
+    public ResponseEntity<?> findEmployee(@RequestParam String employeeId) {
+        Employee employee = employeeService.findEmployeeById(employeeId);
+        System.out.println("employee controller 단= " + employee);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {

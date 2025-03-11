@@ -8,6 +8,7 @@ import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 //import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
@@ -28,6 +30,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final AuthorityDAO authorityDAO;
     private final ModelMapper modelMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+
+    @Override
+    public Employee findEmployeeById(String employeeId) {
+        Employee employee = employeeDAO.findById(employeeId);
+        System.out.println("employee 서비스단= " + employee.getEmployeeId());
+        System.out.println("employee.getCompany().getCompanyCode() = " + employee.getCompany().getCompanyCode());
+        return employee;
+    }
 
     @Override
     public Employee insertEmployee(EmployeeRequestDTO employeeRequestDTO) {
@@ -51,14 +62,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setAuthoritylist(roles);
         employeeDAO.insert(employee);
     }
-
-
-
-
-
-
-
-
     @Override
     public Authentication signin(LoginDTO employee) {
         //스프링시큐리티의 인증이 실행되도록 처리
@@ -67,7 +70,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmpAuthenticationToken token =
                 new EmpAuthenticationToken(
                         employee.getEmployeeId(),
-                        employee.getPassword(),
+                        employee.getPassword(), // 패스워드를 들고 있기?
+                        // 권한은 갖고 있어야함
                         employee.getCompanyCode()
                 );
 
@@ -78,4 +82,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return authentication;
 
     }
+
+
 }

@@ -29,6 +29,7 @@ public class Employee {
     private String departmentId;
     private String teamId;
     private String state;
+    private String positionSalaryId;
 
     @ManyToOne
     @JoinColumn(name = "company_code", referencedColumnName = "companyCode")

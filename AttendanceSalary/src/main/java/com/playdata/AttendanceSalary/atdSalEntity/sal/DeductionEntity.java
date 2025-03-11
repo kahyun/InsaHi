@@ -1,9 +1,8 @@
 package com.playdata.attendanceSalary.atdSalEntity.sal;
 
 
-import com.playdata.Common.publicEntity.DateEntity;
-
-import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.attendanceSalary.atdSalDto.sal.DeductionResponseDTO;
+import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +18,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 
 public class DeductionEntity extends DateEntity {
-//공제
+    //공제
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deduction_id")
@@ -34,13 +33,18 @@ public class DeductionEntity extends DateEntity {
     @Column(name = "amount", precision = 11, scale = 2)
     private BigDecimal amount;
 
-    @ManyToOne
-    @JoinColumn(name = "salary_id")
-    private SalaryEntity salaryId;
+    private Long salaryId;
+    private Long payStubId;
 
-    @ManyToOne
-    @JoinColumn(name="payStub_id")
-    private PayStubEntity payStubId;
+    public DeductionResponseDTO toResponseDTO() {
+        DeductionResponseDTO responseDTO = new DeductionResponseDTO();
+        responseDTO.setPayrollDetailsId(this.payrollDetailsId);
+        responseDTO.setPayrollItemId(this.payrollItemId);
+        responseDTO.setAmount(this.amount);
+        responseDTO.setSalaryId(this.salaryId);
+        responseDTO.setPayStubId(this.payStubId);
+        return responseDTO;
 
+    }
 
 }

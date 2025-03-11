@@ -14,6 +14,7 @@ public interface EmployeeService {
 
     Authentication signin(LoginDTO employee);
 
+    Employee findEmployeeById(String employeeId);
 
     // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 }

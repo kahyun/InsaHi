@@ -1,6 +1,6 @@
 package com.playdata.attendanceSalary.atdSalService.atd;
 
-import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.attendanceSalary.atdClient.HrmFeignClient;
 import com.playdata.attendanceSalary.atdSalDao.atd.AttendanceDAO;
 import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
 import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceStauts;
@@ -16,28 +16,34 @@ import java.time.*;
 @RequiredArgsConstructor
 @Slf4j
 public class AttendanceServiceImpl implements AttendanceService {
-
+    ///  44번째줄 통신으로 company받아와서 getStartTime
     private final AttendanceDAO attendanceDAO;
+    private final HrmFeignClient hrmFeignClient;
     private final ModelMapper modelMapper;
 
 
     @Override
     public AttendanceEntity checkIn(String employeeId, String companyCode) throws IllegalAccessException {
-        Employee employee = attendanceDAO.findEmployeeById(employeeId);
+//        Employee employee = attendanceDAO.findEmployeeById(employeeId);
         // 1) null 처리 후 진행
         AttendanceEntity attendanceEntity = new AttendanceEntity();
-        attendanceEntity.setEmployee(employee);
-        attendanceEntity.setCompanyCode(companyCode);
+        //attendanceEntity.setEmployee(employee);
 
-        if (attendanceEntity.getEmployee() == null) {
+        if (attendanceEntity.getEmployeeId() == null) {
             throw new IllegalAccessException("해당 직원이 없습니다.");
         }
+        attendanceEntity.setEmployeeId(employeeId);
+
         if (attendanceEntity.getCompanyCode() == null) {
             throw new IllegalAccessException("해당 회사가 없습니다.");
         }
-
+        attendanceEntity.setCompanyCode(companyCode);
         // 회사별 출근 시각 지정
-        LocalTime companyHour = employee.getCompany().getStartTime();
+
+        // LocalTime companyHour = employee.getCompany().getStartTime();
+        /// 통신으로 company받아와서 getStartTime();
+         LocalTime companyHour = LocalTime.of(0, 0);
+
         log.info("company code:{}, company hour:{}", companyCode, companyHour);
 
         // 내 출근 시간 기본값 설정
