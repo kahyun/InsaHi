@@ -1,6 +1,6 @@
 package com.playdata.HumanResourceManagement.department.entity;
 
-import com.playdata.ElectronicApproval.common.publicEntity.DateEntity;
+import com.playdata.HumanResourceManagement.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,26 +13,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DepartmentEntity extends DateEntity {
 
-    @Id
-    @Column(name = "department_id", length = 20)
-    private String departmentId;  // 부서 ID (PK)
+  @Id
+  @Column(name = "department_id", length = 20)
+  private String departmentId;  // 부서 ID (PK)
 
-    @Column(name = "department_name", length = 100)
-    private String departmentName;  // 부서명
+  @Column(name = "department_name", length = 100)
+  private String departmentName;  // 부서명
 
-    @Column(name = "parent_department_id")
-    private Integer parentDepartmentId;  // 부모 부서 ID
+  @Column(name = "parent_department_id")
+  private Integer parentDepartmentId;  // 부모 부서 ID
 
-    @Column(name = "department_level", columnDefinition = "INT default 0")
-    private int departmentLevel = 0;  // 부서 계층
+  @Column(name = "department_level", columnDefinition = "INT default 0")
+  private int departmentLevel = 0;  // 부서 계층
 
-    @Column(name = "company_code", length = 100)
-    private String companyCode;  // 회사 코드
+  @Column(name = "company_code", length = 100)
+  private String companyCode;  // 회사 코드
 
-    @Column(name = "left_node")
-    private Integer leftNode;  // 왼쪽 값
+  @Column(name = "left_node")
+  private Integer leftNode;  // 왼쪽 값
 
-    @Column(name = "right_node")
-    private Integer rightNode;  // 오른쪽 값
+  @Column(name = "right_node")
+  private Integer rightNode;  // 오른쪽 값
 
 }

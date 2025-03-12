@@ -10,21 +10,25 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class PositionSalaryDaoImpl implements PositionSalaryDao {
-    private PositionSalaryStepRepository positionSalaryStepRepository;
 
-    @Override
-    public PositionSalaryStepEntity savePositionSalaryStep(PositionSalaryStepEntity positionSalaryStepEntity) {
+  private PositionSalaryStepRepository positionSalaryStepRepository;
+
+  @Override
+  public PositionSalaryStepEntity savePositionSalaryStep(
+      PositionSalaryStepEntity positionSalaryStepEntity) {
     return positionSalaryStepRepository.save(positionSalaryStepEntity);
-    }
+  }
 
-    @Override
-    public void deletePosition(PositionSalaryStepEntity positionSalaryStepEntity) {
-        positionSalaryStepRepository.delete(positionSalaryStepEntity);
-    }
+  @Override
+  public void deletePosition(PositionSalaryStepEntity positionSalaryStepEntity) {
+    positionSalaryStepRepository.delete(positionSalaryStepEntity);
+  }
 
-    @Override
-    public Optional<PositionSalaryStepEntity> findPositionSalaryStepById(Long positionSalaryID) {
-        return positionSalaryStepRepository.findById(positionSalaryID);
-    }
+  @Override
+  public Optional<PositionSalaryStepEntity> findPositionSalaryStepById(Long positionSalaryID) {
+    return positionSalaryStepRepository.findById(positionSalaryID);
+  }
+
+
 }
 

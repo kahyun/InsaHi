@@ -1,5 +1,5 @@
 server:
-#  port: 0
+  #  port: 0
   port: 1010
 
 spring:
@@ -21,10 +21,10 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-#      ddl-auto: create
-#      ddl-auto: update
-      ddl-auto: none
-#
+      #      ddl-auto: create
+      ddl-auto: update
+    #      ddl-auto: none
+    #
     defer-datasource-initialization: true
     properties:
       hibernate:

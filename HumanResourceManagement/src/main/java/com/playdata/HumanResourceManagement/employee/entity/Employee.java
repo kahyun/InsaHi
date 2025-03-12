@@ -2,6 +2,7 @@ package com.playdata.HumanResourceManagement.employee.entity;
 
 import com.playdata.HumanResourceManagement.company.entity.Company;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,44 +18,45 @@ import java.util.UUID;
 @Table(name = "employee")
 public class Employee {
 
-    @Id
-    @Column(name = "employee_id", unique = true, length = 36 )
-    private String employeeId;
-    @ColumnDefault("1234")
-    private String password; // 1(default 1234)
-    private String name; //2
-    private String email; //3
-    private String phoneNumber; //4
-    private String address; //5
-    private String departmentId;
-    private String teamId;
-    private String state;
-    private String positionSalaryId;
+  @Id
+  @Column(name = "employee_id", unique = true, length = 36)
+  private String employeeId;
+  @ColumnDefault("1234")
+  private String password; // 1(default 1234)
+  private String name; //2
+  private String email; //3
+  private String phoneNumber; //4
+  private String address; //5
+  private String departmentId;
+  private String teamId;
+  private String state;
+  private String positionSalaryId;
+//    private LocalDate hireDate;
+//    private LocalDate retireDate;
 
-    @ManyToOne
-    @JoinColumn(name = "company_code", referencedColumnName = "companyCode")
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_code", referencedColumnName = "companyCode")
+  private Company company;
 
-    @ManyToMany
-    @JoinTable(
-            name="employee_authority",
-            joinColumns = {@JoinColumn(name="employee_id",
-                    referencedColumnName = "employee_id" )},
-            inverseJoinColumns =
-                    {@JoinColumn(name="authority_id",
-                            referencedColumnName ="authority_id" )}
-    )
-    private Set<Authority> authoritylist;
+  @ManyToMany
+  @JoinTable(
+      name = "employee_authority",
+      joinColumns = {@JoinColumn(name = "employee_id",
+          referencedColumnName = "employee_id")},
+      inverseJoinColumns =
+          {@JoinColumn(name = "authority_id",
+              referencedColumnName = "authority_id")}
+  )
+  private Set<Authority> authoritylist;
 
-    @PrePersist
-    public void generateEmployeeId() {
-        if (this.employeeId == null) {
-            this.employeeId = UUID.randomUUID().toString().substring(0, 8);
-        }
+  @PrePersist
+  public void generateEmployeeId() {
+    if (this.employeeId == null) {
+      this.employeeId = UUID.randomUUID().toString().substring(0, 8);
     }
+  }
 
-
-    //   public Employee(String employeeId, String password, String name, String email, String gender){
+  //   public Employee(String employeeId, String password, String name, String email, String gender){
 //        this.employeeId = employeeId;
 //        this.password = password;
 //        this.name = name;

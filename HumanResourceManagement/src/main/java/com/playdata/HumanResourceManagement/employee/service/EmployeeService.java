@@ -4,6 +4,7 @@ import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import java.util.List;
 import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
@@ -12,15 +13,18 @@ import java.time.LocalTime;
 
 public interface EmployeeService {
 
-    Employee insertEmployee(EmployeeRequestDTO employeeRequestDTO);
+  Employee insertEmployee(EmployeeRequestDTO employeeRequestDTO);
 
-    void addAdminAndUserRoles(Employee employee);
+  void addAdminAndUserRoles(Employee employee);
 
-    Authentication signin(LoginDTO employee);
+  Authentication signin(LoginDTO employee);
 
-    EmployeeResponseDTO findEmployeeById(String employeeId);
-    /// 김다울 추가
-    LocalTime findCompanyStartTimeByEmployeeId(String employeeId);
+  EmployeeResponseDTO findEmployeeById(String employeeId);
 
-    // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
+  /// 김다울 추가
+  LocalTime findCompanyStartTimeByEmployeeId(String employeeId);
+
+  List<String> getAllEmployeeIds();
+
+  // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 }
