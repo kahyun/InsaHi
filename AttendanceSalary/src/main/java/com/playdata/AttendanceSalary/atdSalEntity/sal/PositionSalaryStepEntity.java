@@ -22,7 +22,7 @@ public class PositionSalaryStepEntity extends DateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "position_salary_id")
-    private Long id;
+    private Long positionSalaryId; //직급 호봉 아이디
 
     @ManyToOne
     @JoinColumn(name ="position_id")
@@ -34,16 +34,13 @@ public class PositionSalaryStepEntity extends DateEntity {
     @Column(precision = 11, scale = 2)
     private BigDecimal baseSalary;
 
-    @Column(precision = 11, scale = 2)
-    private BigDecimal positionAllowance;
+//    @Column(precision = 11, scale = 2)
+//    private BigDecimal positionAllowance;
 
     @Column(precision = 5, scale = 2)
-    private BigDecimal overtimeRate;
+    private BigDecimal overtimeAllowance;
 
     private int baseAnnualLeave;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal salaryIncreaseAllowance;
 
     private String companyCode;
 

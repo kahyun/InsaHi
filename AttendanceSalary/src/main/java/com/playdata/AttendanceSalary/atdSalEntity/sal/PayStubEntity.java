@@ -4,6 +4,7 @@ import com.playdata.attendanceSalary.atdSalDto.sal.PayStubResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PayStubEntity extends DateEntity {
 
     @Id
@@ -24,6 +26,7 @@ public class PayStubEntity extends DateEntity {
 
     @Column(name = "payment_date")
     private LocalDateTime paymentDate;
+
     @Column(name = "base_salary", precision = 11, scale = 2)
     private BigDecimal baseSalary;
 
@@ -31,16 +34,16 @@ public class PayStubEntity extends DateEntity {
     private BigDecimal totalAllowances;
 
     @Column(precision = 11, scale = 2)
-    private BigDecimal overtimePay;
+    private BigDecimal overtimePay; /// 연장 수당
 
     @Column(precision = 11, scale = 2)
-    private BigDecimal totalPayment;
+    private BigDecimal totalPayment; /// 총 급여
 
     @Column(precision = 11, scale = 2)
-    private BigDecimal totalDeductions;
+    private BigDecimal totalDeductions; ///총공제
 
     @Column(precision = 11, scale = 2)
-    private BigDecimal netPay;
+    private BigDecimal netPay; ///실 급여
     private String companyCode;
 
     @Column(name = "employee_id")

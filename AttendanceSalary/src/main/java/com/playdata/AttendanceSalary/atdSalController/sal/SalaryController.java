@@ -121,10 +121,10 @@ public class SalaryController {
 
     }
 
-    @GetMapping("/paystub-find")
-    public PayStubResponseDTO findPayStub(Long payStubId) {
-        return salaryService.findPayStub(payStubId);
-    }
+//    @GetMapping("/paystub-find")
+//    public PayStubResponseDTO findPayStub(Long payStubId) {
+//        return salaryService.findPayStub(payStubId);
+//    }
 
     /// Salary 서비스
     @PostMapping("insert")

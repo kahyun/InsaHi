@@ -25,7 +25,6 @@ public class AttendanceEntity {
     @Column(name = "check_in_time")
     private LocalDateTime checkInTime;
 
-
     @Column(name = "work_date", nullable = false) // 근무일자
     private LocalDate workDate;
 
@@ -47,12 +46,10 @@ public class AttendanceEntity {
     private AttendanceStauts attendanceStatus;
 
     private String companyCode;
+
     @Column(name = "employee_id")
     private String employeeId;
 
-/*   @Column(name = "is_late")
-    prALTER TABLE employee DROP FOREIGN KEY FK_employee_company;ivate boolean isLate;
-*/
 
 /*
     @PrePersist //db에 출근으로  생성시

@@ -25,4 +25,9 @@ public class PayStubDaoImpl implements PayStubDao {
     public void delete(PayStubEntity payStubEntity) {
         payStubRepository.delete(payStubEntity);
     }
+
+    @Override
+    public PayStubEntity findPayStubByeEmployeeId(String employeeId) {
+        return payStubRepository.findByEmployeeId(employeeId);
+    }
 }

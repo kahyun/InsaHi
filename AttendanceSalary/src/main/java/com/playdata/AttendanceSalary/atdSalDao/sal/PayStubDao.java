@@ -5,4 +5,5 @@ public interface PayStubDao  {
     PayStubEntity save(PayStubEntity payStubEntity);
     void update(PayStubEntity payStubEntity);
     void delete(PayStubEntity payStubEntity);
+    PayStubEntity findPayStubByeEmployeeId(String employeeId);
 }

@@ -18,9 +18,5 @@ public class DateEntity {
     private LocalDateTime updatedDate; //업데이트 날짜
 
 
-    @CreationTimestamp
-    private LocalDateTime createTime; // insert 시간
-    @UpdateTimestamp
-    private LocalDateTime updateTime; // 업데이트 시간
 
 }

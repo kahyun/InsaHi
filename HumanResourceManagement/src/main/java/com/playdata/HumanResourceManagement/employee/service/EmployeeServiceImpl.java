@@ -4,6 +4,7 @@ import com.playdata.HumanResourceManagement.employee.authentication.EmpAuthentic
 import com.playdata.HumanResourceManagement.employee.dao.AuthorityDAO;
 import com.playdata.HumanResourceManagement.employee.dao.EmployeeDAO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
@@ -18,6 +19,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,11 +36,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public Employee findEmployeeById(String employeeId) {
+    public EmployeeResponseDTO findEmployeeById(String employeeId) {
         Employee employee = employeeDAO.findById(employeeId);
-        System.out.println("employee 서비스단= " + employee.getEmployeeId());
+        System.out.println("employee 서비스단 = " + employee.getEmployeeId());
         System.out.println("employee.getCompany().getCompanyCode() = " + employee.getCompany().getCompanyCode());
-        return employee;
+        return modelMapper.map(employee, EmployeeResponseDTO.class);
     }
 
     @Override
@@ -83,5 +86,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
-
+    @Override /// 김다울 추가
+    public LocalTime findCompanyStartTimeByEmployeeId(String employeeId) {
+        return employeeDAO.findCompanyStartTimeByEmployeeId(employeeId);
+    }
 }

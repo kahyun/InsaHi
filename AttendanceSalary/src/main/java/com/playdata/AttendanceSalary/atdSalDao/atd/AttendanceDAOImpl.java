@@ -5,6 +5,9 @@ import com.playdata.attendanceSalary.atdSalRepository.atd.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -13,6 +16,10 @@ public class AttendanceDAOImpl implements AttendanceDAO{
     private final AttendanceRepository attendanceRepository;
 
 
+    @Override
+    public BigDecimal getTotalOvertimeHoursByEmployeeAndDateRange(String employeeId, LocalDate startDate, LocalDate endDate) {
+        return attendanceRepository.getTotalOvertimeHoursByEmployeeAndDateRange(employeeId, startDate, endDate);
+    }
 
     @Override
     public AttendanceEntity findById(Long id) {

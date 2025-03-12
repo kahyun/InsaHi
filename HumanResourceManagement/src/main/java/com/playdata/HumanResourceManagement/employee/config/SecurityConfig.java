@@ -32,7 +32,9 @@ public class SecurityConfig {
         http
                 .csrf(CsrfConfigurer :: disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/company/signup").permitAll()
+//                        .requestMatchers("/","/company/signup").permitAll()
+//                        .anyRequest().authenticated())
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new EmployeeJwtFilter(tokenManager),
                         UsernamePasswordAuthenticationFilter.class)

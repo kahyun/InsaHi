@@ -1,8 +1,8 @@
 package com.playdata.HumanResourceManagement.employee.controller;
 
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
-import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -20,11 +23,20 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final TokenManager tokenManager;
 
+
+    @GetMapping("/{employeeId}/company/start-time")
+    public ResponseEntity<LocalTime> getCompanyStartTime(@PathVariable("employeeId") String employeeId) {
+        LocalTime startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
+        log.info("controller 단 : getCompanyStartTime: {}", startTime);
+        return ResponseEntity.ok(startTime);
+    }
+
+
     @GetMapping("/find")
-    public ResponseEntity<?> findEmployee(@RequestParam String employeeId) {
-        Employee employee = employeeService.findEmployeeById(employeeId);
-        System.out.println("employee controller 단= " + employee);
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+    /// 김다울
+    public EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId) {
+        EmployeeResponseDTO employeeResponseDTO = employeeService.findEmployeeById(employeeId);
+        return employeeResponseDTO;
     }
 
     @PostMapping("/login")
@@ -32,7 +44,7 @@ public class EmployeeController {
         System.out.println("loginDTO: " + loginDTO);
         //1. 사용자정보를 담은 인증객체생성
         //2. 인증처리
-        Authentication authentication =  employeeService.signin(loginDTO);
+        Authentication authentication = employeeService.signin(loginDTO);
         //3. 인증이 완료되면 인증객체를 이용해서 토큰생성하기
         String jwt = tokenManager.createToken(authentication);
 
@@ -43,15 +55,10 @@ public class EmployeeController {
         headers.add("Authorization", "Bearer " + jwt);
 
         System.out.println("성공 !!!!!!!~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!");
-        return new ResponseEntity<>(jwt,headers, HttpStatus.OK);
+        return new ResponseEntity<>(jwt, headers, HttpStatus.OK);
     }
 
 
     // gateway로 하면 지금만들어놓은거에서 좀 바뀌나?
-//
-//    @GetMapping("/getuser")
-//    public ResponseEntity<String> getUser(@PathVariable("employeeId")String employeeId,@RequestParam String companyCode) {
-//    }
-//
 
 }

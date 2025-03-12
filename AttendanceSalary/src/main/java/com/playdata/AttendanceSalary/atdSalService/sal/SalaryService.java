@@ -1,13 +1,14 @@
 package com.playdata.attendanceSalary.atdSalService.sal;
 
 import com.playdata.attendanceSalary.atdSalDto.sal.*;
-import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
+
+import java.util.List;
 
 
 public interface SalaryService {
+    /// 급여계산 로직
+    public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId);
 
-    /// 급여 계산 로직
-    PayStubResponseDTO calculateEmployeeSalary(Long employeeId) ;
 
     /// Position  서비스
     // 회사별 직급 생성
@@ -40,6 +41,8 @@ public interface SalaryService {
 
     AllowanceResponseDTO findAllowance(Long allowanceId);
 
+    List<AllowanceResponseDTO> findAllowancesByPayStubId(Long payStubId);
+
     /// Deduction 서비스
     DeductionResponseDTO insertDeduction(DeductionResponseDTO responseDTO);
 
@@ -49,16 +52,25 @@ public interface SalaryService {
 
     DeductionResponseDTO findDeduction(Long deductionId);
 
+    List<DeductionResponseDTO> findDeductionsByPayStubId(Long payStubId);
+
     /// paystub 서비스
     PayStubResponseDTO insertPayStub(PayStubResponseDTO responseDTO);
+
     void updateDeduction(PayStubResponseDTO responseDTO);
+
     void deleteDeduction(PayStubResponseDTO responseDTO);
-    PayStubResponseDTO findPayStub(Long payStubId);
+
+
+    PayStubResponseDTO findPayStubByEmployeeId(String employeeId);
 
     /// Salary 서비스
     SalaryResponseDTO insertSalary(SalaryResponseDTO responseDTO);
+
     void updateSalary(SalaryResponseDTO responseDTO);
+
     void deleteSalary(SalaryResponseDTO responseDTO);
+
     SalaryResponseDTO findSalary(Long salaryId);
 
 
