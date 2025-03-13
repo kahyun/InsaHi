@@ -24,6 +24,16 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "employee_id", unique = true, length = 36)
     private String employeeId;
+    @ColumnDefault("1234")
+    private String password; // 1(default 1234)
+    private String name; //2
+    private String email; //3
+    private String phoneNumber; //4
+    private String address; //5
+    private String departmentId;
+    private String teamId;
+    private String state;
+    private String positionSalaryId; //직급호봉
 
     @Column(nullable = false)
     private String password;  // 비밀번호

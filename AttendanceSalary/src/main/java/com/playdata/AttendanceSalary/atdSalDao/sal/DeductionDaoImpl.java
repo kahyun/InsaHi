@@ -1,7 +1,7 @@
-package com.playdata.attendanceSalary.atdSalDao.sal;
+package com.playdata.AttendanceSalary.atdSalDao.sal;
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.DeductionEntity;
-import com.playdata.attendanceSalary.atdSalRepository.sal.DeductionRepository;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.DeductionEntity;
+import com.playdata.AttendanceSalary.atdSalRepository.sal.DeductionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +12,11 @@ import java.util.Optional;
 @Repository
 public class DeductionDaoImpl implements DeductionDao {
     private final DeductionRepository deductionRepository;
+
+    @Override
+    public void saveAll(List<DeductionEntity> deductions) {
+        deductionRepository.saveAll(deductions);
+    }
 
     @Override
     public void deleteById(Long deductionId) {
@@ -30,6 +35,6 @@ public class DeductionDaoImpl implements DeductionDao {
 
     @Override
     public List<DeductionEntity> findByPayStubId(Long payStubId) {
-        return deductionRepository.findByPayStubId(payStubId);
+        return deductionRepository.findByPayStubPayStubId(payStubId);
     }
 }

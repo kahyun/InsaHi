@@ -1,13 +1,12 @@
-package com.playdata.attendanceSalary.atdSalDao.atd;
+package com.playdata.AttendanceSalary.atdSalDao.atd;
 
-import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
-import org.springframework.stereotype.Repository;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
-@Repository
+
 public interface AttendanceDAO {
     AttendanceEntity save(AttendanceEntity attendance);
     AttendanceEntity findById(Long id);

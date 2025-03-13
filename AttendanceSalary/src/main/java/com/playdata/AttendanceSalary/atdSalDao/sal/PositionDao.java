@@ -1,5 +1,5 @@
-package com.playdata.attendanceSalary.atdSalDao.sal;
-import com.playdata.attendanceSalary.atdSalEntity.sal.PositionEntity;
+package com.playdata.AttendanceSalary.atdSalDao.sal;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
 import java.util.Optional;
 
 
@@ -9,5 +9,7 @@ public interface PositionDao {
     void deletePosition(PositionEntity positionEntity);
 
     Optional<PositionEntity> findById(Long positionId);
+
+
 
 }

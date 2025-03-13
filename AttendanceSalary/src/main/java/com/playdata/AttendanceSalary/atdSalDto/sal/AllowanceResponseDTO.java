@@ -1,8 +1,8 @@
-package com.playdata.attendanceSalary.atdSalDto.sal;
+package com.playdata.AttendanceSalary.atdSalDto.sal;
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.AllowanceEntity;
-import com.playdata.attendanceSalary.atdSalEntity.sal.PayStubEntity;
-import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.AllowanceEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PayStubEntity;
+//import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,20 +11,18 @@ import java.math.BigDecimal;
 public class AllowanceResponseDTO {
     private Long allowanceId;
     private String companyCode;
-    private boolean taxExemption;
-    private BigDecimal salary;
-    private Long salaryId;
-    private Long payStubId;
-
+    private BigDecimal allowSalary;
+//    private Long salaryId;
+    private PayStubEntity payStub;
+    private String allowName;
 
     public AllowanceEntity toEntity(){
         AllowanceEntity allowanceEntity = new AllowanceEntity();
+        allowanceEntity.setAllowanceId(allowanceId);
         allowanceEntity.setAllowanceId(this.allowanceId);
         allowanceEntity.setCompanyCode(this.companyCode);
-        allowanceEntity.setTaxExemption(this.taxExemption);
-        allowanceEntity.setSalary(this.salary);
-        allowanceEntity.setSalaryId(this.salaryId);
-        allowanceEntity.setPayStubId(this.payStubId);
+        allowanceEntity.setAllowSalary(this.allowSalary);
+//        allowanceEntity.setSalaryId(this.salaryId);
         return allowanceEntity;
     }
 

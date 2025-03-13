@@ -1,14 +1,11 @@
 hrm:
   service:
-    url: http://127.0.0.1/1010
+    url: http://127.0.0.1:1010
 
 approval:
   service:
-    url: http://127.0.0.1/1005
+    url: http://127.0.0.1:1005
 
-attendance:
-  service:
-    url: http://127.0.0.1/1000
 
 
 server:

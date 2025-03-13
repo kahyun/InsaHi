@@ -1,7 +1,7 @@
-package com.playdata.attendanceSalary.atdSalDto.sal;
+package com.playdata.AttendanceSalary.atdSalDto.sal;
 
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.DeductionEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.DeductionEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,11 +18,11 @@ public class DeductionResponseDTO {
     public DeductionEntity toEntity(){
         DeductionEntity deductionEntity = new DeductionEntity();
         deductionEntity.setDeductionId(this.deductionId);
-        deductionEntity.setPayrollDetailsId(this.payrollDetailsId);
-        deductionEntity.setPayrollItemId(this.payrollItemId);
+//        deductionEntity.setPayrollDetailsId(this.payrollDetailsId);
+//        deductionEntity.setPayrollItemId(this.payrollItemId);
         deductionEntity.setAmount(this.amount);
-        deductionEntity.setSalaryId(this.salaryId);
-        deductionEntity.setPayStubId(this.payStubId);
+
+        // Service에서 salary, payStub 주입 필요
         return deductionEntity;
-    }
+}
 }

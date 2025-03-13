@@ -1,5 +1,5 @@
-package com.playdata.attendanceSalary.atdClient;
-import com.playdata.attendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
+package com.playdata.AttendanceSalary.atdClient;
+import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
