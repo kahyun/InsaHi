@@ -1,4 +1,4 @@
-package com.playdata.attendanceSalary.atdSalService.atd;
+package com.playdata.AttendanceSalary.atdSalService.atd;
 
 
 import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;

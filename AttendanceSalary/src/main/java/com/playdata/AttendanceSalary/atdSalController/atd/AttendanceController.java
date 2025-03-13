@@ -1,8 +1,8 @@
-package com.playdata.attendanceSalary.atdSalController.atd;
+package com.playdata.AttendanceSalary.atdSalController.atd;
 
-import com.playdata.HumanResourceManagement.company.entity.Company;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
-import com.playdata.attendanceSalary.atdSalService.atd.AttendanceService;
+
+
+import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AttendanceController {
 
-    private final AttendanceService  attendanceService;
+    private final AttendanceService attendanceService;
 
     @PostMapping("/checkin")
     public ResponseEntity<?> checkIn(@RequestParam("employeeId") String employeeId,
                                      @RequestParam("companyCode") String companyCode) throws Exception {
-        AttendanceEntity attendance = attendanceService.checkIn(employeeId,companyCode);
+        com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity attendance = attendanceService.checkIn(employeeId,companyCode);
         log.info("Controller:"+employeeId);
         System.out.println("attendance = " + attendance);
         log.info("Controller:"+ companyCode);
