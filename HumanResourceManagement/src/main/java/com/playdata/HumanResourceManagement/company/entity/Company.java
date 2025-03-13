@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -41,9 +43,8 @@ public class Company {
 
     @Column(name = "business_number")
     private String businessNumber;
-
     @Column(name = "start_time")
-    private Timestamp startTime;
+    private LocalTime startTime;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

@@ -1,8 +1,7 @@
-package com.playdata.AttendanceSalary.atdSalController.atd;
+package com.playdata.attendanceSalary.atdSalController.atd;
 
-
-
-import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceService;
+import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
+import com.playdata.attendanceSalary.atdSalService.atd.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
