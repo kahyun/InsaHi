@@ -27,4 +27,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     /// 김다울 - 회사 시간 가져오기
     @Query("SELECT e.company.startTime FROM Employee e WHERE e.employeeId = :employeeId")
     LocalTime findCompanyStartTimeByEmployeeId(@Param("employeeId") String employeeId);
+    boolean existsByDepartment(DepartmentEntity departmentEntity);
+
+    // 수정된 메소드
+    List<Employee> findByDepartment_DepartmentId(String departmentId);  // 부서 ID로 Employee 조회
 }
