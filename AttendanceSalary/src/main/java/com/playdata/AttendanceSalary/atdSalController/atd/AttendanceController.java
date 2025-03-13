@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AttendanceController {
 
-    private final AttendanceService  attendanceService;
+    private final AttendanceService attendanceService;
 
     @PostMapping("/checkin")
     public ResponseEntity<?> checkIn(@RequestParam("employeeId") String employeeId) throws Exception {
