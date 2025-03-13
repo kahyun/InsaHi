@@ -11,6 +11,7 @@ public class MyUserDetail extends User {
 
     public MyUserDetail(UserDTO userDto, Collection<? extends GrantedAuthority> authorities) {
         super(userDto.getEmployeeId()+" ",userDto.getPassword(), authorities);
+        this.userDto = userDto;
     }
 
     public UserDTO getUserDto() {

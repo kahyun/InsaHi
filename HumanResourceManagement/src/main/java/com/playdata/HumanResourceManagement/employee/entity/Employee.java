@@ -48,7 +48,7 @@ public class Employee {
     @PrePersist
     public void generateEmployeeId() {
         if (this.employeeId == null) {
-            this.employeeId = UUID.randomUUID().toString().substring(0, 8);
+            this.employeeId = UUID.randomUUID().toString().substring(0, 4);
         }
     }
 
