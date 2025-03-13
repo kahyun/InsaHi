@@ -1,7 +1,7 @@
-package com.playdata.attendanceSalary.atdSalDto.sal;
+package com.playdata.AttendanceSalary.atdSalDto.sal;
 
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.PayStubEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PayStubEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;

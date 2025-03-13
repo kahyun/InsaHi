@@ -1,13 +1,12 @@
-package com.playdata.attendanceSalary.atdSalRepository.atd;
+package com.playdata.AttendanceSalary.atdSalRepository.atd;
 
-import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
-import org.apache.ibatis.annotations.Param;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 public interface AttendanceRepository extends JpaRepository<AttendanceEntity, Long> {
     @Query("SELECT COALESCE(SUM(a.overtimeHours), 0) " +

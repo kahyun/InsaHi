@@ -1,4 +1,4 @@
-package com.playdata.attendanceSalary.atdSalEntity.atd;
+package com.playdata.AttendanceSalary.atdSalEntity.atd;
 
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;

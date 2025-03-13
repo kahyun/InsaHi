@@ -1,11 +1,9 @@
-package com.playdata.attendanceSalary.atdSalController.sal;
+package com.playdata.AttendanceSalary.atdSalController.sal;
 
-import com.playdata.attendanceSalary.atdSalDto.sal.*;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
-import com.playdata.attendanceSalary.atdSalEntity.sal.PositionEntity;
-import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
-import com.playdata.attendanceSalary.atdSalService.atd.AttendanceService;
-import com.playdata.attendanceSalary.atdSalService.sal.SalaryService;
+import com.playdata.AttendanceSalary.atdSalDto.sal.*;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.SalaryEntity;
+import com.playdata.AttendanceSalary.atdSalService.sal.SalaryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

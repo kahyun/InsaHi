@@ -1,7 +1,7 @@
-package com.playdata.attendanceSalary.atdSalDao.sal;
+package com.playdata.AttendanceSalary.atdSalDao.sal;
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.PositionEntity;
-import com.playdata.attendanceSalary.atdSalRepository.sal.PositionRepository;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
+import com.playdata.AttendanceSalary.atdSalRepository.sal.PositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

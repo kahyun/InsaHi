@@ -29,7 +29,7 @@ public class Employee {
     private String departmentId;
     private String teamId;
     private String state;
-    private String positionSalaryId;
+    private String positionSalaryId; //직급호봉
 
     @ManyToOne
     @JoinColumn(name = "company_code", referencedColumnName = "companyCode")

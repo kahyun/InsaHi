@@ -30,13 +30,13 @@ public class DepartmentService {
     @Transactional
     public DepartmentResponse createDepartment(String companyCode, DepartmentRequest request) {
         DepartmentEntity departmentEntity = new DepartmentEntity(
-                null,
-                request.getDepartmentName(),
-                request.getParentDepartmentId(),
-                request.getDepartmentLevel(),
-                companyCode,
-                request.getLeftNode(),
-                request.getRightNode()
+//                null,
+//                request.getDepartmentName(),
+//                request.getParentDepartmentId(),
+//                request.getDepartmentLevel(),
+//                companyCode,
+//                request.getLeftNode(),
+//                request.getRightNode()
         );
 
         DepartmentEntity savedDepartment = departmentRepository.save(departmentEntity);

@@ -1,6 +1,6 @@
-package com.playdata.attendanceSalary.atdSalDto.sal;
+package com.playdata.AttendanceSalary.atdSalDto.sal;
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.PositionEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
 import lombok.Data;
 
 @Data

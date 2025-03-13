@@ -14,47 +14,46 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserDepartmentDAOImpl implements UserDepartmentDAO {
 
-    private final DepartmentRepository departmentRepository;
-    private final EmployeeRepository employeeRepository;
+    //private final DepartmentRepository departmentRepository;
 
     // 1. 회사 코드로 부서+사용자 리스트 조회
     @Override
     public List<DepartmentEntity> getDepartmentsByCompanyCode(String companyCode) {
-        return departmentRepository.findByCompanyCode(companyCode);
+        return null;// departmentRepository.findByCompanyCode(companyCode);
     }
 
     // 2-1. 부서 업데이트
     @Override
     public DepartmentEntity updateDepartment(String departmentId, DepartmentRequest departmentRequest) {
-        Optional<DepartmentEntity> departmentOptional = departmentRepository.findById(departmentId);
-        if (departmentOptional.isPresent()) {
-            DepartmentEntity department = departmentOptional.get();
-            department.setDepartmentName(departmentRequest.getDepartmentName());
-            department.setParentDepartmentId(departmentRequest.getParentDepartmentId());
-            department.setDepartmentLevel(departmentRequest.getDepartmentLevel());
-            return departmentRepository.save(department);
-        }
+//        Optional<DepartmentEntity> departmentOptional = departmentRepository.findById(departmentId);
+//        if (departmentOptional.isPresent()) {
+//            DepartmentEntity department = departmentOptional.get();
+//            //department.setDepartmentName(departmentRequest.getDepartmentName());
+//            //department.setParentDepartmentId(departmentRequest.getParentDepartmentId());
+//            //department.setDepartmentLevel(departmentRequest.getDepartmentLevel());
+//            return departmentRepository.save(department);
+//        }
         return null;
     }
 
     // 2-2. 사원 업데이트 (부서 이동 포함)
     @Override
     public DepartmentEntity updateUserDepartment(String departmentId, DepartmentRequest departmentRequest) {
-        Optional<DepartmentEntity> departmentOptional = departmentRepository.findById(departmentId);
-        if (departmentOptional.isPresent()) {
-            DepartmentEntity department = departmentOptional.get();
-            department.setCompanyCode(departmentRequest.getCompanyCode());
-            return departmentRepository.save(department);
-        }
+//        Optional<DepartmentEntity> departmentOptional = departmentRepository.findById(departmentId);
+//        if (departmentOptional.isPresent()) {
+//            DepartmentEntity department = departmentOptional.get();
+//          //  department.setCompanyCode(departmentRequest.getCompanyCode());
+//            return departmentRepository.save(department);
+//        }
         return null;
     }
 
     // 3. 부서 삭제 (사용자는 삭제 불가)
     @Override
     public void deleteDepartment(String companyCode, String departmentId) {
-        Optional<DepartmentEntity> departmentOptional = departmentRepository.findById(departmentId);
-        if (departmentOptional.isPresent() && departmentOptional.get().getCompanyCode().equals(companyCode)) {
-            departmentRepository.deleteById(departmentId);
-        }
+//        Optional<DepartmentEntity> departmentOptional = departmentRepository.findById(departmentId);
+//        if (departmentOptional.isPresent() && departmentOptional.get().getCompanyCode().equals(companyCode)) {
+//            departmentRepository.deleteById(departmentId);
+//        }
     }
 }

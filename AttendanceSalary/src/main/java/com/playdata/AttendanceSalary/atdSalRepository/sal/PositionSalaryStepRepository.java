@@ -1,7 +1,11 @@
-package com.playdata.attendanceSalary.atdSalRepository.sal;
+package com.playdata.AttendanceSalary.atdSalRepository.sal;
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface PositionSalaryStepRepository extends JpaRepository<PositionSalaryStepEntity, Long> {
+    Optional<PositionSalaryStepEntity> findByPositionSalaryId(@Param("positionSalaryId") Long positionSalaryId);
 }

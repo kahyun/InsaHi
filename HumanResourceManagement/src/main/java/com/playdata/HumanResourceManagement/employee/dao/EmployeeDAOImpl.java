@@ -31,15 +31,17 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public LocalTime findCompanyStartTimeByEmployeeId(String employeeId) {
-        LocalTime companyStartTime = employeeRepository.findCompanyStartTimeByEmployeeId(employeeId);
-        employeeRepository.findById(employeeId).orElse(null);
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
-        log.info("Employee Entity: {}", employee);
-        log.info("Company Entity: {}", employee.getCompany());
-        log.info("Company StartTime: {}", employee.getCompany().getStartTime());
-
-        System.out.println("dao단 = " + employeeId);
-        log.info("dao단 getCompanyStartTime: {}", companyStartTime);
+        if (employee == null) {
+            log.warn("해당 ID의 직원이 없습니다: {}", employeeId);
+            return null; // 혹은 예외처리 권장
+        }
+        if (employee.getCompany() == null) {
+            log.warn("직원의 소속 회사 정보가 없습니다. 직원ID={}", employeeId);
+            return null;
+        }
+        LocalTime companyStartTime = employee.getCompany().getStartTime();
+        log.info("직원ID={}의 회사 출근 시간={}", employeeId, companyStartTime);
         return companyStartTime;
     }
 }

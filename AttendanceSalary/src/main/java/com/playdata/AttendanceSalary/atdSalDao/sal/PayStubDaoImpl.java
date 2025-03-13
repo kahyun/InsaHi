@@ -1,9 +1,8 @@
-package com.playdata.attendanceSalary.atdSalDao.sal;
+package com.playdata.AttendanceSalary.atdSalDao.sal;
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.PayStubEntity;
-import com.playdata.attendanceSalary.atdSalRepository.sal.PayStubRepository;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PayStubEntity;
+import com.playdata.AttendanceSalary.atdSalRepository.sal.PayStubRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository

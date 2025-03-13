@@ -1,6 +1,6 @@
-package com.playdata.attendanceSalary.atdSalEntity.sal;
+package com.playdata.AttendanceSalary.atdSalEntity.sal;
 
-import com.playdata.attendanceSalary.atdSalDto.sal.PositionResponseDTO;
+import com.playdata.AttendanceSalary.atdSalDto.sal.PositionResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

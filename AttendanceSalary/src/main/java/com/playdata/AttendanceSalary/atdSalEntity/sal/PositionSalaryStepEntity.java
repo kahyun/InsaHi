@@ -1,6 +1,5 @@
-package com.playdata.attendanceSalary.atdSalEntity.sal;
+package com.playdata.AttendanceSalary.atdSalEntity.sal;
 
-import com.playdata.attendanceSalary.atdSalDto.sal.PositionSalaryStepResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /// 직급호봉
 @Entity
@@ -37,7 +34,7 @@ public class PositionSalaryStepEntity extends DateEntity {
 //    @Column(precision = 11, scale = 2)
 //    private BigDecimal positionAllowance;
 
-    @Column(precision = 5, scale = 2)
+    @Column(precision = 11, scale = 2)
     private BigDecimal overtimeAllowance;
 
     private int baseAnnualLeave;

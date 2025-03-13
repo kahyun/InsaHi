@@ -1,7 +1,7 @@
-package com.playdata.attendanceSalary.atdSalDao.sal;
+package com.playdata.AttendanceSalary.atdSalDao.sal;
 
-import com.playdata.attendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
-import com.playdata.attendanceSalary.atdSalRepository.sal.PositionSalaryStepRepository;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
+import com.playdata.AttendanceSalary.atdSalRepository.sal.PositionSalaryStepRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class PositionSalaryDaoImpl implements PositionSalaryDao {
-    private PositionSalaryStepRepository positionSalaryStepRepository;
+    private final PositionSalaryStepRepository positionSalaryStepRepository;
 
     @Override
     public PositionSalaryStepEntity savePositionSalaryStep(PositionSalaryStepEntity positionSalaryStepEntity) {
@@ -23,8 +23,9 @@ public class PositionSalaryDaoImpl implements PositionSalaryDao {
     }
 
     @Override
-    public Optional<PositionSalaryStepEntity> findPositionSalaryStepById(Long positionSalaryID) {
-        return positionSalaryStepRepository.findById(positionSalaryID);
+    public Optional<PositionSalaryStepEntity> findPositionSalaryById(Long positionSalaryID) {
+        return positionSalaryStepRepository.findByPositionSalaryId(positionSalaryID);
+
     }
 }
 

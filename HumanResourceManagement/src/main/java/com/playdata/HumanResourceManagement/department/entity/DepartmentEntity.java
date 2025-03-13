@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "departments")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class DepartmentEntity extends DateEntity {
 
     @Id

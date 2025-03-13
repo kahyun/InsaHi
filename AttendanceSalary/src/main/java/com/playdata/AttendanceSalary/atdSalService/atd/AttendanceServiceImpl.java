@@ -1,9 +1,10 @@
-package com.playdata.attendanceSalary.atdSalService.atd;
+package com.playdata.AttendanceSalary.atdSalService.atd;
 
-import com.playdata.attendanceSalary.atdClient.HrmFeignClient;
-import com.playdata.attendanceSalary.atdSalDao.atd.AttendanceDAO;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceEntity;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AttendanceStauts;
+import com.playdata.AttendanceSalary.atdClient.HrmFeignClient;
+import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
+import com.playdata.AttendanceSalary.atdSalDao.atd.AttendanceDAO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceStauts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +21,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceDAO attendanceDAO;
     private final HrmFeignClient hrmFeignClient;
     private final ModelMapper modelMapper;
+
+
+
 
 
     @Override
@@ -33,33 +36,20 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public AttendanceEntity checkIn(String employeeId, String companyCode) throws IllegalAccessException {
-        hrmFeignClient.findEmployee(employeeId);
+    public AttendanceEntity checkIn(String employeeId) throws IllegalAccessException {
 
-
-        //        Employee employee = attendanceDAO.findEmployeeById(employeeId);
+        EmployeeResponseDTO emp = hrmFeignClient.findEmployee(employeeId);
         // 1) null 처리 후 진행
         AttendanceEntity attendanceEntity = new AttendanceEntity();
         //attendanceEntity.setEmployee(employee)
-        attendanceEntity.setEmployeeId(employeeId);
-
-        if (attendanceEntity.getEmployeeId() == null) {
-            throw new IllegalAccessException("해당 직원이 없습니다.");
-        }
-        attendanceEntity.setEmployeeId(employeeId);
-
-        if (attendanceEntity.getCompanyCode() == null) {
-            throw new IllegalAccessException("해당 회사가 없습니다.");
-        }
-        attendanceEntity.setCompanyCode(companyCode);
+        attendanceEntity.setEmployeeId(emp.getEmployeeId());
+        attendanceEntity.setCompanyCode(emp.getCompanyCode());
         // 회사별 출근 시각 지정
 
         // LocalTime companyHour = employee.getCompany().getStartTime();
         /// 통신으로 company받아와서 getStartTime();
-        LocalDate localDate = Objects.requireNonNull(hrmFeignClient.getCompanyStartTime(employeeId).getBody()).toLocalDate();;
-        LocalTime companyHour = LocalTime.of(0, 0);
+        LocalTime companyHour = hrmFeignClient.getCompanyStartTime(employeeId).getBody();
 
-        log.info("company code:{}, company hour:{}", companyCode, companyHour);
 
         // 내 출근 시간 기본값 설정
         attendanceEntity.setWorkDate(LocalDate.now());
