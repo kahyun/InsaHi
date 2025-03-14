@@ -1,16 +1,16 @@
 /* 전체 레이아웃 */
-.container {
+.topcontainer {
     display: flex;
 }
 
 /* 헤더 스타일 */
-.topbar {
+.toptopbar {
     background-color: #3D67D7;
     padding: 0.5rem 1rem;
     width: 100%;
 }
 
-.nav {
+.topnav {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -19,14 +19,14 @@
 }
 
 /* 로고 */
-.logo {
+.toplogo {
     color: #fff;
     font-size: 1.2rem;
     font-weight: bold;
 }
 
 /* 메뉴 스타일 */
-.menu {
+.topmenu {
     list-style: none;
     display: flex;
     gap: 1rem;
@@ -34,18 +34,18 @@
     padding: 0;
 }
 
-.menu-link {
+.topmenulink {
     color: #fff;
     text-decoration: none;
     transition: color 0.2s ease-in-out;
 }
 
-.menu-link:hover {
+.topmenulink:hover {
     color: #FFD700;
 }
 
 /* 오른쪽 아이콘 */
-.icons {
+.topicons {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -53,6 +53,6 @@
 }
 
 /* Sidebar 컨테이너 */
-.sidebar-container {
+.topsidebarcontainer {
     margin-left: 1rem;
 }
