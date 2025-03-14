@@ -1,10 +1,8 @@
-package com.playdata.attendanceSalary.atdSalController.atd;
+package com.playdata.AttendanceSalary.atdSalController.atd;
 
-import com.playdata.attendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
-import com.playdata.attendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
-import com.playdata.attendanceSalary.atdSalService.atd.AnnualLeaveService;
-import com.playdata.attendanceSalary.atdSalService.atd.AnnualLeaveServiceImpl;
+import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
+import com.playdata.AttendanceSalary.atdSalService.atd.AnnualLeaveService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

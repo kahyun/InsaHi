@@ -1,6 +1,5 @@
-package com.playdata.attendanceSalary.atdSalDto.atd;
+package com.playdata.AttendanceSalary.atdSalDto.atd;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

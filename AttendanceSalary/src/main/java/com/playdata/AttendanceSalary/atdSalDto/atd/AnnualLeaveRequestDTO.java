@@ -1,6 +1,5 @@
-package com.playdata.attendanceSalary.atdSalDto.atd;
+package com.playdata.AttendanceSalary.atdSalDto.atd;
 
-import com.playdata.attendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;

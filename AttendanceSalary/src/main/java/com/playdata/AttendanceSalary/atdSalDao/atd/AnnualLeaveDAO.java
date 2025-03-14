@@ -1,6 +1,6 @@
-package com.playdata.attendanceSalary.atdSalDao.atd;
+package com.playdata.AttendanceSalary.atdSalDao.atd;
 
-import com.playdata.attendanceSalary.atdSalEntity.atd.AnnualLeaveEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveEntity;
 import java.util.Optional;
 
 public interface AnnualLeaveDAO {

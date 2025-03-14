@@ -1,8 +1,7 @@
-package com.playdata.attendanceSalary.atdSalService.atd;
+package com.playdata.AttendanceSalary.atdSalService.atd;
 
-import com.playdata.attendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
-import com.playdata.attendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
+import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
 import java.util.List;
 
 public interface AnnualLeaveService {

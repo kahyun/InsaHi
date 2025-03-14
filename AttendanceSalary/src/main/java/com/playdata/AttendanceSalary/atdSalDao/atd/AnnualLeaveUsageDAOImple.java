@@ -1,8 +1,8 @@
-package com.playdata.attendanceSalary.atdSalDao.atd;
+package com.playdata.AttendanceSalary.atdSalDao.atd;
 
-import com.playdata.attendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
-import com.playdata.attendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
-import com.playdata.attendanceSalary.atdSalRepository.atd.AnnualLeaveUsageRepository;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
+import com.playdata.AttendanceSalary.atdSalRepository.atd.AnnualLeaveUsageRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

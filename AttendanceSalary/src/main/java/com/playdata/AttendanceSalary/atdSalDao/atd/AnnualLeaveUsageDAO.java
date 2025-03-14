@@ -1,8 +1,7 @@
-package com.playdata.attendanceSalary.atdSalDao.atd;
+package com.playdata.AttendanceSalary.atdSalDao.atd;
 
-import com.playdata.attendanceSalary.atdSalEntity.atd.AnnualLeaveEntity;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
-import com.playdata.attendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
 import java.util.List;
 import java.util.Optional;
 

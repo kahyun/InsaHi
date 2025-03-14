@@ -1,9 +1,9 @@
-package com.playdata.attendanceSalary.atdSalService.atd;
+package com.playdata.AttendanceSalary.atdSalService.atd;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.playdata.attendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
-import com.playdata.attendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
+import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AnnualLeaveServiceImplTest {
 
   @Autowired
-  AnnualLeaveService annualLeaveService;
+  private AnnualLeaveService annualLeaveService;
 
   @Test
   @DisplayName("휴가 신청 기능 테스트")
