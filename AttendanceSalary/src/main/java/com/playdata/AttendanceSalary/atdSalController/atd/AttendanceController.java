@@ -1,5 +1,4 @@
 package com.playdata.AttendanceSalary.atdSalController.atd;
-
 import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
 import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ public class AttendanceController {
     @PostMapping("/checkin")
     public ResponseEntity<?> checkIn(@RequestParam("employeeId") String employeeId) throws Exception {
         AttendanceEntity attendance = attendanceService.checkIn(employeeId);
+
         log.info("Controller:"+employeeId);
         System.out.println("attendance = " + attendance);
         return ResponseEntity.ok(attendance);
