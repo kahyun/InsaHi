@@ -1,4 +1,4 @@
-package com.playdata.HumanResourceManagement.employee.service;
+package com.playdata.HumanResourceManagement.department.business.service;
 
 import com.playdata.HumanResourceManagement.department.business.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.department.business.repository.DepartmentRepository;
@@ -16,7 +16,7 @@ public class EmployeeDataService {
     private final DepartmentRepository departmentRepository;
 
     @Transactional
-    public void transferEmployee(Long employeeId, String newDepartmentId) {
+    public void transferEmployee(String employeeId, String newDepartmentId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException("직원을 찾을 수 없습니다."));
 
