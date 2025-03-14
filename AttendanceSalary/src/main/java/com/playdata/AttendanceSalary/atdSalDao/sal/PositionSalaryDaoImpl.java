@@ -1,7 +1,7 @@
 package com.playdata.attendanceSalary.atdSalDao.sal;
 
 import com.playdata.attendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
-import com.playdata.attendanceSalary.atdSalRepository.sal.PositionSalaryStepRepository;
+import com.playdata.attendanceSalary.atdSalRepository.sal.PositionSalaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PositionSalaryDaoImpl implements PositionSalaryDao {
 
-  private PositionSalaryStepRepository positionSalaryStepRepository;
+  private PositionSalaryRepository positionSalaryStepRepository;
 
   @Override
   public PositionSalaryStepEntity savePositionSalaryStep(
