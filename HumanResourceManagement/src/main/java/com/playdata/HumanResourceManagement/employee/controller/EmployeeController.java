@@ -1,16 +1,26 @@
 package com.playdata.HumanResourceManagement.employee.controller;
 
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
-import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
-import com.playdata.HumanResourceManagement.employee.service.EmployeeDataService;
-import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import org.springframework.web.bind.annotation.*;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.service.EmployeeDataService;
+import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+>>>>>>> default-develop
 
+
+<<<<<<< kyusang-branch
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/employee")
@@ -36,6 +46,30 @@ public class EmployeeController {
         System.out.println("성공 !!!!!!!~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!");
         return new ResponseEntity<>(jwt,headers, HttpStatus.OK);
     }
+          
+
+  @GetMapping("/{employeeId}/company/start-time")
+  public ResponseEntity<LocalTime> getCompanyStartTime(
+      @PathVariable("employeeId") String employeeId) {
+    LocalTime startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
+    log.info("controller 단 : getCompanyStartTime: {}", startTime);
+    return ResponseEntity.ok(startTime);
+  }
+
+
+  @GetMapping("/find")
+  /// 김다울
+  public EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId) {
+    EmployeeResponseDTO employeeResponseDTO = employeeService.findEmployeeById(employeeId);
+    return employeeResponseDTO;
+  }
+
+
+
+  @GetMapping("/getallemployeeids")
+  public List<String> getAllEmployeeIds() {
+    return employeeService.getAllEmployeeIds();
+  }
 
 
 }
