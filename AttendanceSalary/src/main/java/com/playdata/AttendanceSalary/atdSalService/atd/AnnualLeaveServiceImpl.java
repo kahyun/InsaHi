@@ -186,7 +186,7 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
   private void setAnnualLeave(AnnualLeaveDTO dto, int yearsWorked) {
     // dto.employeeId로 employee가 가진 직급호봉 id 가져오는 통신
     long id = findEmployee(dto.getEmployeeId()).getPositionSalaryId();
-    PositionSalaryStepEntity positionSalaryStepEntity = positionSalaryDao.findPositionSalaryStepById(
+    PositionSalaryStepEntity positionSalaryStepEntity = positionSalaryDao.findPositionSalaryById(
         id).orElseThrow(() -> new RuntimeException("직급호봉 id를 찾기 못했습니다. 잘못된 직급호봉 id."));
     int baseAnnualLeave = positionSalaryStepEntity.getBaseAnnualLeave();
     //positionFeignClient.getBaseAnnualLeave(dto.getEmployeeId());
