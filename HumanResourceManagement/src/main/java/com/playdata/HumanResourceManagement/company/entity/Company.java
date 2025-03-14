@@ -26,12 +26,6 @@ public class Company {
     @Column(name = "company_code", unique = true, length = 36)
     private String companyCode;
 
-    @Column(name = "position_id")
-    private String positionId;
-
-    @Column(name = "position_name")
-    private String positionName;
-
     @Column(name = "company_name")
     private String companyName;
 

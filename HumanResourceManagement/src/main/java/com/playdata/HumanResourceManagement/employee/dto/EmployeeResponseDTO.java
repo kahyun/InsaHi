@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeResponseDTO {
+
     private Long id;
     private String employeeId;
     private String password;
@@ -23,4 +24,8 @@ public class EmployeeResponseDTO {
     private String departmentId;
     private String teamId;
     private String state;
+    private String positionSalaryId;
+
+
+
 }

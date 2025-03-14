@@ -79,7 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return authentication;
 
     }
-
+  
    @Override
   public EmployeeResponseDTO findEmployeeById(String employeeId) {
     Employee employee = employeeDAO.findById(employeeId);
@@ -88,13 +88,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         "employee.getCompany().getCompanyCode() = " + employee.getCompany().getCompanyCode());
     return modelMapper.map(employee, EmployeeResponseDTO.class);
   }
-
+  
   @Override
   /// 김다울 추가
   public LocalTime findCompanyStartTimeByEmployeeId(String employeeId) {
     return employeeDAO.findCompanyStartTimeByEmployeeId(employeeId);
   }
-
+  
   @Override
   public Employee insertEmployee(EmployeeRequestDTO employeeRequestDTO) {
 
@@ -104,7 +104,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     return entity;
   }
 
-
+  
   @Override
   public List<String> getAllEmployeeIds() {
     return employeeDAO.findAll().stream()
