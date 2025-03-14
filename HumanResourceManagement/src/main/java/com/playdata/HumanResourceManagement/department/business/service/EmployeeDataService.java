@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class EmployeeDataService {
 
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
