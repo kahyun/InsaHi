@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -77,17 +78,19 @@ public class Employee {
     )
     private Set<Authority> authorityList = new HashSet<>();  // 권한 목록
 
+
+
     // 부서 ID 반환 (부서가 없는 경우 null 반환)
     public String getDepartmentId() {
         return department != null ? department.getDepartmentId() : null;
     }
 
-    // 직급명 설정 (직급 ID로 외부에서 직급명 조회)
-    public void setPositionNameFromClient() {
-        if (this.positionId != null) {
-            this.positionName = fetchPositionNameFromClient(positionId);
-        }
-    }
+    /// 직급명 설정 (직급 ID로 외부에서 직급명 조회)
+//    public void setPositionNameFromClient() {
+//        if (this.positionSalaryId != null) {
+//            this.positionSalaryIdName = fetchPositionNameFromClient(positionId);
+//        }
+//    }
 
     // 외부 시스템에서 직급명 조회 (예시: API 호출)
     private String fetchPositionNameFromClient(Long positionId) {
@@ -123,8 +126,8 @@ public class Employee {
         return state != null ? state : "Status not available";
     }
 
-    // 직급 반환 (직급이 없는 경우 "Position not available" 반환)
-    public String getPosition() {
-        return positionName != null ? positionName : "Position not available";
-    }
+   /// 직급 반환 (직급이 없는 경우 "Position not available" 반환)
+//    public String getPosition() {
+//        return positionName != null ? positionName : "Position not available";
+//    }
 }

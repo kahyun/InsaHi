@@ -34,7 +34,7 @@ const TopBar: React.FC = () => {
                         </li>
                         <li>
                             <Link
-                                href="#"
+                                href="/Approval/approval"
                                 className={styles.topmenulink}
                                 onClick={() => setActiveSidebar("sidebar2")}
                             >
