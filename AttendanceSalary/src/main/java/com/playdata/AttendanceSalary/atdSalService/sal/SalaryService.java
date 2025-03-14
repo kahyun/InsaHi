@@ -9,7 +9,6 @@ import java.util.List;
 public interface SalaryService {
     /// 급여계산 로직
     public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId);
-
     List<AllowanceEntity> findByAllowance_CompanyCode(String CompanyCode);
 
 
@@ -65,19 +64,7 @@ public interface SalaryService {
     void deleteDeduction(PayStubResponseDTO responseDTO);
 
 
-    PayStubResponseDTO findPayStubByEmployeeId(String employeeId);
-
-    /// EmployeeAllowService
-    EmployeeAllowDTO insertEmployeeAllow(EmployeeAllowDTO responseDTO);
-
-    void updateEmployeeAllow(EmployeeAllowDTO responseDTO);
-
-    void deleteEmployeeAllow(EmployeeAllowDTO responseDTO);
-
-    EmployeeAllowDTO findEmployeeAllowByEmployeeId(Long employeeId);
-}
-
-
+    PayStubResponseDTO findPayStubByEmployeeId(String employeeId);}
 //
 //    /// Salary 서비스
 //    SalaryResponseDTO insertSalary(SalaryResponseDTO responseDTO);
