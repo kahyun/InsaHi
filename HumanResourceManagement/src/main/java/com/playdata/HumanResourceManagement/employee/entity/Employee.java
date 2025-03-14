@@ -58,6 +58,8 @@ public class Employee {
     )
     private Set<Authority> authorityList = new HashSet<>();  // 권한 목록
 
+
+
     // 부서 ID 반환 (부서가 없는 경우 null 반환)
     public String getDepartmentId() {
         return department != null ? department.getDepartmentId() : null;
