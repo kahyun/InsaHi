@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class CompanyDAOImpl implements CompanyDAO{
+public class CompanyDAOImpl extends CompanyDAO {
     private final CompanyRepository companyRepository;
 
     //회사 정보 insert

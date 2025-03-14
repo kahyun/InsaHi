@@ -48,7 +48,9 @@ public class EmployeeJwtFilter extends GenericFilterBean {
         }
         System.out.println("%%%%%%%%%%%%%%%%%%");
         //필터 체인의 다음 단계(다른 필터 또는 서블릿)로 요청을 전달
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         filterChain.doFilter(servletRequest, servletResponse);
+
     }
     //클라이언트의 요청정보에서 토큰을 꺼내서 리턴하는 메소드
     public String getToken(HttpServletRequest request) {

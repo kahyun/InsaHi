@@ -45,7 +45,7 @@ public class EmployeeUserDetailService implements UserDetailsService {
     public User createUser(Employee employee) {
 
         List<GrantedAuthority>authorities =
-                employee.getAuthoritylist().stream()
+                employee.getAuthorityList().stream()
                         .map(authority ->
                                 new SimpleGrantedAuthority(authority.getAuthorityName()))
                         .collect(Collectors.toList());

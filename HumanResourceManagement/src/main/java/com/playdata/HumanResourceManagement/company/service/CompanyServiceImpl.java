@@ -19,6 +19,8 @@ public class CompanyServiceImpl implements CompanyService {
     //회사 정보 insert
     @Override
     public Company insert(CompanyRequestDTO companyRequestDTO) {
+        System.out.println(companyRequestDTO);
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
         Company entity = modelMapper.map(companyRequestDTO, Company.class);
 
         companyDAO.insert(entity);
