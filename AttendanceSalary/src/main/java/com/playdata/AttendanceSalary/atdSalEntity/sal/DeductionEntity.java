@@ -1,7 +1,6 @@
-package com.playdata.attendanceSalary.atdSalEntity.sal;
+package com.playdata.AttendanceSalary.atdSalEntity.sal;
 
 
-import com.playdata.attendanceSalary.atdSalDto.sal.DeductionResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,35 +15,29 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class DeductionEntity extends DateEntity {
-    //공제
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deduction_id")
     private Long deductionId;
 
-    @Column(name = "payroll_details_id", nullable = false)
-    private Long payrollDetailsId;
-
-    @Column(name = "payrollItem_id", nullable = false)
-    private Long payrollItemId;
+    @Enumerated(EnumType.STRING)
+    private DeductionType deductionType;  // 국민연금, 건강보험, 고용보험 등
 
     @Column(name = "amount", precision = 11, scale = 2)
-    private BigDecimal amount;
+    private BigDecimal amount; // 개인 부담금 기준
 
-    private Long salaryId;
-    private Long payStubId;
+    // 급여 항목과 급여 명세서 연관관계
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "salary_id")
+//    private SalaryEntity salary;
 
-    public DeductionResponseDTO toResponseDTO() {
-        DeductionResponseDTO responseDTO = new DeductionResponseDTO();
-        responseDTO.setPayrollDetailsId(this.payrollDetailsId);
-        responseDTO.setPayrollItemId(this.payrollItemId);
-        responseDTO.setAmount(this.amount);
-        responseDTO.setSalaryId(this.salaryId);
-        responseDTO.setPayStubId(this.payStubId);
-        return responseDTO;
-
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pay_stub_id")
+    private PayStubEntity payStub;
+//
+//    private Long payrollDetailsId;
+//    private Long payrollItemId;
 }
+

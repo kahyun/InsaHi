@@ -1,6 +1,6 @@
-package com.playdata.attendanceSalary.atdSalEntity.sal;
+package com.playdata.AttendanceSalary.atdSalEntity.sal;
 
-import com.playdata.attendanceSalary.atdSalDto.sal.PayStubResponseDTO;
+import com.playdata.AttendanceSalary.atdSalDto.sal.PayStubResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /// 급여 명세
 @Entity
 @Table(name = "pay_stub")
@@ -39,6 +42,10 @@ public class PayStubEntity extends DateEntity {
     @Column(precision = 11, scale = 2)
     private BigDecimal totalPayment; /// 총 급여
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "salary_id")
+//    private SalaryEntity salary;
+    private BigDecimal totalTaxFreeAllowances;
     @Column(precision = 11, scale = 2)
     private BigDecimal totalDeductions; ///총공제
 
@@ -48,6 +55,11 @@ public class PayStubEntity extends DateEntity {
 
     @Column(name = "employee_id")
     private String employeeId;
+    @OneToMany(mappedBy = "payStub", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AllowanceEntity> allowances = new ArrayList<>();
+
+    @OneToMany(mappedBy = "payStub", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DeductionEntity> deductions = new ArrayList<>();
 
     public PayStubResponseDTO toPayStubResponseDTO() {
         PayStubResponseDTO payStubResponseDTO = new PayStubResponseDTO();

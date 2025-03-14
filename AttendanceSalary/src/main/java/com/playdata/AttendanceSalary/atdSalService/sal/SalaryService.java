@@ -1,6 +1,7 @@
-package com.playdata.attendanceSalary.atdSalService.sal;
+package com.playdata.AttendanceSalary.atdSalService.sal;
 
-import com.playdata.attendanceSalary.atdSalDto.sal.*;
+import com.playdata.AttendanceSalary.atdSalDto.sal.*;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.AllowanceEntity;
 
 import java.util.List;
 
@@ -8,6 +9,7 @@ import java.util.List;
 public interface SalaryService {
     /// 급여계산 로직
     public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId);
+    List<AllowanceEntity> findByAllowance_CompanyCode(String CompanyCode);
 
 
     /// Position  서비스
@@ -30,7 +32,7 @@ public interface SalaryService {
 
     void deletePositionSalaryStep(PositionSalaryStepResponseDTO responseDTO);
 
-    PositionSalaryStepResponseDTO findPositionSalaryStep(Long positionId);
+    PositionSalaryStepResponseDTO findPositionSalaryStep(Long positionSalaryId);
 
     /// Allowance 서비스
     AllowanceResponseDTO insertAllowance(AllowanceResponseDTO responseDTO);
@@ -41,8 +43,6 @@ public interface SalaryService {
 
     AllowanceResponseDTO findAllowance(Long allowanceId);
 
-    List<AllowanceResponseDTO> findAllowancesByPayStubId(Long payStubId);
-
     /// Deduction 서비스
     DeductionResponseDTO insertDeduction(DeductionResponseDTO responseDTO);
 
@@ -51,6 +51,8 @@ public interface SalaryService {
     void deleteDeduction(DeductionResponseDTO responseDTO);
 
     DeductionResponseDTO findDeduction(Long deductionId);
+
+    List<AllowanceResponseDTO> findAllowancesByPayStubId(Long payStubId);
 
     List<DeductionResponseDTO> findDeductionsByPayStubId(Long payStubId);
 
@@ -62,16 +64,16 @@ public interface SalaryService {
     void deleteDeduction(PayStubResponseDTO responseDTO);
 
 
-    PayStubResponseDTO findPayStubByEmployeeId(String employeeId);
-
-    /// Salary 서비스
-    SalaryResponseDTO insertSalary(SalaryResponseDTO responseDTO);
-
-    void updateSalary(SalaryResponseDTO responseDTO);
-
-    void deleteSalary(SalaryResponseDTO responseDTO);
-
-    SalaryResponseDTO findSalary(Long salaryId);
-
-
-}
+    PayStubResponseDTO findPayStubByEmployeeId(String employeeId);}
+//
+//    /// Salary 서비스
+//    SalaryResponseDTO insertSalary(SalaryResponseDTO responseDTO);
+//
+//    void updateSalary(SalaryResponseDTO responseDTO);
+//
+//    void deleteSalary(SalaryResponseDTO responseDTO);
+//
+//    SalaryResponseDTO findSalary(Long salaryId);
+//
+//
+//}

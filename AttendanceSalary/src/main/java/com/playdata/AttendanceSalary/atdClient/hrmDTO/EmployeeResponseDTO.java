@@ -1,4 +1,4 @@
-package com.playdata.attendanceSalary.atdClient.hrmDTO;
+package com.playdata.AttendanceSalary.atdClient.hrmDTO;
 
 
 import java.time.LocalDate;
@@ -19,12 +19,15 @@ public class EmployeeResponseDTO {
 //    private String name;
 //    private String role; //enum
 //    private String email;
+    private String name;
+    private String role; //enum
+    private String email;
 //    private String phoneNumber;
 //    private String address;
 //    private String gender;
 //    private String birthday;
-//    private String departmentId;
-//    private String teamId;
-//    private String state;
+    private String departmentId;
+    private String teamId;
+    private String state;
 
 }
