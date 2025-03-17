@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { NextPage } from "next";
 import styles from "@/styles/mypage/MyPage.module.css";
+import {fetcher} from "@/pages/api/fetcher";
 
 const MyPage: NextPage = () => {
     const [clockInTime, setClockInTime] = useState<string | null>(null);
@@ -13,7 +14,11 @@ const MyPage: NextPage = () => {
     const handleClockOut = () => {
         setClockOutTime(new Date().toLocaleTimeString());
     };
-
+    useEffect(() => {
+        fetcher("/mypage/MyPage")
+            // .then(setUserData)
+            .catch(console.error);
+    }, []);
     return (
         <div className={styles.container}>
             <div className={styles.topSection}>

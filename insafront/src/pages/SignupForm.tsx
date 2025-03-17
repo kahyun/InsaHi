@@ -26,7 +26,7 @@ export default function SignupForm() {
         alert("회원가입이 완료되었습니다!");
 
         // ✅ Next.js의 로그인 페이지로 이동
-        window.location.href = "/Login";
+        window.location.href = "/";
 
         console.log(response); //  응답 메시지 저장
         // router.push("/");

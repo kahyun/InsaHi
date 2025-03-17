@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "employee_id", unique = true, length = 36)
     private String employeeId;
 
@@ -72,7 +71,7 @@ public class Employee {
             joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "employee_id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "authority_id")}
     )
-    private Set<Authority> authorityList = new HashSet<>();  // 권한 목록
+    private Set<Authority> authorityList;  // 권한 목록
 
     // 권한 이름만 반환
     public Set<String> getAuthorityNames() {
