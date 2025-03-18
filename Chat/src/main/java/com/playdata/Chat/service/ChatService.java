@@ -1,7 +1,7 @@
 package com.playdata.Chat.service;
 
-import com.example.chat.entity.ChatMessage;
-import com.example.chat.repository.ChatMessageRepository;
+import com.playdata.Chat.entity.ChatMessage;
+import com.playdata.Chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

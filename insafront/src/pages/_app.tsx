@@ -16,9 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
     const noLayoutPaths = ["/Login", "/SignupForm","/"];
     const isNoLayoutPage = noLayoutPaths.includes(router.pathname)
 //  WebSocket 연결 상태 관리
-    const [stompClient, setStompClient] = useState<any>(null);
-    const [currentUser, setCurrentUser] = useState<string | null>(null);
-    const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
+//     const [stompClient, setStompClient] = useState<any>(null);
+//     const [currentUser, setCurrentUser] = useState<string | null>(null);
+//     const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
 
     useEffect(() => {
         const publicPaths = ["/Login", "/SignupForm"]; // 인증 없이 접근 가능한 페이지

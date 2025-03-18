@@ -1,6 +1,6 @@
 package com.playdata.Chat.repository;
 
-import com.example.chat.entity.ChatMessage;
+import com.playdata.Chat.entity.ChatMessage;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.playdata.Chat.controller;
 
-import com.example.chat.dto.RoomCreateRequest;
-import com.example.chat.entity.ChatRoom;
-import com.example.chat.service.ChatRoomService;
+import com.playdata.Chat.dto.RoomCreateRequest;
+import com.playdata.Chat.entity.ChatRoom;
+import com.playdata.Chat.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

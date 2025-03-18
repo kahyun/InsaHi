@@ -1,7 +1,7 @@
 package com.playdata.Chat.service;
 
-import com.example.chat.entity.ChatRoom;
-import com.example.chat.repository.ChatRoomRepository;
+import com.playdata.Chat.entity.ChatRoom;
+import com.playdata.Chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
 package com.playdata.Chat.controller;
 
-import com.example.chat.dto.ChatMessageResponse;
-import com.example.chat.entity.ChatMessage;
-import com.example.chat.service.ChatService;
-import com.example.chat.service.FileStorageService;
+import com.playdata.Chat.dto.ChatMessageResponse;
+import com.playdata.Chat.entity.ChatMessage;
+import com.playdata.Chat.service.ChatService;
+import com.playdata.Chat.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

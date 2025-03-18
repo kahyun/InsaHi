@@ -1,7 +1,7 @@
 package com.playdata.Chat.controller;
 
-import com.example.chat.entity.ChatMessage;
-import com.example.chat.service.ChatService;
+import com.playdata.Chat.entity.ChatMessage;
+import com.playdata.Chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
