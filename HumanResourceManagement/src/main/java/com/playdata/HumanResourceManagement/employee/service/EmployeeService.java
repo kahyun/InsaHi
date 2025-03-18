@@ -2,26 +2,24 @@ package com.playdata.HumanResourceManagement.employee.service;
 
 import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
 import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.dto.SmallProfileDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import org.springframework.security.core.Authentication;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
 import java.util.List;
-import org.springframework.security.core.Authentication;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public interface EmployeeService {
 
-  Employee adminInsert(AdminRequestDTO adminRequestDTO);
+    Employee adminInsert(AdminRequestDTO adminRequestDTO);
 
-  void addAdminAndUserRoles(Employee employee);
+    void addAdminAndUserRoles(Employee employee);
 
-  Authentication login(LoginDTO employee);
+    Authentication login(LoginDTO employee);
 
-  // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
-//  Employee insertEmployee(
-//      EmployeeRequestDTO employeeRequestDTO);  // 기존 insert문 (이거 사용한분 수정할 필요 있음.)
+    // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
+
 
   EmployeeResponseDTO findEmployeeById(String employeeId);
 
@@ -31,4 +29,6 @@ public interface EmployeeService {
   List<String> getAllEmployeeIds();
 
   // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
+
+    SmallProfileDTO getSmallProfile(String employeeId);
 }

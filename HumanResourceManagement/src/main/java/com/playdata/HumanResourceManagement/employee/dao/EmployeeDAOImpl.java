@@ -1,15 +1,13 @@
 package com.playdata.HumanResourceManagement.employee.dao;
 
-
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+
 
 @Slf4j
 @Repository
@@ -18,9 +16,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   private final EmployeeRepository employeeRepository;
 
+  @Override
   public void insert(Employee employee) {
     employeeRepository.save(employee);
   }
+
+
+
+
 
   @Override
   public Employee findById(String employeeId) {
@@ -46,6 +49,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   public List<Employee> findAll() {
     return employeeRepository.findAll();
   }
+
 
 
 }

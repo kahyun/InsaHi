@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
 import styles from "@/styles/mypage/MyPage.module.css";
+import {fetcher} from "@/pages/api/fetcher";
+import {SmallprofileDTO} from "@/type/smallprofile";
 
-const MyPage: NextPage = () => {
+const MyPage = ({name,phoneNumber,departmentId,positionSalaryId}:SmallprofileDTO) => {
     const [clockInTime, setClockInTime] = useState<string | null>(null);
     const [clockOutTime, setClockOutTime] = useState<string | null>(null);
+    const [userData, setUserData] = useState(null);
 
     const handleClockIn = () => {
         setClockInTime(new Date().toLocaleTimeString());
@@ -14,6 +17,12 @@ const MyPage: NextPage = () => {
         setClockOutTime(new Date().toLocaleTimeString());
     };
 
+    useEffect(() => {
+        fetcher("/mypage/MyPage")
+            .then((data)=>setUserData(data))
+            .catch(console.error);
+    }, []);
+
     return (
         <div className={styles.container}>
             <div className={styles.topSection}>
@@ -22,10 +31,10 @@ const MyPage: NextPage = () => {
                     <div className={styles.profileCard}>
                         <div className={styles.profileInfo}>
                             <div className={styles.avatar}>사진 없음</div>
-                            <h2>사용자 이름</h2>
-                            <p>부서명</p>
-                            <p>직위: 직책명</p>
-                            <p>연락처: 전화번호</p>
+                            <h2>이름 : {name}</h2>
+                            <p>부서명 : {departmentId}</p>
+                            <p>직급 : {positionSalaryId}</p>
+                            <p>전화번호 : {phoneNumber}</p>
                             <button className={styles.button}>정보 변경</button>
                         </div>
                     </div>
