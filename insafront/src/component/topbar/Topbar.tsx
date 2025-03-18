@@ -24,10 +24,7 @@ const TopBar: React.FC = () => {
         alert("로그아웃 되었습니다.");
         router.push("/");
     };
-    // 채팅 핸들러
-    const handleChatClick = () => {
-        router.push("/chat");
-    };
+
 
 
     return (
@@ -87,8 +84,8 @@ const TopBar: React.FC = () => {
                     </ul>
 
                     {/* 오른쪽 아이콘 */}
-                    <div className={styles.topicons} >
-                        <div className={styles.chatButton} onClick={handleChatClick} style={{ cursor: "pointer" }}>채팅</div>
+                    <div className={styles.topicons}>
+                        <div>알림</div>
                         <div className={styles.user}>
                             사용자
                         </div>

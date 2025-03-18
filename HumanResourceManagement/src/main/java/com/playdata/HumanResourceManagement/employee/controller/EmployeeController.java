@@ -1,6 +1,7 @@
 package com.playdata.HumanResourceManagement.employee.controller;
 
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
+import com.playdata.HumanResourceManagement.employee.dto.SmallProfileDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,15 @@ public class EmployeeController {
     @GetMapping("/getallemployeeids")
     public List<String> getAllEmployeeIds() {
         return employeeService.getAllEmployeeIds();
+    }
+
+    @GetMapping("/{employeeId}/smallprofile")
+    public ResponseEntity<?> getSmallProfile(@PathVariable String employeeId) {
+        SmallProfileDTO response = employeeService.getSmallProfile(employeeId);
+
+
+        return ResponseEntity.ok(response);
+
     }
 
 
