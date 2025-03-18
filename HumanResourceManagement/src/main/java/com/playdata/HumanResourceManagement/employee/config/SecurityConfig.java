@@ -27,29 +27,30 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final TokenManager tokenManager;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  private final TokenManager tokenManager;
 
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(CsrfConfigurer :: disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/company/signup","/employee/login").permitAll()
-                        .anyRequest().authenticated())
-                .addFilterBefore(new EmployeeJwtFilter(tokenManager),
-                        UsernamePasswordAuthenticationFilter.class)
-
-                //세션을 사용하지 않겠다는 의미
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) );
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
 
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(CsrfConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/**").permitAll()
+            .anyRequest().authenticated())
+        .addFilterBefore(new EmployeeJwtFilter(tokenManager),
+            UsernamePasswordAuthenticationFilter.class)
+
+        //세션을 사용하지 않겠다는 의미
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+    return http.build();
+  }
 
 }

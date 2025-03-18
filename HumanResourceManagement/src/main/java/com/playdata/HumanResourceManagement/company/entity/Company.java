@@ -20,43 +20,37 @@ import com.playdata.HumanResourceManagement.employee.entity.Employee;
 @NoArgsConstructor
 public class Company {
 
-    @Id
-    @Column(name = "company_code", unique = true, length = 36)
-    private String companyCode;
+  @Id
+  @Column(name = "company_code", unique = true, length = 36)
+  private String companyCode;
 
-    @Column(name = "position_id")
-    private String positionId;
+  @Column(name = "company_name")
+  private String companyName;
 
-    @Column(name = "position_name")
-    private String positionName;
+  @Column(name = "head_count")
+  private String headCount;
 
-    @Column(name = "company_name")
-    private String companyName;
+  @Column(name = "created_at")
+  private Date createdAt;
 
-    @Column(name = "head_count")
-    private String headCount;
+  @Column(name = "business_number")
+  private String businessNumber;
 
-    @Column(name = "created_at")
-    private Date createdAt;
+  @Column(name = "start_time")
+  private Timestamp startTime;
 
-    @Column(name = "business_number")
-    private String businessNumber;
+  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
+  private List<DepartmentEntity> departments; // 부서 목록
 
-    @Column(name = "start_time")
-    private Timestamp startTime;
+  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
+  private List<Employee> employees; // 직원 목록
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<DepartmentEntity> departments; // 부서 목록
-
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Employee> employees; // 직원 목록
-
-    @PrePersist
-    public void generateCompanyCode() {
-        if (this.companyCode == null) {
-            this.companyCode = "2025"+UUID.randomUUID().toString().substring(0, 4);
-        }
+  @PrePersist
+  public void generateCompanyCode() {
+    if (this.companyCode == null) {
+      this.companyCode = "2025" + UUID.randomUUID().toString().substring(0, 4);
     }
+  }
 }

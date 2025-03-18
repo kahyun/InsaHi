@@ -1,25 +1,23 @@
 package com.playdata.ElectronicApproval.dto;
 
-import com.playdata.ElectronicApproval.entity.ApprovalStatus;
-import com.playdata.ElectronicApproval.entity.DeleteStatus;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ApprovalFileDTO {
+@AllArgsConstructor
+public class SubmitApprovalRequest {
 
   private String id;
   private String name;
   private String text;
-  private ApprovalStatus status;
-  private DeleteStatus deleteStatus;//delete_status
-  private boolean deleted;
   private String companyCode;
   private String employeeId;
-
+  private List<String> approvers;
+  private List<String> referencedIds;
+//  private List<MultipartFile> files;
 
 }
-
