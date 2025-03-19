@@ -4,12 +4,14 @@ import com.playdata.ElectronicApproval.common.publicEntity.FileEntity;
 import com.playdata.ElectronicApproval.dao.FileDAO;
 import com.playdata.ElectronicApproval.dto.FileDTO;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,28 +32,34 @@ public class FileDownloadServiceImpl implements FileDownloadService {
   private String uploadDir;
 
   // 단일 파일 다운로드 처리
-  public ResponseEntity<Resource> downloadFile(Long fileId) {
+  public ResponseEntity<Resource> downloadFile(String fileId) {
     // 파일 엔티티 조회
-    FileEntity fileEntity = fileDao.findById(fileId)
+    FileEntity fileEntity = fileDao.findById(Long.valueOf(fileId))
         .orElseThrow(() -> new IllegalArgumentException("파일을 찾을 수 없습니다."));
 
     // 파일 경로 설정
     Path path = Paths.get(fileEntity.getStoreFilename());
+    if (!Files.exists(path)) {
+      log.error("파일이 존재하지 않습니다: " + path.toString());
+      throw new RuntimeException("파일이 존재하지 않습니다.");
+    }
     Resource resource = new FileSystemResource(path);
 
-    // 파일이 존재하거나 읽을 수 있으면 ResponseEntity 반환
+    // 파일이 존재하고 읽을 수 있으면 반환
     if (resource.exists() && resource.isReadable()) {
-      return ResponseEntity.ok()
-          .header("Content-Disposition",
-              "attachment; filename=\"" + fileEntity.getOriginalFilename() + "\"")
-          .body(resource);
+      return createFileDownloadResponse(resource, fileEntity.getOriginalFilename());
     } else {
-      try {
-        throw new IOException("파일을 읽을 수 없습니다.");
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+      throw new RuntimeException("파일을 읽을 수 없습니다.");
     }
+  }
+
+  // 파일 다운로드를 위한 ResponseEntity 생성
+  private ResponseEntity<Resource> createFileDownloadResponse(Resource resource,
+      String originalFilename) {
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=\"" + originalFilename + "\"")
+        .body(resource);
   }
 
   // 결재 문서 ID로 해당 파일 정보 조회
