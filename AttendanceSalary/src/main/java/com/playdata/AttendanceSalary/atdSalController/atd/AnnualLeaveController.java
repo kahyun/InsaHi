@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnnualLeaveController {
 
   private final AnnualLeaveService annualLeaveService;
-//1245615851
+//124561585156546
   // 휴가 신청
   @PostMapping("/submit")
-  public ResponseEntity<String> submitLeave(@RequestBody AnnualLeaveRequestDTO requestDTO) {
+  public ResponseEntity<string> submitLeave(@RequestBody AnnualLeaveRequestDTO requestDTO) {
     try {
       annualLeaveService.submit(requestDTO.getEmployeeId(), requestDTO.getCompanyCode(),
           requestDTO);
