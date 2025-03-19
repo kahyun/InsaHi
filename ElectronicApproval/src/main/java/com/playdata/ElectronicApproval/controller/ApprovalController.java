@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,9 +89,9 @@ public class ApprovalController {
   }
 
   //  @PostMapping("/submit") // 결재 요청 제출
-  public void submitApproval(@RequestBody SubmitApprovalRequest request) {
-    approvalService.submitApproval(request);
-  }
+//  public void submitApproval(@RequestBody SubmitApprovalRequest request) {
+//    approvalService.submitApproval(request);
+//  }
 
   @GetMapping("/permit") // 결재 승인/반려 처리
   public void permitApproval(@RequestParam("lineId") String lineId,
@@ -105,15 +106,40 @@ public class ApprovalController {
     return approvalService.getApprovalFiles(employeeId, menu);
 
   }
-
+/*
   @GetMapping("/file/{approvalFileId}")
   public ResponseApprovalFileDTO getFile(@PathVariable("approvalFileId") String approvalFileId) {
     // 결재문서를 가져오는 메소드
     return approvalService.getApprovalFile(approvalFileId);
+  }*/
+
+  @GetMapping("/file/{approvalFileId}")
+  public ResponseEntity<ResponseApprovalFileDTO> getFile(
+      @PathVariable("approvalFileId") String approvalFileId) {
+    log.info("Request received for file with approvalFileId: {}", approvalFileId);
+
+    try {
+      // 결재 문서와 파일 정보 조회
+      ResponseApprovalFileDTO response = approvalService.getApprovalFile(approvalFileId);
+      log.info("file:{}", response);
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(new ResponseApprovalFileDTO("파일을 찾을 수 없습니다."));
+    }
   }
 
   @GetMapping("/file/download/{fileId}")
-  public ResponseEntity<Resource> downloadFile(@PathVariable("fileId") Long fileId) {
+  public ResponseEntity<Resource> downloadFile(@PathVariable("fileId") String fileId) {
+    try {
+      return fileDownloadService.downloadFile(fileId);  // 서비스 호출
+    } catch (Exception e) {
+      // 예외 처리 로직 추가
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+  }
+
+  public ResponseEntity<Resource> downloadFile1(@PathVariable("fileId") String fileId) {
     return fileDownloadService.downloadFile(fileId);
   }
 }

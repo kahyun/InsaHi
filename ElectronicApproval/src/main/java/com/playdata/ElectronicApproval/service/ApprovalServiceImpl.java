@@ -79,7 +79,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     }
   }
 
-  // 결재 요청 제출 (나름 리팩토링된 메서드)
+/*  // 결재 요청 제출 (나름 리팩토링된 메서드)
   public void submitApproval(SubmitApprovalRequest request) {
     log.info("Submitting Approval for DTO: {}", request);
 
@@ -107,7 +107,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     if (!savedLines.isEmpty()) {
       savedLines.get(0).getApprovalFile().setApprovalLineEntities(savedLines);
     }
-  }
+  }*/
 
   //  결재자 및 참조인 라인을 생성하는 메서드
   private List<ApprovalLineEntity> createApprovalLines(ApprovalFileEntity approvalFile,
@@ -239,9 +239,15 @@ public class ApprovalServiceImpl implements ApprovalService {
     List<FileDTO> fileDTOs = fileDownloadService.loadAllFiles(approvalFileId);
     ApprovalFileEntity approvalFile = approvalFileDao.findById(approvalFileId)
         .orElseThrow(() -> new IllegalArgumentException("Approval file not found"));
-//    return convertToDto();
-//    ResponseApprovalFileDTO dto = new ResponseApprovalFileDTO();
-    ResponseApprovalFileDTO dto = modelMapper.map(approvalFile, ResponseApprovalFileDTO.class);
+    ResponseApprovalFileDTO dto = new ResponseApprovalFileDTO();
+    dto.setId(approvalFile.getId());
+    dto.setName(approvalFile.getName());
+    dto.setText(approvalFile.getText());
+    dto.setCompanyCode(approvalFile.getCompanyCode());
+    dto.setEmployeeId(approvalFile.getEmployeeId());
+    dto.setStatus(approvalFile.getStatus().name());
+    dto.setDeleteStatus(approvalFile.getDeleteStatus().name());
+    dto.setDeleted(approvalFile.isDeleted());
     dto.setFiles(fileDTOs);
     return dto;
   }
