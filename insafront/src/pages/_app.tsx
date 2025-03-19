@@ -5,8 +5,8 @@ import MainLayout from "@/component/MainLayout";
 // import Stomp from 'stompjs';
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import RoomList from "@/component/chat/ChatRoomList";
-import ChatArea from "@/component/chat/ChatArea";
+// import RoomList from "@/component/chat/ChatRoomList";
+// import ChatArea from "@/component/chat/ChatArea";
 
 export default function App({ Component, pageProps }: AppProps) {
 

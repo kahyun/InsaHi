@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-// import ChatRoomList from "@/component/chat/ChatRoomList";
-// import ChatArea from "@/component/chat/ChatArea";
+import ChatRoomList from "@/component/chat/ChatRoomList";
+import ChatArea from "@/component/chat/ChatArea";
+import RoomCreateModal from "@/component/chat/RoomCreateModal";
 import SockJS from "sockjs-client";
 import Stomp, {Client} from "stompjs";
 import {useRouter} from "next/router";
+
 
 const SOCKET_URL = "http://127.0.0.1:1006/chat/ws-stomp"; //  Spring Boot와 일치
 
@@ -17,6 +19,7 @@ export default function Chat() {
     const stompClientRef = useRef<Client | null>(null);
     const [currentUser, setCurrentUser] = useState<string | null>(null);
     const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
+    const [showCreateModal, setShowCreateModal] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -81,45 +84,36 @@ export default function Chat() {
             .catch((err) => console.error("❌ 사용자 정보 가져오기 실패:", err));
     }, [currentUser]); // 🔥 currentUser가 변경될 때만 실행
 
-    //  메시지 전송 함수
-    const sendMessage = () => {
-        if (stompClientRef.current && stompClientRef.current.connected) {
-            stompClientRef.current.send(
-                "/app/chat/send",
-                {},
-                JSON.stringify({ roomId: currentRoomId, sender: currentUser, message: input })
-            );
-            setInput("");
-        }
-    };
+    // //  메시지 전송 함수
+    // const sendMessage = () => {
+    //     if (stompClientRef.current && stompClientRef.current.connected) {
+    //         stompClientRef.current.send(
+    //             "/app/chat/send",
+    //             {},
+    //             JSON.stringify({ roomId: currentRoomId, sender: currentUser, message: input })
+    //         );
+    //         setInput("");
+    //     }
+    // };
+    //
 
     return (
-        <div>
-            <h2>Chat Room</h2>
-            <div>
-                {messages.map((msg, index) => (
-                    <p key={index}>{msg.text}</p>
-                ))}
-            </div>
-            <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+        <div style={{display: "flex", height: "100vh"}}>
+            <ChatRoomList
+                currentUser={currentUser}
+                stompClient={stompClientRef.current}
+                onSelectRoom={(roomId: string) => setCurrentRoomId(roomId)}
+                onCreateRoom={() => setShowCreateModal(true)}
             />
-            <button onClick={sendMessage}>Send</button>
+            <ChatArea currentUser={currentUser} currentRoomId={currentRoomId} stompClient={stompClientRef.current}/>
+            <RoomCreateModal
+                visible={showCreateModal}
+                onClose={() => setShowCreateModal(false)}
+                onRoomCreated={() => console.log("방 생성 완료")}
+                currentUser={currentUser}
+            />
         </div>
     );
-}
-//     return (
-//         <div style={{ display: "flex", height: "100vh" }}>
-//             <ChatRoomList
-//                 currentUser={currentUser}
-//                 stompClient={stompClientRef.current}
-//                 onSelectRoom={(roomId: string) => setCurrentRoomId(roomId)}
-//             />
-//             <ChatArea currentUser={currentUser} currentRoomId={currentRoomId} stompClient={stompClientRef.current} />
-//         </div>
-//     );
-// };
+};
 
 
