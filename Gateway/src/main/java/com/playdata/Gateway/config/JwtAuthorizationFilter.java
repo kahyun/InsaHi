@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 
 @Component
-@Slf4j//123456
+@Slf4j//12345611232
 public class JwtAuthorizationFilter extends AbstractGatewayFilterFactory<JwtAuthorizationFilter.Config> {
     //yml파일에 정의된 속성 사용하기 위해서
     private Environment environment;
