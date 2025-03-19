@@ -35,13 +35,14 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(CsrfConfigurer :: disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/company/signup","/employee/login").permitAll()
-                        .anyRequest().authenticated())
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(CsrfConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/", "/company/signup", "/employee/login", "/approavl/submit")
+            .permitAll()
+            .anyRequest().authenticated())
 //                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(new EmployeeJwtFilter(tokenManager),
                         UsernamePasswordAuthenticationFilter.class)
