@@ -2,7 +2,7 @@ package com.playdata.HumanResourceManagement.employee.service;
 
 import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
 import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
-import com.playdata.HumanResourceManagement.employee.dto.SmallProfileDTO;
+import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import org.springframework.security.core.Authentication;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
@@ -30,5 +30,5 @@ public interface EmployeeService {
 
   // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
-    SmallProfileDTO getSmallProfile(String employeeId);
+    ProfileCardDTO getProfileCard(String employeeId);
 }

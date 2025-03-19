@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SmallProfileDTO {
+public class ProfileCardDTO {
     private String employeeId;
     private String name;
     private String phoneNumber;

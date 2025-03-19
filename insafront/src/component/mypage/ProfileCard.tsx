@@ -1,9 +1,9 @@
 import styles from "@/styles/mypage/MyPage.module.css";
 import React, {useEffect} from "react";
-import {SmallprofileDTO} from "@/type/smallprofile";
+import {profileCardDTO} from "@/type/profilecard";
 
 
-const SmallProfile=({employeeId,name,phoneNumber,departmentId,positionSalaryId}:SmallprofileDTO)=>{
+const ProfileCard=({employeeId,name,phoneNumber,departmentId,positionSalaryId}:profileCardDTO)=>{
 
 
     return(
@@ -34,4 +34,4 @@ const SmallProfile=({employeeId,name,phoneNumber,departmentId,positionSalaryId}:
     )
 }
 
-export default SmallProfile;
+export default ProfileCard;

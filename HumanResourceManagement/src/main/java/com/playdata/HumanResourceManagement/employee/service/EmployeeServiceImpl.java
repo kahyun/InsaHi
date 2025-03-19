@@ -6,7 +6,7 @@ import com.playdata.HumanResourceManagement.employee.dao.EmployeeDAO;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.playdata.HumanResourceManagement.employee.dto.SmallProfileDTO;
+import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -107,9 +107,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     //Small Profile
     @Override
-    public SmallProfileDTO getSmallProfile(String employeeId) {
+    public ProfileCardDTO getProfileCard(String employeeId) {
         Employee employee = employeeDAO.findById(employeeId);
-        SmallProfileDTO smallProfileDTO = modelMapper.map(employee, SmallProfileDTO.class);
+        ProfileCardDTO smallProfileDTO = modelMapper.map(employee, ProfileCardDTO.class);
         return smallProfileDTO;
     }
 }

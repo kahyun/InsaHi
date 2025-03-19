@@ -14,6 +14,7 @@ public class ApprovalFileDTO {
   private String id;
   private String name;
   private String text;
+  private String approvalForm;
   private ApprovalStatus status;
   private DeleteStatus deleteStatus;//delete_status
   private boolean deleted;

@@ -19,7 +19,6 @@
     "react-icons": "^5.5.0",
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
-
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
