@@ -6,6 +6,7 @@ import com.playdata.HumanResourceManagement.company.service.CompanyService;
 import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

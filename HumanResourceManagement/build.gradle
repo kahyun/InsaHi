@@ -31,7 +31,6 @@ dependencies {
 
     // Spring Cloud OpenFeign (서비스 간 통신)
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
     // MySQL 커넥터
     runtimeOnly 'com.mysql:mysql-connector-j'
