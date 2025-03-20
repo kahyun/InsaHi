@@ -34,4 +34,6 @@ public interface EmployeeService {
     ProfileCardDTO getProfileCard(String employeeId);
 
     EmployeeResponseDTO getEmployeeInfo(String employeeId);
+
+    EmployeeResponseDTO updateEmployeeInfo(String employeeId);
 }

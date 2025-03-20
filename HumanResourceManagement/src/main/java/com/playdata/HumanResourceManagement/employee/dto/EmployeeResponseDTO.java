@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 public class EmployeeResponseDTO {
 
     private String employeeId;
-    private String password;
     private String name;
     private String email;
     private String phoneNumber;
