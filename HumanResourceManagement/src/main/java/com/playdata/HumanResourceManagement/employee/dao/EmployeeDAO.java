@@ -20,4 +20,5 @@ public interface EmployeeDAO {
     LocalTime findCompanyStartTimeByEmployeeId(String employeeId);
 
 
+    void update(Employee employee);
 }

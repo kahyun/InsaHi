@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -28,8 +27,7 @@ public class EmployeeResponseDTO {
     private String state;
     private Long positionSalaryId;
     private LocalDate hireDate;
-    private LocalTime retireDate;
-
+    private LocalDate retireDate;
 
 
 }
