@@ -7,33 +7,35 @@ import WorkInfo from "@/component/mypage/WorkInfo";
 import ClockButton from "@/component/mypage/ClockButton";
 import ProfileCard from "@/component/mypage/ProfileCard";
 import Calendar from "@/component/mypage/Calendar";
-import profileCardAction from "@/api/mypageaction";
+import profileCardAction from "@/api/mypage/profilecardaction";
+import EmployeeInfoAction from "@/api/mypage/employeeinfoaction";
 
 const MyPage = () => {
 
     const [userData, setUserData] = useState<profileCardDTO | null>(null);
-    const employeeId = localStorage.getItem("employeeId") || "defaultID"; // 로그인한 사용자의 ID 가져오기
+    const [employeeIdToken, setEmployeeIdToken] = useState<string | null>(null); // 로그인한 사용자의 ID 가져오기
 
-    // console.log(employeeId)
 
-    // useEffect(() => {
-    //     fetcher("/mypage/MyPage")
-    //         .then((data)=>setUserData(data))
-    //         .catch(console.error);
-    // }, []);
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await profileCardAction(employeeId);
-            console.log("datadata "+data);
-            if(data){
-                setUserData(data);
-            }
-            else {
-                console.warn("No data")
-            }
-        };
-        fetchData();
-    }, [employeeId]);
+        // 클라이언트에서만 실행되도록 보장
+        if (typeof window !== "undefined") {
+            const storedEmployeeId = localStorage.getItem("employeeId") || "defaultId";
+            setEmployeeIdToken(storedEmployeeId);
+        }
+    }, []);
+    useEffect(() => {
+        if (employeeIdToken) {
+            const fetchData = async () => {
+                const data = await profileCardAction(employeeIdToken);
+                if (data) {
+                    setUserData(data);
+                } else {
+                    console.warn("No data found.");
+                }
+            };
+            fetchData();
+        }
+    }, [employeeIdToken]);
 
     return (
         <div className={styles.container}>

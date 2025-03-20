@@ -38,7 +38,6 @@ public class Employee {
     private String name; //2 이름
     private String email; //3 이메일
     private String phoneNumber; //4 전화번호
-    private String address; //5 주소
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "department_id", nullable = true)  // 외래키 컬럼만 지정

@@ -41,6 +41,9 @@ public class Company {
     @Column(name = "start_time")
     private Timestamp startTime;
 
+    @Column(name = "company_address")
+    private String companyAddress;
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<DepartmentEntity> departments; // 부서 목록

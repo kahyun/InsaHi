@@ -30,5 +30,8 @@ public interface EmployeeService {
 
   // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
+    //mypage 왼쪽 작은 프로필
     ProfileCardDTO getProfileCard(String employeeId);
+
+    EmployeeResponseDTO getEmployeeInfo(String employeeId);
 }

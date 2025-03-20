@@ -1,6 +1,7 @@
 import styles from "@/styles/mypage/MyPage.module.css";
 import React, {useEffect} from "react";
 import {profileCardDTO} from "@/type/profilecard";
+import Link from "next/link";
 
 
 const ProfileCard=({employeeId,name,phoneNumber,departmentId,positionSalaryId}:profileCardDTO)=>{
@@ -17,7 +18,7 @@ const ProfileCard=({employeeId,name,phoneNumber,departmentId,positionSalaryId}:p
                         <p>부서명 : {departmentId}</p>
                         <p>직급 : {positionSalaryId}</p>
                         <p>전화번호 : {phoneNumber}</p>
-                        <button className={styles.button}>정보 변경</button>
+                        <Link href={"/mypage/EditProfile"} className={styles.button}>정보 변경</Link>
                     </div>
                 </div>
                 {/* Quick Menu */}

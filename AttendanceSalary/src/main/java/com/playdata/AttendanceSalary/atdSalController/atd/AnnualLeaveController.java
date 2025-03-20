@@ -23,7 +23,7 @@ public class AnnualLeaveController {
 //124561585156546
   // 휴가 신청
   @PostMapping("/submit")
-  public ResponseEntity<string> submitLeave(@RequestBody AnnualLeaveRequestDTO requestDTO) {
+  public ResponseEntity<String> submitLeave(@RequestBody AnnualLeaveRequestDTO requestDTO) {
     try {
       annualLeaveService.submit(requestDTO.getEmployeeId(), requestDTO.getCompanyCode(),
           requestDTO);
