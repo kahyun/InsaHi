@@ -7,6 +7,7 @@ import com.playdata.ElectronicApproval.dao.ApprovalLineDAO;
 import com.playdata.ElectronicApproval.dao.ApprovalLineDetailDAO;
 import com.playdata.ElectronicApproval.dao.FileDAO;
 import com.playdata.ElectronicApproval.dto.ApprovalFileDTO;
+import com.playdata.ElectronicApproval.dto.ApprovalLineDTO;
 import com.playdata.ElectronicApproval.dto.FileDTO;
 import com.playdata.ElectronicApproval.dto.RequestApprovalFileDTO;
 import com.playdata.ElectronicApproval.dto.ResponseApprovalFileDTO;
@@ -236,9 +237,42 @@ public class ApprovalServiceImpl implements ApprovalService {
 
   @Override
   public ResponseApprovalFileDTO getApprovalFile(String approvalFileId) {
+    // 1. 파일 정보 조회
     List<FileDTO> fileDTOs = fileDownloadService.loadAllFiles(approvalFileId);
+
+    // 2. 결재 문서 정보 조회
     ApprovalFileEntity approvalFile = approvalFileDao.findById(approvalFileId)
         .orElseThrow(() -> new IllegalArgumentException("Approval file not found"));
+
+    // 결재 라인 및 상태 정보 조회
+    List<ApprovalLineDTO> approvalLines = approvalLineDao.findAllByApprovalFile(approvalFile)
+        .stream()
+        .map(line -> new ApprovalLineDTO(
+            line.getId(),
+            line.getApprovalOrder(),
+            line.getEmployeeId(),
+            line.getApprovalLineDetail().getStatus().name() // 결재 상태 추가
+        ))
+        .collect(Collectors.toList());
+/*
+    // 3. 결재 라인 정보 조회
+    List<ApprovalLineEntity> approvalLines = approvalLineDao.findAllByApprovalFile(approvalFile);
+
+    // 4. 결재자 순서와 employeeId 정보를 포함한 ApprovalLine 리스트 생성
+    List<ApprovalLineDTO> approvalLineDTOs = approvalLines.stream()
+        .map(line -> new ApprovalLineDTO(line.getId(), line.getApprovalOrder(),
+            line.getEmployeeId()))
+        .collect(Collectors.toList());
+*/
+
+    ResponseApprovalFileDTO dto = getResponseApprovalFileDTO(
+        approvalFile, fileDTOs, approvalLines);
+
+    return dto;
+  }
+
+  private static ResponseApprovalFileDTO getResponseApprovalFileDTO(ApprovalFileEntity approvalFile,
+      List<FileDTO> fileDTOs, List<ApprovalLineDTO> approvalLineDTOs) {
     ResponseApprovalFileDTO dto = new ResponseApprovalFileDTO();
     dto.setId(approvalFile.getId());
     dto.setName(approvalFile.getName());
@@ -249,6 +283,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     dto.setDeleteStatus(approvalFile.getDeleteStatus().name());
     dto.setDeleted(approvalFile.isDeleted());
     dto.setFiles(fileDTOs);
+    dto.setApprovalLines(approvalLineDTOs); // 결재 라인 정보 추가
     return dto;
   }
 
@@ -280,8 +315,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 
   private List<ApprovalFileEntity> findByAssignedApproval(String employeeId) {
 //    approvalLineDao.findAllByEmployeeIdAndApprovalStatus(EmployeeId, ApprovalStatus.PENDING);
-    return approvalLineDao.findAllByEmployeeId(employeeId).stream()
-        .map(line -> line.getApprovalFile()).collect(Collectors.toList());
+    return approvalLineDao.findAllByEmployeeIdAndApprovalOrderNotZero(employeeId).stream()
+        .map(line -> line.getApprovalFile())
+        .collect(Collectors.toList());
 //    return null;
   }
 

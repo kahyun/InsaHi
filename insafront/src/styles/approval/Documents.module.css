@@ -1,0 +1,161 @@
+.documentsPageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.documentsContentContainer {
+  display: flex;
+  flex: 1;
+  margin-top: 60px;
+}
+
+.documentsMainContent {
+  padding: 20px;
+  flex: 1;
+}
+
+.documentsPageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.documentsPageTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.documentsFilterContainer {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.documentsSearchInput {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 250px;
+}
+
+.documentsFilterSelect {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.documentsCreateButton {
+  background-color: #3D67D7;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.documentsCreateButton:hover {
+  background-color: #2a4ba8;
+}
+
+.documentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.documentsTable th {
+  background-color: #f8f9fa;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.documentsTable td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.documentsTable tr:hover {
+  background-color: #f5f5f5;
+}
+
+.documentsStatus {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.documentsStatusPending {
+  background-color: #fff8e6;
+  color: #f5a623;
+}
+
+.documentsStatusApproved {
+  background-color: #e6f7ee;
+  color: #28a745;
+}
+
+.documentsStatusRejected {
+  background-color: #ffebee;
+  color: #dc3545;
+}
+
+.documentsActionLink {
+  color: #3D67D7;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.documentsActionLink:hover {
+  text-decoration: underline;
+}
+
+.documentsPaginationContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.documentsPaginationButton {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.documentsPaginationButton:hover {
+  background-color: #f0f0f0;
+}
+
+.documentsPaginationButtonActive {
+  background-color: #3D67D7;
+  color: white;
+  border: 1px solid #3D67D7;
+}
+
+.documentsEmptyState {
+  text-align: center;
+  padding: 50px 0;
+  color: #666;
+}
