@@ -43,11 +43,11 @@ public class Employee {
     @JoinColumn(name = "department_id", nullable = true)  // 외래키 컬럼만 지정
     @JsonBackReference  // 순환 참조 방지
     private DepartmentEntity department; // 부서
-
     private String teamId;
     private String state; // 상태 (Active, Inactive 등)
-    private String positionSalaryId; //직급호봉
-
+    private Long positionSalaryId; //직급호봉
+	private LocalTime hireDate;
+    private  LocalTime retireDate;
 
 
 //    private LocalDate hireDate;
