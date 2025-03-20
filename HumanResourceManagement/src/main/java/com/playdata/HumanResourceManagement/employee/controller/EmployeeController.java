@@ -66,13 +66,21 @@ public class EmployeeController {
         return employeeService.getAllEmployeeIds();
     }
 
+
+    //mypage 왼쪽 작은 프로필
     @GetMapping("/{employeeId}/profilecard")
-    public ResponseEntity<ProfileCardDTO> getProfileCard(@PathVariable String employeeId) {
+    public ResponseEntity<ProfileCardDTO> getProfileCard(@PathVariable("employeeId") String employeeId) {
         ProfileCardDTO response = employeeService.getProfileCard(employeeId);
-
-
+        System.out.println("result result result : "+response);
         return ResponseEntity.ok(response);
 
+    }
+    //개인정보 수정페이지
+    @GetMapping("/{employeeId}/employeeinfo")
+    public ResponseEntity<EmployeeResponseDTO> getEmployeeInfo(@PathVariable("employeeId") String employeeId) {
+        EmployeeResponseDTO response = employeeService.getEmployeeInfo(employeeId);
+
+        return ResponseEntity.ok(response);
     }
 
 

@@ -9,18 +9,19 @@ import Sidebar6 from "../sidebar/Sidebar6";
 
 import styles from "@/styles/Topbar.module.css";
 import {useRouter} from "next/router";
+import {profileCardDTO} from "@/type/profilecard";
 
 
 
-const TopBar: React.FC = () => {
+const TopBar = ({name}:profileCardDTO) => {
     const [activeSidebar, setActiveSidebar] = useState<string | null>(null);
     const router = useRouter();
-
 
 
     // 로그아웃 핸들러
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("employeeId");
         alert("로그아웃 되었습니다.");
         router.push("/");
     };
@@ -33,7 +34,7 @@ const TopBar: React.FC = () => {
             <header className={styles.toptopbar}>
                 <nav className={styles.topnav}>
                     {/* 왼쪽 로고 */}
-                    <div className={styles.toplogo}>인사 HI</div>
+                    <Link href={"/mypage/MyPage"} className={styles.toplogo}>인사 HI</Link>
 
                     {/* 중앙 메뉴 */}
                     <ul className={styles.topmenu}>
@@ -86,9 +87,9 @@ const TopBar: React.FC = () => {
                     {/* 오른쪽 아이콘 */}
                     <div className={styles.topicons}>
                         <div>알림</div>
-                        <div className={styles.user}>
-                            사용자
-                        </div>
+                        <Link href={"/mypage/MyPage"} className={styles.user}>
+                            {name} 님
+                        </Link>
                         <button className={styles.logoutButton} onClick={handleLogout}>
                             로그아웃
                         </button>

@@ -105,12 +105,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   }
 
-    //Small Profile
+    //mypage 왼쪽 작은 프로필
     @Override
     public ProfileCardDTO getProfileCard(String employeeId) {
         Employee employee = employeeDAO.findById(employeeId);
-        ProfileCardDTO smallProfileDTO = modelMapper.map(employee, ProfileCardDTO.class);
-        return smallProfileDTO;
+        ProfileCardDTO ProfileCardDTO = modelMapper.map(employee, ProfileCardDTO.class);
+
+        return ProfileCardDTO;
+    }
+
+    //개인정보수정페이지
+    @Override
+    public EmployeeResponseDTO getEmployeeInfo(String employeeId) {
+      Employee employee = employeeDAO.findById(employeeId);
+      EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
+      return employeeResponseDTO;
     }
 }
 
