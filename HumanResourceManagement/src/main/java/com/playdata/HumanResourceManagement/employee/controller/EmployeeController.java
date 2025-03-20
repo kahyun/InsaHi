@@ -48,6 +48,7 @@ public class EmployeeController {
             @PathVariable("employeeId") String employeeId) {
         LocalTime startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
         log.info("controller 단 : getCompanyStartTime: {}", startTime);
+
         return ResponseEntity.ok(startTime);
     }
 

@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeResponseDTO {
 
-    private Long id;
     private String employeeId;
     private String password;
     private String name;
@@ -24,7 +26,9 @@ public class EmployeeResponseDTO {
     private String departmentId;
     private String teamId;
     private String state;
-    private String positionSalaryId;
+    private Long positionSalaryId;
+    private LocalDate hireDate;
+    private LocalTime retireDate;
 
 
 
