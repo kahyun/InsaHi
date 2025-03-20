@@ -39,7 +39,7 @@ public class Company {
     private String businessNumber;
 
     @Column(name = "start_time")
-    private Timestamp startTime;
+    private LocalTime startTime;
 
     @Column(name = "company_address")
     private String companyAddress;
