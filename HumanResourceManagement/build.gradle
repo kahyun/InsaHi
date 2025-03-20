@@ -56,6 +56,9 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    //javamailsender
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     // 외부 프로젝트 의존성 (ElectronicApproval)
 //    implementation project(':ElectronicApproval')
 
