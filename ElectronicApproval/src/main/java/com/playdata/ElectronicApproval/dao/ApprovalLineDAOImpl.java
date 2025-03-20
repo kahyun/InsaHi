@@ -1,5 +1,6 @@
 package com.playdata.ElectronicApproval.dao;
 
+import com.playdata.ElectronicApproval.entity.ApprovalFileEntity;
 import com.playdata.ElectronicApproval.entity.ApprovalLineEntity;
 import com.playdata.ElectronicApproval.entity.ApprovalStatus;
 import com.playdata.ElectronicApproval.repository.ApprovalLineRepository;
@@ -33,8 +34,15 @@ public class ApprovalLineDAOImpl implements ApprovalLineDAO {
   }
 
   @Override
-  public List<ApprovalLineEntity> findAllByEmployeeId(String employeeId) {
-    return approvalLineRepository.findAllByEmployeeId(employeeId);
+  /**/ public List<ApprovalLineEntity> findAllByEmployeeIdAndApprovalOrder(String employeeId,
+      int approvalOrder) {
+    return approvalLineRepository.findAllByEmployeeIdAndApprovalOrder(employeeId, approvalOrder);
+  }
+
+  /**/
+  @Override
+  public List<ApprovalLineEntity> findAllByEmployeeIdAndApprovalOrderNotZero(String employeeId) {
+    return approvalLineRepository.findAllByEmployeeIdAndApprovalOrderNotZero(employeeId);
   }
 
   @Override
@@ -47,6 +55,11 @@ public class ApprovalLineDAOImpl implements ApprovalLineDAO {
   @Override
   public List<ApprovalLineEntity> findAllByApprovalStatus(ApprovalStatus approvalStatus) {
     return List.of();
+  }
+
+  @Override
+  public List<ApprovalLineEntity> findAllByApprovalFile(ApprovalFileEntity approvalFile) {
+    return approvalLineRepository.findAllByApprovalFile(approvalFile);
   }
 
   @Override
