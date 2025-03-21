@@ -15,17 +15,18 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    public void sendRegistrationInfo(String email, String companyCode, String employeeId) throws MessagingException {
+    public void sendRegistrationInfo(String name, String email, String companyCode, String employeeId) throws MessagingException {
         String htmlContent = "<html>" +
                 "<body>" +
                 "<h1 style='color: orange;'>회원가입 완료</h1>" +
                 "<p>회원가입이 완료되었습니다!</p>" +
+                "<p>"+name +"님"+
                 "<p><b>회사 코드:</b> " + companyCode + "</p>" +
                 "<p><b>아이디:</b> " + employeeId + "</p>" +
                 "</body>" +
                 "</html>";
 
-        sendEmail(email, "[Pethub] 회원가입 완료", htmlContent);
+        sendEmail(email, "[InsaHI] 회원가입 완료", htmlContent);
     }
 
     private void sendEmail(String email, String subject, String htmlContent) throws MessagingException {

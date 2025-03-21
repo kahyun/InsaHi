@@ -43,7 +43,9 @@ spring:
             - Path=/employee/**
             - Method=GET
           filters:
-            - JwtAuthorizationFilter
+#            - JwtAuthorizationFilter
+             name: JwtAuthorizationFilter
+
 
         - id: HumanResourceManagement
           uri: http://127.0.0.1:1010
@@ -75,6 +77,11 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+  security:
+    user:
+      roles:
+        - ROLE_ADMIN
+        - ROLE_USER
 logging:
   level:
     org:
