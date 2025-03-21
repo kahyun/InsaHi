@@ -15,5 +15,8 @@ public class EmployeeRequestDTO {
     private String email;
     private String phoneNumber;
 
+    private String teamId;
+    private String positionSalaryId;
+    private String departmentId;
 
 }
