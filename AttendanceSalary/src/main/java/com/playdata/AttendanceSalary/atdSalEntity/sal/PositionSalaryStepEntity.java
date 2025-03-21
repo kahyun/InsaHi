@@ -3,26 +3,29 @@ package com.playdata.AttendanceSalary.atdSalEntity.sal;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
-/// 직급호봉
+import java.math.BigDecimal; // 급여 관련 필드에서 사용
+/**
+ * 직급별 급여 단계 엔티티
+ */
 @Entity
 @Table(name = "position_salary_step")
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PositionSalaryStepEntity extends DateEntity {
-//직급 호봉 테이블
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "position_salary_id")
-    private Long positionSalaryId; //직급 호봉 아이디
+    private Long positionSalaryId;
 
-    @ManyToOne
-    @JoinColumn(name ="position_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id")
     private PositionEntity position;
 
     @Column(name = "salary_step_id")
@@ -31,17 +34,10 @@ public class PositionSalaryStepEntity extends DateEntity {
     @Column(precision = 11, scale = 2)
     private BigDecimal baseSalary;
 
-//    @Column(precision = 11, scale = 2)
-//    private BigDecimal positionAllowance;
-
     @Column(precision = 11, scale = 2)
     private BigDecimal overtimeAllowance;
 
     private int baseAnnualLeave;
 
     private String companyCode;
-
-//    @ElementCollection employee에서 가지고 있기
-//    private List<String> employees = new ArrayList<>();
-
 }

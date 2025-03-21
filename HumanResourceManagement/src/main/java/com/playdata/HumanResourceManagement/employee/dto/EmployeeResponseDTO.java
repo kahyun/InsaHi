@@ -1,9 +1,12 @@
 package com.playdata.HumanResourceManagement.employee.dto;
 
-import com.playdata.HumanResourceManagement.employee.entity.Employee;
+
+import com.playdata.AttendanceSalary.atdSalDto.sal.PositionResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +29,8 @@ public class EmployeeResponseDTO {
     private String state;
     private String positionSalaryId;
 
+    // 직급 정보 추가
+    private PositionResponseDTO position;
 
 
 }

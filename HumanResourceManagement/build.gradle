@@ -22,15 +22,20 @@ repositories {
 }
 
 dependencies {
+
+    implementation project(':AttendanceSalary')
+
     // Spring Boot 의존성
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
     // Spring Cloud OpenFeign (서비스 간 통신)
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Spring Cloud Load Balancer
+    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'  // 추가된 부분
 
     // MySQL 커넥터
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -58,12 +63,14 @@ dependencies {
     // 외부 프로젝트 의존성 (ElectronicApproval)
     implementation project(':ElectronicApproval')
 
-    // Kafka 의존성 (메시징)
-    implementation 'org.springframework.kafka:spring-kafka'
-    implementation 'org.apache.kafka:kafka-clients:3.4.0'
+    // MapStruct 추가
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
-    // Redis 의존성 (캐싱 지원)
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'  // Redis 지원 추가
+    // 이메일 관련 의존성 추가
+    implementation 'jakarta.mail:jakarta.mail-api:2.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 dependencyManagement {

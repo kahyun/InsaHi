@@ -1,6 +1,6 @@
 package com.playdata.AttendanceSalary.atdSalService.atd;
 
-import com.playdata.AttendanceSalary.atdClient.HrmFeignClient;
+import com.playdata.AttendanceSalary.ahrmClient.HrmFeignClient;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
 import com.playdata.AttendanceSalary.atdSalDao.atd.AttendanceDAO;
 import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;

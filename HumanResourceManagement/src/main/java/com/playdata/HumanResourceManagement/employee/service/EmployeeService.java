@@ -31,4 +31,6 @@ public interface EmployeeService {
   // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
     SmallProfileDTO getSmallProfile(String employeeId);
+
+
 }
