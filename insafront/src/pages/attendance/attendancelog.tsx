@@ -149,7 +149,8 @@ const AttendanceLog: React.FC = () => {
                             <th>사원코드</th>
                             <th>출근시간</th>
                             <th>퇴근시간</th>
-                            <th>근무시간</th>
+                            <th>근무시간(분 단위)</th>
+                            <th>연장근무시간(시간 단위)</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -160,6 +161,7 @@ const AttendanceLog: React.FC = () => {
                                 <td>{formatTime(record.checkInTime)}</td>
                                 <td>{formatTime(record.checkOutTime)}</td>
                                 <td>{record.workHours ?? '-'}</td>
+                                <td>{record.overtimeHours ?? '-'}</td>
                             </tr>
                         ))}
                         </tbody>
