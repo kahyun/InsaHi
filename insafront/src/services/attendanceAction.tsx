@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { checkIn, checkOut } from '@/services/attendanceService'; // 서비스 임포트
+import { checkIn, checkOut } from '@/services/attendanceService';
 import styles from '../styles/attendancelog.module.css';
 
 interface AttendanceActionsProps {

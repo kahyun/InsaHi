@@ -14,12 +14,10 @@ public interface SalaryService {
     /// 급여계산 로직
     public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId);
 
-    List<AllowanceEntity> findByAllowance_CompanyCode(String CompanyCode);
-
-
+    List<PositionSalaryStepResponseDTO> findPositionSalaryStepByCompanyCode(String CompanyCode);
     /// Position  서비스
     // 회사별 직급 생성
-    PositionResponseDTO insertPosition(PositionResponseDTO requestDTO, String CompanyCode);
+    PositionResponseDTO insertPosition(PositionResponseDTO requestDTO, String companyCode);
 
     // 직급 수정
     void updatePosition(PositionResponseDTO requestDTO);
@@ -47,6 +45,9 @@ public interface SalaryService {
     void deleteAllowance(AllowanceResponseDTO responseDTO);
 
     AllowanceResponseDTO findAllowance(Long allowanceId);
+
+    List<AllowanceResponseDTO> findAllowancesByCompanyCode(String CompanyCode);
+
 
     /// Deduction 서비스
     DeductionResponseDTO insertDeduction(DeductionResponseDTO responseDTO);
@@ -79,7 +80,7 @@ public interface SalaryService {
 
     EmployeeAllowDTO findEmployeeAllowByEmployeeId(Long employeeId);
 
-
+    List<PositionResponseDTO> findPositionsByCompanyCode(String companyCode);
 }
 //
 //    /// Salary 서비스
