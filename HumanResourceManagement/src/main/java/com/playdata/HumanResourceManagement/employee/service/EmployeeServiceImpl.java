@@ -56,6 +56,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDAO.insert(employee);
     }
 
+
+
     @Override
     public Authentication login(LoginDTO employee) {
         //스프링시큐리티의 인증이 실행되도록 처리
@@ -127,6 +129,25 @@ public class EmployeeServiceImpl implements EmployeeService {
       EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
 
         return employeeResponseDTO;
+    }
+
+    @Override
+    public void addUserRoles(Employee employee) {
+        Set<Authority> roles = new HashSet<>();
+
+        authorityDAO.getUserRole().ifPresent(roles::add);
+
+        employee.setAuthorityList(roles);
+        employeeDAO.insert(employee);
+    }
+
+    @Override
+    public Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO) {
+        Employee entity = modelMapper.map(employeeRequestDTO, Employee.class);
+
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        employeeDAO.insert(entity);
+        return entity;
     }
 }
 

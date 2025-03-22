@@ -46,8 +46,8 @@ public class SecurityConfig {
     http
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/", "/company/signup", "/employee/login", "/approavl/submit")
-            .permitAll()
+            .requestMatchers("/", "/company/signup", "/employee/login", "/approavl/submit").permitAll()
+            //관리자만 볼 수 있는 페이지 설정
             .anyRequest().authenticated())
 //                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(new EmployeeJwtFilter(tokenManager),

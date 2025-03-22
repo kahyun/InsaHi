@@ -39,7 +39,7 @@ public class CompanyController {
 
         // 회원가입 완료 후 이메일 전송
         try {
-            emailService.sendRegistrationInfo(employee.getEmail(), savedCompany.getCompanyCode(), employee.getEmployeeId());
+            emailService.sendRegistrationInfo(employee.getName(),employee.getEmail(), savedCompany.getCompanyCode(), employee.getEmployeeId());
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입은 완료되었으나 이메일 전송 중 오류가 발생했습니다.");
         }
