@@ -38,4 +38,6 @@ public interface EmployeeService {
     void addUserRoles(Employee employee);
 
     Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO);
+
+    List<Employee> getMemberList();
 }

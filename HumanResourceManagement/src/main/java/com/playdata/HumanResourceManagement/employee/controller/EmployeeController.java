@@ -121,5 +121,9 @@ public class EmployeeController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-
+    //    채팅방 초대 멤버 조회
+    @GetMapping("/all")
+    public List<Employee> getMemberList(){
+        return employeeService.getMemberList();
+    }
 }
