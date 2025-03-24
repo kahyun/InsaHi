@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.playdata.HumanResourceManagement.employee.dto.*;
+import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final ModelMapper modelMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final PasswordEncoder passwordEncoder;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public Employee adminInsert(AdminRequestDTO adminRequestDTO) {
@@ -149,5 +151,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDAO.insert(entity);
         return entity;
     }
+
+    @Override
+    public List<Employee> getMemberList() {
+        return employeeRepository.findAll();
+    }
+
 }
 

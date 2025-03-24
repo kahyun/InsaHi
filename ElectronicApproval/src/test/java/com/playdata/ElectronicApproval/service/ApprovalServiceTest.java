@@ -59,14 +59,14 @@ class ApprovalServiceTest {
   public void approve4() {
     String employeeId = "E002";
     System.out.println("-----------------------------------");
-    List<ApprovalFileDTO> files1 = approvalService.getApprovalFiles(employeeId, 1);
-    System.out.println(files1);
-    System.out.println("-----------------------------------");
-    List<ApprovalFileDTO> files2 = approvalService.getApprovalFiles(employeeId, 2);
-    System.out.println(files2);
-    System.out.println("---------------------------------");
-    List<ApprovalFileDTO> files3 = approvalService.getApprovalFiles(employeeId, 3);
-    System.out.println(files3);
+//    List<ApprovalFileDTO> files1 = approvalService.getApprovalFiles(employeeId, 1);
+//    System.out.println(files1);
+//    System.out.println("-----------------------------------");
+//    List<ApprovalFileDTO> files2 = approvalService.getApprovalFiles(employeeId, 2);
+//    System.out.println(files2);
+//    System.out.println("---------------------------------");
+//    List<ApprovalFileDTO> files3 = approvalService.getApprovalFiles(employeeId, 3);
+//    System.out.println(files3);
     // 조회하고 일단 파일이 가진 라인 중 employeeId가 일치하고  return
   }
 

@@ -131,7 +131,13 @@ const TopBar = () => {
 
             {/* 오른쪽 아이콘 */}
             <div className={styles.topicons}>
-              <div>알림</div>
+              <Link
+                  href="/chat"
+                  className={styles.topmenulink}
+                  style={{ cursor: "pointer" }}
+              >
+                채팅
+              </Link>
               <Link href={"/mypage/MyPage"} className={styles.user}>
                 {employee?.name} 님
               </Link>
