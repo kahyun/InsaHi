@@ -1,161 +1,175 @@
+/* styles/approval/Documents.module.css */
+
 .documentsPageContainer {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #ffffff;
-}
-
-.documentsContentContainer {
-  display: flex;
-  flex: 1;
-  margin-top: 60px;
+  justify-content: center;
+  padding: 2rem;
 }
 
 .documentsMainContent {
-  padding: 20px;
-  flex: 1;
-}
-
-.documentsPageHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  width: 100%;
+  max-width: 800px;
 }
 
 .documentsPageTitle {
-  font-size: 24px;
+  font-size: 2rem;
   font-weight: bold;
-  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .documentsFilterContainer {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  align-items: center;
-}
-
-.documentsSearchInput {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  width: 250px;
-}
-
-.documentsFilterSelect {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  background-color: white;
+  justify-content: stretch;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .documentsCreateButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
   background-color: #3D67D7;
   color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
   font-weight: bold;
+  transition: background-color 0.3s;
 }
 
 .documentsCreateButton:hover {
-  background-color: #2a4ba8;
-}
-
-.documentsTable {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.documentsTable th {
-  background-color: #f8f9fa;
-  padding: 12px 15px;
-  text-align: left;
-  font-weight: bold;
-  color: #333;
-  border-bottom: 1px solid #ddd;
-}
-
-.documentsTable td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-}
-
-.documentsTable tr:hover {
-  background-color: #f5f5f5;
-}
-
-.documentsStatus {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 12px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.documentsStatusPending {
-  background-color: #fff8e6;
-  color: #f5a623;
-}
-
-.documentsStatusApproved {
-  background-color: #e6f7ee;
-  color: #28a745;
-}
-
-.documentsStatusRejected {
-  background-color: #ffebee;
-  color: #dc3545;
-}
-
-.documentsActionLink {
-  color: #3D67D7;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.documentsActionLink:hover {
-  text-decoration: underline;
-}
-
-.documentsPaginationContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  background-color: #0369a1;
 }
 
 .documentsPaginationButton {
-  background: white;
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  margin: 0 5px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #333;
   cursor: pointer;
-  border-radius: 4px;
+  transition: background-color 0.3s;
 }
 
 .documentsPaginationButton:hover {
-  background-color: #f0f0f0;
-}
-
-.documentsPaginationButtonActive {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
   background-color: #3D67D7;
   color: white;
-  border: 1px solid #3D67D7;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+
+}
+
+.documentsLoading {
+  text-align: center;
+  color: #666;
+  margin: 1rem 0;
+}
+
+.documentsError {
+  text-align: center;
+  color: red;
+  margin: 1rem 0;
 }
 
 .documentsEmptyState {
   text-align: center;
-  padding: 50px 0;
-  color: #666;
+  color: #999;
+  margin: 1rem 0;
+}
+
+.documentsTable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 0;
+}
+
+.documentsActionLink {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.documentsActionLink:hover {
+  color: #3D67D7;
+}
+
+.documentsLoadingTrigger {
+  text-align: center;
+  color: #777;
+  padding: 1rem;
+  list-style: none;
+}
+
+.documentsSearchInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
+.badgeApproved {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badgeRejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badgePending {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.toastContainer {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #333;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
