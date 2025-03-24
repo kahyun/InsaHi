@@ -11,10 +11,31 @@ import styles from "@/styles/Topbar.module.css";
 import {useRouter} from "next/router";
 import {profileCardDTO} from "@/type/profilecard";
 
+import useSSE from "@/component/approval/useSSE";
+import Toast from "@/component/approval/Toast";
 
 const TopBar = ({name}: profileCardDTO) => {
   const [activeSidebar, setActiveSidebar] = useState<string | null>(null);
+  const [hasNotification, setHasNotification] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const router = useRouter();
+
+  // 전자결재 - 유저 정보 가져오기 (employeeId)
+  const employeeId =
+      typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
+
+  // 전자결재 - SSE 알림 수신 (알림 상태 갱신 + 토스트)
+  useSSE(employeeId, (message) => {
+    setHasNotification(true); // 뱃지 표시
+    setToastMessage(message); // 토스트 알림 표시
+  });
+
+  // 전자결재 - 알림 클릭 시 핸들러
+  // const handleNotificationClick = () => {
+  //   setHasNotification(false);
+  //   router.push("/notifications"); // 알림 센터 페이지로 이동
+  // };
 
 
   // 로그아웃 핸들러
@@ -54,6 +75,7 @@ const TopBar = ({name}: profileCardDTO) => {
                 >
                   전자결재
                 </Link>
+                {hasNotification && <span className={styles.notificationDot}/>}
               </li>
               <li>
                 <Link
@@ -104,6 +126,11 @@ const TopBar = ({name}: profileCardDTO) => {
           {activeSidebar === "sidebar5" && <Sidebar5/>}
           {activeSidebar === "sidebar6" && <Sidebar6/>}
         </div>
+        {/* 전자결재 - Toast 알림 */}
+        {toastMessage && (
+            <Toast message={toastMessage} onClose={() => setToastMessage(null)}/>
+        )}
+
       </div>
   );
 };
