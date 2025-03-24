@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import Sidebar1 from "../sidebar/Sidebar1";
 import Sidebar2 from "../sidebar/Sidebar2";
@@ -9,12 +9,12 @@ import Sidebar6 from "../sidebar/Sidebar6";
 
 import styles from "@/styles/Topbar.module.css";
 import {useRouter} from "next/router";
-import {profileCardDTO} from "@/type/profilecard";
+import EmployeeInfoAction from "@/api/mypage/employeeinfoaction";
 
 import useSSE from "@/component/approval/useSSE";
 import Toast from "@/component/approval/Toast";
 
-const TopBar = ({name}: profileCardDTO) => {
+const TopBar = () => {
   const [activeSidebar, setActiveSidebar] = useState<string | null>(null);
   const [hasNotification, setHasNotification] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -46,6 +46,30 @@ const TopBar = ({name}: profileCardDTO) => {
     alert("로그아웃 되었습니다.");
     router.push("/");
   };
+  const [employee, setEmployee] = useState<employeeInfoDTO | null>(null);
+  const [employeeIdToken, setEmployeeIdToken] = useState<string | null>(null); // 로그인한 사용자의 ID 가져오기
+
+
+  useEffect(() => {
+    // 클라이언트에서만 실행되도록 보장
+    if (typeof window !== "undefined") {
+      const storedEmployeeId = localStorage.getItem("employeeId") || "defaultId";
+      setEmployeeIdToken(storedEmployeeId);
+    }
+  }, []);
+  useEffect(() => {
+    if (employeeIdToken) {
+      const fetchData = async () => {
+        const data = await EmployeeInfoAction(employeeIdToken);
+        if (data) {
+          setEmployee(data);
+        } else {
+          console.warn("No data found.");
+        }
+      };
+      fetchData();
+    }
+  }, [employeeIdToken]);
 
 
   return (
@@ -109,7 +133,7 @@ const TopBar = ({name}: profileCardDTO) => {
             <div className={styles.topicons}>
               <div>알림</div>
               <Link href={"/mypage/MyPage"} className={styles.user}>
-                {name} 님
+                {employee?.name} 님
               </Link>
               <button className={styles.logoutButton} onClick={handleLogout}>
                 로그아웃
