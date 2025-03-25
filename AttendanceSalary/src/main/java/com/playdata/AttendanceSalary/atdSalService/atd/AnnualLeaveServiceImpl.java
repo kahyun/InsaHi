@@ -13,10 +13,16 @@ import com.playdata.AttendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +41,34 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
   // 휴가 신청
   public void submit(String employeeId, String companyCode, AnnualLeaveRequestDTO dto) {
     //dto 받아서 entity로 변환
-    //dto 의 유효성 검사 는 프론트에서
+    // dto 의 유효성 검사 는 프론트에서도 해야
     //AnnualLeaveRequestDTO 는 usage 에 대한 dto , entity insert
-    annualLeaveUsageDAO.save(convertToAnnualLeaveUsageEntity(dto));
+    // 중복 신청 체크
+    log.info("employeeId::{},companyCode::{},dto::{}", employeeId, companyCode, dto);
+    boolean hasOverlap = annualLeaveUsageDAO.existsOverlappingLeave(employeeId, dto.getStartDate(),
+        dto.getStopDate());
+    log.info("hasOverlap::{}", hasOverlap);
+    if (hasOverlap) {
+      throw new RuntimeException("이미 해당 기간에 신청된 휴가가 존재합니다.");
+    }
+
+    // 최신 AnnualLeave 조회
+    AnnualLeaveEntity latestLeave = annualLeaveDAO.findLatestByEmployeeId(employeeId)
+        .orElseThrow(() -> new RuntimeException("유효한 연차 정보가 없습니다."));
+    log.info("latestLeave::{}", latestLeave.getAnnualLeaveId());
+    // 남은 연차 확인
+    int requestedDays = dto.getStopDate().getDayOfMonth() - dto.getStartDate().getDayOfMonth() + 1;
+    log.info("requestedDays::{}", requestedDays);
+    if (latestLeave.getRemainingLeave() < requestedDays) {
+      throw new RuntimeException("잔여 연차가 부족합니다.");
+    }
+    log.info("latestLeave::{}", latestLeave.getRemainingLeave());
+
+    // 신청 정보 저장
+    AnnualLeaveUsageEntity usageEntity = convertToAnnualLeaveUsageEntity(dto);
+    usageEntity.setAnnualLeaveId(latestLeave.getAnnualLeaveId());
+
+    annualLeaveUsageDAO.save(usageEntity);
 
 
   }
@@ -57,12 +88,26 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
     return annualLeaveUsageDAO.findByEmployeeId(employeeId);
   }
 
+  public List<AnnualLeaveRequestDTO> findAllByEmployeeIdAndLeaveApprovalStatus(String employeeId,
+      String status) {
+    LeaveApprovalStatus leaveApprovalStatus = LeaveApprovalStatus.valueOf(status);
+    return annualLeaveUsageDAO.findByEmployeeIdAndLeaveApprovalStatus(employeeId,
+            leaveApprovalStatus)
+        .stream()
+        .map(entity -> modelMapper.map(entity, AnnualLeaveRequestDTO.class))
+        .collect(Collectors.toList());
+  }
+
 
   // 관리자 단계 -> Pending인 얘들 다 불러오기 / 신청내역 불러오기
-  public List<AnnualLeaveUsageEntity> findAllByCompanyCode(String companyCode, String status) {
+  public List<AnnualLeaveRequestDTO> findAllByCompanyCodeAndLeaveApprovalStatus(String companyCode,
+      String status) {
     LeaveApprovalStatus leaveApprovalStatus = LeaveApprovalStatus.valueOf(status);
     return annualLeaveUsageDAO.findAllByCompanyCodeAndLeaveApprovalStatus(companyCode,
-        leaveApprovalStatus);
+            leaveApprovalStatus)
+        .stream()
+        .map(entity -> modelMapper.map(entity, AnnualLeaveRequestDTO.class))
+        .collect(Collectors.toList());
   }
 
   private AnnualLeaveUsageEntity convertToAnnualLeaveUsageEntity(AnnualLeaveRequestDTO dto) {
@@ -73,6 +118,11 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
     return modelMapper.map(dto, AnnualLeaveEntity.class);
   }
 
+  public AnnualLeaveRequestDTO findById(Long id) {
+    AnnualLeaveUsageEntity entity = annualLeaveUsageDAO.findById(id)
+        .orElseThrow(() -> new RuntimeException("해당 휴가 신청이 존재하지 않습니다."));
+    return modelMapper.map(entity, AnnualLeaveRequestDTO.class);
+  }
 
   // 관리자/ 휴가 신청 허가 -> AnnualLeaveUsage 상태 업데이트 + AnnualLeave 에서 사용 연차 증가, 남은 연차 감소
   public void approveLeave(AnnualLeaveRequestDTO dto) {
@@ -135,6 +185,43 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
       }
     }
     log.info("==== 연차/월차 자동 지급 배치 종료 ====");
+  }
+
+  @Override
+  public AnnualLeaveDTO findLatestAnnualLeave(String employeeId) {
+    AnnualLeaveEntity leaveEntity = annualLeaveDAO.findLatestByEmployeeId(employeeId)
+        .orElseThrow(() -> new RuntimeException("연차 정보를 불러오기 어렵습니다. "));
+    AnnualLeaveDTO leaveDTO = modelMapper.map(leaveEntity, AnnualLeaveDTO.class);
+    return leaveDTO;
+  }
+
+  @Override
+  public Page<AnnualLeaveRequestDTO> findAllByCompanyCodeAndLeaveApprovalStatusWithPagination(
+      String companyCode, String status, int page, int size, String sort) {
+
+    String[] sortParams = sort.split(",");
+    String property = sortParams[0];
+    Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+        ? Sort.Direction.DESC
+        : Sort.Direction.ASC;
+
+    Sort sorting = Sort.by(new Sort.Order(direction, property));
+
+    Pageable pageable = PageRequest.of(page, size, sorting);
+
+    Page<AnnualLeaveUsageEntity> pageResult;
+    if ("ALL".equalsIgnoreCase(status)) {
+      pageResult = annualLeaveUsageDAO.findAllByCompanyCode(companyCode, pageable);
+    } else {
+      pageResult = annualLeaveUsageDAO.findAllByCompanyCodeAndLeaveApprovalStatus(companyCode,
+          status, pageable);
+    }
+
+    // Entity -> DTO 변환 (Page.map 사용)
+    Page<AnnualLeaveRequestDTO> dtoPage = pageResult.map(
+        entity -> modelMapper.map(entity, AnnualLeaveRequestDTO.class));
+
+    return dtoPage;
   }
 
 

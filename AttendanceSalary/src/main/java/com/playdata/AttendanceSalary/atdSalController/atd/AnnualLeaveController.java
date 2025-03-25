@@ -1,10 +1,14 @@
 package com.playdata.AttendanceSalary.atdSalController.atd;
 
+import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveDTO;
 import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
+import com.playdata.AttendanceSalary.atdSalDto.atd.PageResponseDTO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveEntity;
 import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
 import com.playdata.AttendanceSalary.atdSalService.atd.AnnualLeaveService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,7 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnnualLeaveController {
 
   private final AnnualLeaveService annualLeaveService;
-//124561585156546
+
+  //124561585156546
   // 휴가 신청
   @PostMapping("/submit")
   public ResponseEntity<String> submitLeave(@RequestBody AnnualLeaveRequestDTO requestDTO) {
@@ -33,30 +39,80 @@ public class AnnualLeaveController {
     }
   }
 
-  // 직원의 휴가 신청 내역 조회
-  @GetMapping("/usage/{employeeId}")
-  public ResponseEntity<List<AnnualLeaveUsageEntity>> getLeaveUsageByEmployeeId(
-      @PathVariable String employeeId) {
+  @GetMapping("/remaining/{employeeId}")
+  public ResponseEntity<AnnualLeaveDTO> getRemainingLeave(@PathVariable String employeeId) {
     try {
-      List<AnnualLeaveUsageEntity> usageList = annualLeaveService.findAllByEmployeeId(employeeId);
+      AnnualLeaveDTO latestLeave = annualLeaveService.findLatestAnnualLeave(employeeId);
+      return ResponseEntity.ok(latestLeave);
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body(null);
+    }
+  }
+
+  // 직원의 휴가 신청 내역 조회
+  @GetMapping("/getmyleave/{employeeId}/{status}")
+  public ResponseEntity<List<AnnualLeaveRequestDTO>> getLeaveUsageByEmployeeId(
+      @PathVariable String employeeId, @PathVariable String status) {
+    try {
+      List<AnnualLeaveRequestDTO> usageList = annualLeaveService.findAllByEmployeeIdAndLeaveApprovalStatus(
+          employeeId, status);
       return ResponseEntity.ok(usageList);
     } catch (Exception e) {
       return ResponseEntity.status(500).body(null);
     }
   }
 
+
   // 회사 내에서 특정 상태의 휴가 신청 내역 조회 (관리자용)
-  @GetMapping("/usage/company/{companyCode}/{status}")
-  public ResponseEntity<List<AnnualLeaveUsageEntity>> getLeaveUsageByCompanyCode(
+//  @GetMapping("/usage/{companyCode}/{status}")
+  public ResponseEntity<List<AnnualLeaveRequestDTO>> getLeaveUsageByCompanyCode(
       @PathVariable String companyCode, @PathVariable String status) {
     try {
-      List<AnnualLeaveUsageEntity> usageList = annualLeaveService.findAllByCompanyCode(companyCode,
-          status);
+      List<AnnualLeaveRequestDTO> usageList = annualLeaveService.findAllByCompanyCodeAndLeaveApprovalStatus(
+          companyCode, status);
       return ResponseEntity.ok(usageList);
     } catch (Exception e) {
       return ResponseEntity.status(500).body(null);
     }
   }
+
+
+  @GetMapping("/usage/{companyCode}/{status}")
+  public ResponseEntity<PageResponseDTO<AnnualLeaveRequestDTO>> getLeaveUsageByCompanyWithPagination(
+      @PathVariable String companyCode, @PathVariable String status,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "createDate,desc") String sort
+  ) {
+    try {
+      Page<AnnualLeaveRequestDTO> usageList = annualLeaveService.findAllByCompanyCodeAndLeaveApprovalStatusWithPagination(
+          companyCode, status, page, size, sort);
+
+      PageResponseDTO<AnnualLeaveRequestDTO> response = PageResponseDTO.<AnnualLeaveRequestDTO>builder()
+          .content(usageList.stream().toList())
+          .page(usageList.getNumber())
+          .size(usageList.getSize())
+          .totalPages(usageList.getTotalPages())
+          .totalElements(usageList.getTotalElements())
+          .build();
+
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      e.printStackTrace(); // 예외 확인 필수!!
+      return ResponseEntity.status(500).body(null);
+    }
+  }
+
+  @GetMapping("/detail/{id}")
+  public ResponseEntity<AnnualLeaveRequestDTO> getLeaveDetailById(@PathVariable Long id) {
+    try {
+      AnnualLeaveRequestDTO dto = annualLeaveService.findById(id);
+      return ResponseEntity.ok(dto);
+    } catch (Exception e) {
+      return ResponseEntity.status(404).body(null);
+    }
+  }
+
 
   // 휴가 승인
   @PutMapping("/approve")
