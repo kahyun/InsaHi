@@ -3,9 +3,64 @@ import styles from '../../styles/atdsal/setting.module.css'; // 기존 스타일
 import { useAllowanceActions, usePositionActions } from '@/services/salaryAction';
 import { usePositionSalaryStepActions } from '@/services/positionSalaryStepAction';
 import { allowanceTypes } from '@/type/Setting';
+import {fetcher} from "@/api/fetcher";
 
 const Setting: React.FC = () => {
     const [companyCodeFromToken, setCompanyCodeFromToken] = useState<string>('');
+    const [companyStartTime, setCompanyStartTime] = useState<string>('');
+    const [newStartTime, setNewStartTime] = useState<string>('');
+
+    // ✅ 회사 시작 시간 조회 (GET)
+    const handleGetStartTime = async () => {
+        if (!companyCodeFromToken) {
+            alert('회사 정보가 없습니다.');
+            return;
+        }
+
+        const url = `http://127.0.0.1:1006/company/${companyCodeFromToken}/start-time`;
+        console.log('조회 요청 URL:', url);
+
+        try {
+            const res = await fetcher<string>(url);
+            if (res) {
+                setCompanyStartTime(res);
+                alert(`현재 회사 시작 시간은 ${res}입니다.`);
+            }
+        } catch (error) {
+            console.error('회사 시작 시간 조회 실패', error);
+            alert('회사 시작 시간 조회에 실패했습니다.');
+        }
+    };
+
+    // ✅ 회사 시작 시간 등록 (POST)
+    const handleAddStartTime = async () => {
+        if (!companyCodeFromToken || !newStartTime) {
+            alert('회사 코드와 시작 시간을 입력해주세요.');
+            return;
+        }
+
+        const url = `http://127.0.0.1:1006/company/start-Time`;
+        console.log('등록 요청 URL:', url);
+
+        try {
+            const res = await fetcher<string>(url, {
+                method: 'POST',
+                body: JSON.stringify({
+                    companyCode: companyCodeFromToken,
+                    startTime: newStartTime
+                })
+            });
+
+            if (res) {
+                alert(`회사 시작 시간이 ${newStartTime}으로 등록되었습니다.`);
+                setCompanyStartTime(newStartTime);
+                setNewStartTime('');
+            }
+        } catch (error) {
+            console.error('회사 시작 시간 등록 실패', error);
+            alert('회사 시작 시간 등록에 실패했습니다.');
+        }
+    };
 
     useEffect(() => {
         const storedCompanyCode = localStorage.getItem('companyCode');
@@ -132,42 +187,42 @@ const Setting: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
-                {/*/!* 회사 시작 시간 관리 *!/*/}
-                {/*<div className={styles.section}>*/}
-                {/*    <h2 className={styles.title}>회사 시작 시간 관리</h2>*/}
 
-                {/*    /!* 조회 *!/*/}
-                {/*    <div className={styles.inlineForm}>*/}
-                {/*        <label>회사 시작 시간 조회</label>*/}
-                {/*        <button*/}
-                {/*            onClick={handleGetStartTime}*/}
-                {/*            className={styles.buttonInline}*/}
-                {/*        >*/}
-                {/*            조회하기*/}
-                {/*        </button>*/}
-                {/*        {companyStartTime && (*/}
-                {/*            <div style={{ marginTop: '10px' }}>*/}
-                {/*                <strong>현재 회사 시작 시간:</strong> {companyStartTime}*/}
-                {/*            </div>*/}
-                {/*        )}*/}
-                {/*    </div>*/}
+                <div className={styles.section}>
+                    <h2 className={styles.title}>회사 시작 시간 관리</h2>
 
-                {/*    /!* 추가 *!/*/}
-                {/*    <div className={styles.inlineForm} style={{ marginTop: '20px' }}>*/}
-                {/*        <label>회사 시작 시간 입력</label>*/}
-                {/*        <input*/}
-                {/*            type="time"*/}
-                {/*            value={newStartTime}*/}
-                {/*            onChange={(e) => setNewStartTime(e.target.value)}*/}
-                {/*        />*/}
-                {/*        <button*/}
-                {/*            onClick={handleAddStartTime}*/}
-                {/*            className={styles.buttonInline}*/}
-                {/*        >*/}
-                {/*            회사 시간 등록*/}
-                {/*        </button>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                    {/* 조회 */}
+                    <div className={styles.inlineForm}>
+                        <label>회사 시작 시간 조회</label>
+                        <button
+                            onClick={handleGetStartTime}
+                            className={styles.buttonInline}
+                        >
+                            조회하기
+                        </button>
+                        {companyStartTime && (
+                            <div style={{ marginTop: '10px' }}>
+                                <strong>현재 회사 시작 시간:</strong> {companyStartTime}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* 추가 */}
+                    <div className={styles.inlineForm} style={{ marginTop: '20px' }}>
+                        <label>회사 시작 시간 입력</label>
+                        <input
+                            type="time"
+                            value={newStartTime}
+                            onChange={(e) => setNewStartTime(e.target.value)}
+                        />
+                        <button
+                            onClick={handleAddStartTime}
+                            className={styles.buttonInline}
+                        >
+                            회사 시간 등록
+                        </button>
+                    </div>
+                </div>
             </div>
 
             {/* 하단 영역 */}

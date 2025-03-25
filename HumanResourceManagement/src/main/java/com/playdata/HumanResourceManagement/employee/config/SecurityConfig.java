@@ -48,7 +48,12 @@ public class SecurityConfig {
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/",
-                    "/company/signup", "/employee/login", "/approavl/submit","/atdsal/**","/employee/find","/employee/{employeeId}/company/start-time","/company/start-Time/*").permitAll()
+                    "/company/signup",
+                    "/employee/login",
+                    "/approavl/submit","/atdsal/**",
+                    "/employee/find",
+                    "/company/*/start-time",
+                    "/company/start-Time").permitAll()
             //관리자만 볼 수 있는 페이지 설정
             .anyRequest().authenticated())
                 .addFilterBefore(new EmployeeJwtFilter(tokenManager),
