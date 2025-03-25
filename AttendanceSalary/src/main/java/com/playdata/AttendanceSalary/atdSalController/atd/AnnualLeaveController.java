@@ -8,6 +8,7 @@ import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
 import com.playdata.AttendanceSalary.atdSalService.atd.AnnualLeaveService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/leave")
 @RequiredArgsConstructor
+@Slf4j
 public class AnnualLeaveController {
 
   private final AnnualLeaveService annualLeaveService;
@@ -50,7 +52,7 @@ public class AnnualLeaveController {
   }
 
   // 직원의 휴가 신청 내역 조회
-  @GetMapping("/getmyleave/{employeeId}/{status}")
+  @GetMapping("/getemployeeleavel/{employeeId}/{status}")
   public ResponseEntity<List<AnnualLeaveRequestDTO>> getLeaveUsageByEmployeeId(
       @PathVariable String employeeId, @PathVariable String status) {
     try {
@@ -58,6 +60,34 @@ public class AnnualLeaveController {
           employeeId, status);
       return ResponseEntity.ok(usageList);
     } catch (Exception e) {
+      return ResponseEntity.status(500).body(null);
+    }
+  }
+
+  @GetMapping("/getmyleave/{employeeId}/{status}")
+  public ResponseEntity<PageResponseDTO<AnnualLeaveRequestDTO>> getLeaveUsageByEmployeeId(
+      @PathVariable String employeeId,
+      @PathVariable String status,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "createDate,desc") String sort
+  ) {
+    try {
+      Page<AnnualLeaveRequestDTO> usagePage = annualLeaveService
+          .findAllByEmployeeIdAndLeaveApprovalStatusWithPagination(employeeId, status, page, size,
+              sort);
+
+      PageResponseDTO<AnnualLeaveRequestDTO> response = PageResponseDTO.<AnnualLeaveRequestDTO>builder()
+          .content(usagePage.getContent())
+          .page(usagePage.getNumber())
+          .size(usagePage.getSize())
+          .totalPages(usagePage.getTotalPages())
+          .totalElements(usagePage.getTotalElements())
+          .build();
+
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      e.printStackTrace(); // 디버깅용 로그
       return ResponseEntity.status(500).body(null);
     }
   }
@@ -85,9 +115,10 @@ public class AnnualLeaveController {
       @RequestParam(defaultValue = "createDate,desc") String sort
   ) {
     try {
+      log.info("companyCode:{},status:{}", companyCode, status);
       Page<AnnualLeaveRequestDTO> usageList = annualLeaveService.findAllByCompanyCodeAndLeaveApprovalStatusWithPagination(
           companyCode, status, page, size, sort);
-
+      log.info("usageList:{}", usageList);
       PageResponseDTO<AnnualLeaveRequestDTO> response = PageResponseDTO.<AnnualLeaveRequestDTO>builder()
           .content(usageList.stream().toList())
           .page(usageList.getNumber())
@@ -95,18 +126,21 @@ public class AnnualLeaveController {
           .totalPages(usageList.getTotalPages())
           .totalElements(usageList.getTotalElements())
           .build();
-
+      log.info("response:{}", response);
       return ResponseEntity.ok(response);
     } catch (Exception e) {
       e.printStackTrace(); // 예외 확인 필수!!
+      log.info(e.getMessage());
       return ResponseEntity.status(500).body(null);
     }
   }
 
   @GetMapping("/detail/{id}")
   public ResponseEntity<AnnualLeaveRequestDTO> getLeaveDetailById(@PathVariable Long id) {
+    log.info("getLeaveDetailById :: {}", id);
     try {
       AnnualLeaveRequestDTO dto = annualLeaveService.findById(id);
+      log.info("dto ::{}", dto);
       return ResponseEntity.ok(dto);
     } catch (Exception e) {
       return ResponseEntity.status(404).body(null);

@@ -23,6 +23,24 @@ export const getLeaveUsageByEmployeeId = async (employeeId: string, status: stri
   return res.data;
 };
 
+export const getLeaveUsageByEmployeeIdWithPagination = async (
+    employeeId: string,
+    status: string,
+    page: number,
+    size: number
+): Promise<PageResponseDTO<AnnualLeaveRequestDTO>> => {
+  const res = await axios.get<PageResponseDTO<AnnualLeaveRequestDTO>>(
+      `${API_BASE}/getmyleave/${employeeId}/${status}?page=${page}&size=${size}&sort=createDate,desc`
+  );
+  return {
+    content: res.data.content,
+    totalPages: res.data.totalPages,
+    totalElements: res.data.totalElements,
+    number: res.data.number,
+    size: res.data.size,
+  };
+};
+
 // 회사 전체 휴가 신청 내역 조회 (관리자)
 export const getLeaveUsageByCompany = async (companyCode: string, status: string): Promise<AnnualLeaveRequestDTO[]> => {
   const res = await axios.get<AnnualLeaveRequestDTO[]>(`${API_BASE}/usage/${companyCode}/${status}`);
