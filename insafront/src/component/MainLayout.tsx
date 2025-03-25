@@ -7,7 +7,7 @@ function MainLayout({children}: LayoutProps) {
 
 
   const router = useRouter();
-  const isfullWidthPage = ["/mypage/MyPage", "/chat"].some(path => router.pathname.startsWith(path));
+  const isfullWidthPage = ["/mypage", "/chat"].some(path => router.pathname.startsWith(path));
   return (
       <>
         <Topbar/>
