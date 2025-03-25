@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../../styles/setting.module.css'; // 기존 스타일은 유지
+import styles from '../../styles/atdsal/setting.module.css'; // 기존 스타일은 유지
 import { useAllowanceActions, usePositionActions } from '@/services/salaryAction';
 import { usePositionSalaryStepActions } from '@/services/positionSalaryStepAction';
 import { allowanceTypes } from '@/type/Setting';
@@ -132,6 +132,42 @@ const Setting: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
+                {/*/!* 회사 시작 시간 관리 *!/*/}
+                {/*<div className={styles.section}>*/}
+                {/*    <h2 className={styles.title}>회사 시작 시간 관리</h2>*/}
+
+                {/*    /!* 조회 *!/*/}
+                {/*    <div className={styles.inlineForm}>*/}
+                {/*        <label>회사 시작 시간 조회</label>*/}
+                {/*        <button*/}
+                {/*            onClick={handleGetStartTime}*/}
+                {/*            className={styles.buttonInline}*/}
+                {/*        >*/}
+                {/*            조회하기*/}
+                {/*        </button>*/}
+                {/*        {companyStartTime && (*/}
+                {/*            <div style={{ marginTop: '10px' }}>*/}
+                {/*                <strong>현재 회사 시작 시간:</strong> {companyStartTime}*/}
+                {/*            </div>*/}
+                {/*        )}*/}
+                {/*    </div>*/}
+
+                {/*    /!* 추가 *!/*/}
+                {/*    <div className={styles.inlineForm} style={{ marginTop: '20px' }}>*/}
+                {/*        <label>회사 시작 시간 입력</label>*/}
+                {/*        <input*/}
+                {/*            type="time"*/}
+                {/*            value={newStartTime}*/}
+                {/*            onChange={(e) => setNewStartTime(e.target.value)}*/}
+                {/*        />*/}
+                {/*        <button*/}
+                {/*            onClick={handleAddStartTime}*/}
+                {/*            className={styles.buttonInline}*/}
+                {/*        >*/}
+                {/*            회사 시간 등록*/}
+                {/*        </button>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
 
             {/* 하단 영역 */}

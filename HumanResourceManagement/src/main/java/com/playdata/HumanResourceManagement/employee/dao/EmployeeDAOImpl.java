@@ -24,7 +24,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 
 
-
   @Override
   public Employee findById(String employeeId) {
     System.out.println("dao단 = " + employeeId);
@@ -34,7 +33,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     public LocalTime findCompanyStartTimeByEmployeeId(String employeeId) {
         LocalTime companyStartTime = employeeRepository.findCompanyStartTimeByEmployeeId(employeeId);
-        employeeRepository.findById(employeeId).orElse(null);
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
         log.info("Employee Entity: {}", employee);
         log.info("Company Entity: {}", employee.getCompany());
