@@ -23,20 +23,21 @@ public interface AnnualLeaveUsageRepository extends JpaRepository<AnnualLeaveUsa
 
   List<AnnualLeaveUsageEntity> findByEmployeeId(String employeeId);
 
-  @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
-      "FROM AnnualLeaveUsageEntity a " +
-      "WHERE a.employeeId = :employeeId " +
-      "AND a.leaveApprovalStatus IN :statuses " +
-      "AND (a.startDate <= :stopDate AND a.stopDate >= :startDate)")
+  @Query(
+      "SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " + "FROM AnnualLeaveUsageEntity a "
+          + "WHERE a.employeeId = :employeeId " + "AND a.leaveApprovalStatus IN :statuses "
+          + "AND (a.startDate <= :stopDate AND a.stopDate >= :startDate)")
   boolean existsByEmployeeIdAndLeaveApprovalStatusInAndDateOverlap(
-      @Param("employeeId") String employeeId,
-      @Param("statuses") List<LeaveApprovalStatus> statuses,
-      @Param("startDate") LocalDate startDate,
-      @Param("stopDate") LocalDate stopDate
-  );
+      @Param("employeeId") String employeeId, @Param("statuses") List<LeaveApprovalStatus> statuses,
+      @Param("startDate") LocalDate startDate, @Param("stopDate") LocalDate stopDate);
 
   Page<AnnualLeaveUsageEntity> findAllByCompanyCodeAndLeaveApprovalStatus(String companyCode,
-      String status, Pageable pageable);
+      LeaveApprovalStatus status, Pageable pageable);
 
   Page<AnnualLeaveUsageEntity> findAllByCompanyCode(String companyCode, Pageable pageable);
+
+  Page<AnnualLeaveUsageEntity> findAllByEmployeeId(String employeeId, Pageable pageable);
+
+  Page<AnnualLeaveUsageEntity> findAllByEmployeeIdAndLeaveApprovalStatus(String employeeId,
+      LeaveApprovalStatus leaveApprovalStatus, Pageable pageable);
 }

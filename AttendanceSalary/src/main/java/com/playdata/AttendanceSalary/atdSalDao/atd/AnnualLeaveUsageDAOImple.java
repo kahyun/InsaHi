@@ -33,7 +33,7 @@ public class AnnualLeaveUsageDAOImple implements AnnualLeaveUsageDAO {
 
   @Override
   public Page<AnnualLeaveUsageEntity> findAllByCompanyCodeAndLeaveApprovalStatus(String companyCode,
-      String status, Pageable pageable) {
+      LeaveApprovalStatus status, Pageable pageable) {
     return annualLeaveUsageRepository.findAllByCompanyCodeAndLeaveApprovalStatus(companyCode,
         status, pageable);
   }
@@ -41,6 +41,18 @@ public class AnnualLeaveUsageDAOImple implements AnnualLeaveUsageDAO {
   @Override
   public Page<AnnualLeaveUsageEntity> findAllByCompanyCode(String companyCode, Pageable pageable) {
     return annualLeaveUsageRepository.findAllByCompanyCode(companyCode, pageable);
+  }
+
+  @Override
+  public Page<AnnualLeaveUsageEntity> findAllByEmployeeId(String employeeId, Pageable pageable) {
+    return annualLeaveUsageRepository.findAllByEmployeeId(employeeId, pageable);
+  }
+
+  @Override
+  public Page<AnnualLeaveUsageEntity> findAllByEmployeeIdAndLeaveApprovalStatus(String employeeId,
+      LeaveApprovalStatus leaveApprovalStatus, Pageable pageable) {
+    return annualLeaveUsageRepository.findAllByEmployeeIdAndLeaveApprovalStatus(employeeId,
+        leaveApprovalStatus, pageable);
   }
 
   @Override

@@ -13,6 +13,7 @@ import com.playdata.AttendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,6 +99,31 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
         .collect(Collectors.toList());
   }
 
+  public Page<AnnualLeaveRequestDTO> findAllByEmployeeIdAndLeaveApprovalStatusWithPagination(
+      String employeeId, String status, int page, int size, String sort) {
+
+    String[] sortParams = sort.split(",");
+    String property = sortParams[0];
+    Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+        ? Sort.Direction.DESC
+        : Sort.Direction.ASC;
+
+    Sort sorting = Sort.by(new Sort.Order(direction, property));
+
+    Pageable pageable = PageRequest.of(page, size, sorting);
+
+    Page<AnnualLeaveUsageEntity> pageResult;
+    if ("ALL".equalsIgnoreCase(status)) {
+      pageResult = annualLeaveUsageDAO.findAllByEmployeeId(employeeId, pageable);
+    } else {
+      LeaveApprovalStatus leaveApprovalStatus = LeaveApprovalStatus.valueOf(status);
+      pageResult = annualLeaveUsageDAO.findAllByEmployeeIdAndLeaveApprovalStatus(employeeId,
+          leaveApprovalStatus, pageable);
+    }
+
+    return pageResult.map(entity -> modelMapper.map(entity, AnnualLeaveRequestDTO.class));
+  }
+
 
   // 관리자 단계 -> Pending인 얘들 다 불러오기 / 신청내역 불러오기
   public List<AnnualLeaveRequestDTO> findAllByCompanyCodeAndLeaveApprovalStatus(String companyCode,
@@ -110,6 +136,37 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public Page<AnnualLeaveRequestDTO> findAllByCompanyCodeAndLeaveApprovalStatusWithPagination(
+      String companyCode, String status, int page, int size, String sort) {
+
+    String[] sortParams = sort.split(",");
+    String property = sortParams[0];
+    Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+        ? Sort.Direction.DESC
+        : Sort.Direction.ASC;
+
+    Sort sorting = Sort.by(new Sort.Order(direction, property));
+
+    Pageable pageable = PageRequest.of(page, size, sorting);
+
+    Page<AnnualLeaveUsageEntity> pageResult;
+
+    if ("ALL".equalsIgnoreCase(status)) {
+      pageResult = annualLeaveUsageDAO.findAllByCompanyCode(companyCode, pageable);
+    } else {
+      LeaveApprovalStatus leaveApprovalStatus = LeaveApprovalStatus.valueOf(status);
+      pageResult = annualLeaveUsageDAO.findAllByCompanyCodeAndLeaveApprovalStatus(companyCode,
+          leaveApprovalStatus, pageable);
+    }
+
+    // Entity -> DTO 변환 (Page.map 사용)
+    Page<AnnualLeaveRequestDTO> dtoPage = pageResult.map(
+        entity -> modelMapper.map(entity, AnnualLeaveRequestDTO.class));
+
+    return dtoPage;
+  }
+
   private AnnualLeaveUsageEntity convertToAnnualLeaveUsageEntity(AnnualLeaveRequestDTO dto) {
     return modelMapper.map(dto, AnnualLeaveUsageEntity.class);
   }
@@ -119,22 +176,25 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
   }
 
   public AnnualLeaveRequestDTO findById(Long id) {
+    log.info("getLeaveDetailById :: {}", id);
     AnnualLeaveUsageEntity entity = annualLeaveUsageDAO.findById(id)
         .orElseThrow(() -> new RuntimeException("해당 휴가 신청이 존재하지 않습니다."));
+    log.info("entity.getAnnualLeaveId :: {}", entity.getAnnualLeaveId());
+    log.info("entity.getAnnualLeaveUsageId :: {}", entity.getAnnualLeaveUsageId());
     return modelMapper.map(entity, AnnualLeaveRequestDTO.class);
   }
 
   // 관리자/ 휴가 신청 허가 -> AnnualLeaveUsage 상태 업데이트 + AnnualLeave 에서 사용 연차 증가, 남은 연차 감소
   public void approveLeave(AnnualLeaveRequestDTO dto) {
     long annualLeaveUsageId = dto.getAnnualLeaveUsageId();
-    int day = dto.getStopDate().getDayOfMonth() - dto.getStartDate().getDayOfMonth() + 1;
+    long day = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getStopDate()) + 1;
     AnnualLeaveUsageEntity usage = annualLeaveUsageDAO.findById(annualLeaveUsageId)
         .orElseThrow(() -> new RuntimeException("휴가 신청 내역을 찾을 수 없습니다."));
     usage.setLeaveApprovalStatus(LeaveApprovalStatus.APPROVED);
     AnnualLeaveEntity leave = annualLeaveDAO.findById(usage.getAnnualLeaveId())
         .orElseThrow(() -> new RuntimeException("가능한 연차을 찾을 수 없습니다"));
-    leave.setRemainingLeave(leave.getRemainingLeave() - day);
-    leave.setUsedLeave(leave.getUsedLeave() + day);
+    leave.setRemainingLeave((int) (leave.getRemainingLeave() - day));
+    leave.setUsedLeave((int) (leave.getUsedLeave() + day));
     annualLeaveUsageDAO.save(usage);
     annualLeaveDAO.save(leave);
   }
@@ -161,6 +221,7 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
 // //    leave.setRemainingLeave(leave.getRemainingLeave() - day);
 //    leave.setUsedLeave(leave.getUsedLeave() + day);
     leave.setAdditionalLeave(leave.getAdditionalLeave() + day);
+    leave.setTotalGrantedLeave(leave.getTotalGrantedLeave() + day);
 
     annualLeaveUsageDAO.save(usage);
     annualLeaveDAO.save(leave);
@@ -193,35 +254,6 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
         .orElseThrow(() -> new RuntimeException("연차 정보를 불러오기 어렵습니다. "));
     AnnualLeaveDTO leaveDTO = modelMapper.map(leaveEntity, AnnualLeaveDTO.class);
     return leaveDTO;
-  }
-
-  @Override
-  public Page<AnnualLeaveRequestDTO> findAllByCompanyCodeAndLeaveApprovalStatusWithPagination(
-      String companyCode, String status, int page, int size, String sort) {
-
-    String[] sortParams = sort.split(",");
-    String property = sortParams[0];
-    Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
-        ? Sort.Direction.DESC
-        : Sort.Direction.ASC;
-
-    Sort sorting = Sort.by(new Sort.Order(direction, property));
-
-    Pageable pageable = PageRequest.of(page, size, sorting);
-
-    Page<AnnualLeaveUsageEntity> pageResult;
-    if ("ALL".equalsIgnoreCase(status)) {
-      pageResult = annualLeaveUsageDAO.findAllByCompanyCode(companyCode, pageable);
-    } else {
-      pageResult = annualLeaveUsageDAO.findAllByCompanyCodeAndLeaveApprovalStatus(companyCode,
-          status, pageable);
-    }
-
-    // Entity -> DTO 변환 (Page.map 사용)
-    Page<AnnualLeaveRequestDTO> dtoPage = pageResult.map(
-        entity -> modelMapper.map(entity, AnnualLeaveRequestDTO.class));
-
-    return dtoPage;
   }
 
 

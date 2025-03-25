@@ -25,7 +25,12 @@ public interface AnnualLeaveUsageDAO {
       LeaveApprovalStatus leaveApprovalStatus);
 
   Page<AnnualLeaveUsageEntity> findAllByCompanyCodeAndLeaveApprovalStatus(String companyCode,
-      String status, Pageable pageable);
+      LeaveApprovalStatus status, Pageable pageable);
 
   Page<AnnualLeaveUsageEntity> findAllByCompanyCode(String companyCode, Pageable pageable);
+
+  Page<AnnualLeaveUsageEntity> findAllByEmployeeId(String employeeId, Pageable pageable);
+
+  Page<AnnualLeaveUsageEntity> findAllByEmployeeIdAndLeaveApprovalStatus(String employeeId,
+      LeaveApprovalStatus leaveApprovalStatus, Pageable pageable);
 }

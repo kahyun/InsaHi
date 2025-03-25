@@ -33,4 +33,7 @@ public interface AnnualLeaveService {
 
   Page<AnnualLeaveRequestDTO> findAllByCompanyCodeAndLeaveApprovalStatusWithPagination(
       String companyCode, String status, int page, int size, String sort);
+
+  Page<AnnualLeaveRequestDTO> findAllByEmployeeIdAndLeaveApprovalStatusWithPagination(
+      String employeeId, String status, int page, int size, String sort);
 }
