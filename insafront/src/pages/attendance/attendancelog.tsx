@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import styles from '../../styles/attendancelog.module.css';
+import styles from '../../styles/atdsal/attendancelog.module.css';
 import { fetchAttendanceRecords, checkIn, checkOut } from '@/services/attendanceService';
 import { AttendanceEntity } from '@/type/Attendance';
 import { profileCardDTO } from "@/type/profilecard";

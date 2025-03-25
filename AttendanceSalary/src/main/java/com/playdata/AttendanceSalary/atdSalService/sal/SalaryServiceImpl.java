@@ -1,7 +1,7 @@
 package com.playdata.AttendanceSalary.atdSalService.sal;
 
-
 import com.playdata.AttendanceSalary.atdClient.HrmFeignClient;
+import com.playdata.AttendanceSalary.atdClient.hrmDTO.CompanyStartTimeDto;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
 import com.playdata.AttendanceSalary.atdSalDao.sal.*;
 import com.playdata.AttendanceSalary.atdSalDto.sal.*;
@@ -10,8 +10,11 @@ import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,6 +41,48 @@ public class SalaryServiceImpl implements SalaryService {
     private final AttendanceServiceImpl attendanceServiceImpl;
 
     @Override
+    public List<PayStubResponseDTO> findAllPayStubAndYearAndMonth(String employeeId, int year, int month) {
+        return null;
+    }
+
+    @Override
+    public List<PayStubResponseDTO> findAllPayStub(String employeeId) {
+        List<PayStubEntity> payStubEntities = payStubDao.findAllPayStub(employeeId);
+
+        List<PayStubResponseDTO> payStubResponseDTOS = payStubEntities.stream()
+                .map(entity -> {
+                    PayStubResponseDTO dto = new PayStubResponseDTO();
+                    dto.setBaseSalary(entity.getBaseSalary());
+                    dto.setCompanyCode(entity.getCompanyCode());
+                    dto.setNetPay(entity.getNetPay());
+                    dto.setOvertimePay(entity.getOvertimePay());
+                    dto.setPayStubId(entity.getPayStubId());
+                    dto.setPaymentDate(entity.getPaymentDate());
+                    dto.setEmployeeId(entity.getEmployeeId());
+                    dto.setTotalAllowances(entity.getTotalAllowances());
+                    dto.setTotalPayment(entity.getTotalPayment());
+                    dto.setTotalDeductions(entity.getTotalDeductions());
+
+                    List<AllowanceEntity> allowanceEntities = allowanceDao.findByPayStubId(entity.getPayStubId());
+                    List<AllowanceResponseDTO> allowanceDTOs = allowanceEntities.stream()
+                            .map(a -> modelMapper.map(a, AllowanceResponseDTO.class))
+                            .collect(Collectors.toList());
+
+                    List<DeductionEntity> deductionEntities = deductionDao.findByPayStubId(entity.getPayStubId());
+                    List<DeductionResponseDTO> deductionDTOs = deductionEntities.stream()
+                            .map(d -> modelMapper.map(d, DeductionResponseDTO.class))
+                            .collect(Collectors.toList());
+
+                    dto.setAllowances(allowanceDTOs);
+                    dto.setDeductions(deductionDTOs);
+
+                    return dto;
+                }).toList();
+        return payStubResponseDTOS;
+
+    }
+
+    @Override
     public List<PositionSalaryStepResponseDTO> findPositionSalaryStepByCompanyCode(String companyCode) {
         List<PositionSalaryStepEntity> salaryStepEntityList = positionSalaryDao.findAllByCompanyCode(companyCode);
         log.info("서비스단: {}", salaryStepEntityList);
@@ -53,6 +98,7 @@ public class SalaryServiceImpl implements SalaryService {
                     dto.setOvertimeAllowance(entity.getOvertimeAllowance());
                     dto.setPositionAllowance(entity.getPositionAllowance());
                     dto.setCompanyCode(entity.getCompanyCode());
+
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -84,24 +130,25 @@ public class SalaryServiceImpl implements SalaryService {
     }
 
     /// 급여 계산 로직
-    @Override
+
     @Transactional
-
+    @Scheduled(cron = "0 0 0 1 * ?")
     public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId) {
-        EmployeeResponseDTO employee = hrmFeignClient.findEmployee(employeeId);
 
+        EmployeeResponseDTO employee = hrmFeignClient.findEmployee(employeeId);
         if (employee == null || employee.getEmployeeId() == null) {
             throw new RuntimeException("직원 정보를 찾을 수 없습니다.");
         }
 
         PositionSalaryStepEntity salaryStep = positionSalaryDao.findPositionSalaryById(employee.getPositionSalaryId())
                 .orElseThrow(() -> new RuntimeException("직원의 직급 정보를 찾을 수 없습니다."));
-
+        // 직급 호봉 아이디를 가져오기
         BigDecimal totalBaseSalary = salaryStep.getBaseSalary().add(salaryStep.getPositionAllowance());
-
         BigDecimal overtimeHours = attendanceServiceImpl.calculateMonthlyOvertimeHours(employeeId, YearMonth.now());
+        // 연장근무 수당 * 연장 근무시간
         BigDecimal totalOvertimeAllowance = salaryStep.getOvertimeAllowance().multiply(overtimeHours);
 
+        // 기본급, 연장급, 급여일 저장
         PayStubEntity payStub = PayStubEntity.builder()
                 .employeeId(employeeId)
                 .companyCode(employee.getCompanyCode())
@@ -109,28 +156,36 @@ public class SalaryServiceImpl implements SalaryService {
                 .overtimePay(totalOvertimeAllowance)
                 .paymentDate(LocalDateTime.now())
                 .build();
-
         payStubDao.save(payStub);
 
-        List<EmployeeAllowEntity> employeeAllowances = employeeAllowDao.findByEmployeeId(employeeId);
+        // 전체 공통수당을 불러오기
+        List<AllowanceEntity> employeeAllowances = allowanceDao.findByCompanyCode(employee.getCompanyCode());
+        List<AllowanceResponseDTO> allowanceResponseList = new ArrayList<>();
+        BigDecimal allowanceTotal = BigDecimal.valueOf(0);
 
-        for (EmployeeAllowEntity employeeAllowance : employeeAllowances) {
+        for (AllowanceEntity employeeAllowance : employeeAllowances) {
             AllowanceEntity allowance = AllowanceEntity.builder()
-                    .companyCode(employee.getCompanyCode())
-                    .allowType(employeeAllowance.getAllowanceType())
-                    .allowSalary(employeeAllowance.getAmount())
-                    .payStub(payStub)
+                    .allowType(employeeAllowance.getAllowType())
+                    .allowSalary(employeeAllowance.getAllowSalary())
                     .build();
-
-            allowanceDao.saveAllowance(allowance);
+            allowanceTotal = allowanceTotal.add(employeeAllowance.getAllowSalary());
         }
 
-        createDeductionsForPayStub(payStub);
-        BigDecimal totalDeductions = deductionDao.sumByPayStubId(payStub.getPayStubId());
-        BigDecimal totalAllowances = employeeAllowances.stream()
-                .map(EmployeeAllowEntity::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // ✅ 공제 생성 및 공제 리스트 생성
+        createDeductionsForPayStub(payStub);
+        List<DeductionEntity> deductionEntities = deductionDao.findByPayStubId(payStub.getPayStubId());
+        List<DeductionResponseDTO> deductionResponseList = deductionEntities.stream()
+                .map(entity -> {
+                    DeductionResponseDTO dto = modelMapper.map(entity, DeductionResponseDTO.class);
+                    dto.setPayStubId(entity.getPayStub().getPayStubId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        // ✅ 총합 계산
+        BigDecimal totalDeductions = deductionDao.sumByPayStubId(payStub.getPayStubId());
+        BigDecimal totalAllowances = allowanceTotal;
         BigDecimal totalPayment = totalBaseSalary.add(totalOvertimeAllowance).add(totalAllowances);
         BigDecimal netPay = totalPayment.subtract(totalDeductions);
 
@@ -141,76 +196,14 @@ public class SalaryServiceImpl implements SalaryService {
 
         payStubDao.save(payStub);
 
-        return modelMapper.map(payStub, PayStubResponseDTO.class);
+        // ✅ 최종 PayStubResponseDTO 반환 (수당/공제 리스트 포함)
+        PayStubResponseDTO responseDTO = modelMapper.map(payStub, PayStubResponseDTO.class);
+        responseDTO.setAllowances(allowanceResponseList);
+        responseDTO.setDeductions(deductionResponseList);
+
+        return responseDTO;
     }
-//  @Override
-//  @Transactional
-//  public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId) {
-//
-//    // ✅ Feign으로 직원 정보 가져오기
-//    EmployeeResponseDTO employee = hrmFeignClient.findEmployee(employeeId);
-//
-//    if (employee == null || employee.getEmployeeId() == null) {
-//      throw new RuntimeException("직원 정보를 찾을 수 없습니다.");
 //    }
-//
-//    PositionSalaryStepEntity salaryStep = positionSalaryDao.findPositionSalaryById(employee.getPositionSalaryId())
-//            .orElseThrow(() -> new RuntimeException("직원의 직급 정보를 찾을 수 없습니다."));
-//
-//    BigDecimal totalBaseSalary = salaryStep.getBaseSalary().add(salaryStep.getPositionAllowance());
-//
-//    BigDecimal overtimeHours = attendanceServiceImpl.calculateMonthlyOvertimeHours(employeeId, YearMonth.now());
-//    BigDecimal totalOvertimeAllowance = salaryStep.getOvertimeAllowance().multiply(overtimeHours);
-//
-//    PayStubEntity payStub = PayStubEntity.builder()
-//            .employeeId(employeeId)
-//            .companyCode(employee.getCompanyCode())
-//            .baseSalary(totalBaseSalary)
-//            .overtimePay(totalOvertimeAllowance)
-//            .paymentDate(LocalDateTime.now())
-//            .build();
-//
-//    payStubDao.save(payStub);
-//
-//    List<EmployeeAllowEntity> employeeAllowances = employeeAllowDao.findByEmployeeId(employeeId);
-//
-//    for (EmployeeAllowEntity employeeAllowance : employeeAllowances) {
-//      AllowanceEntity allowance = AllowanceEntity.builder()
-//              .companyCode(employee.getCompanyCode())
-//              .allowType(employeeAllowance.getAllowanceType())
-//              .allowSalary(employeeAllowance.getAmount())
-//              .payStub(payStub)
-//              .build();
-//
-//      allowanceDao.saveAllowance(allowance);
-//    }
-//
-//    BigDecimal nationalPension = totalBaseSalary.multiply(BigDecimal.valueOf(0.045));
-//    BigDecimal healthInsurance = totalBaseSalary.multiply(BigDecimal.valueOf(0.035));
-//    BigDecimal employmentInsurance = totalBaseSalary.multiply(BigDecimal.valueOf(0.009));
-//
-//    deductionDao.save(new DeductionEntity(null, DeductionType.NATIONAL_PENSION, nationalPension, payStub));
-//    deductionDao.save(new DeductionEntity(null, DeductionType.HEALTH_INSURANCE, healthInsurance, payStub));
-//    deductionDao.save(new DeductionEntity(null, DeductionType.EMPLOYMENT_INSURANCE, employmentInsurance, payStub));
-//
-//    BigDecimal totalDeductions = deductionDao.sumByPayStubId(payStub.getPayStubId());
-//
-//    BigDecimal totalAllowances = employeeAllowances.stream()
-//            .map(EmployeeAllowEntity::getAmount)
-//            .reduce(BigDecimal.ZERO, BigDecimal::add);
-//
-//    BigDecimal totalPayment = totalBaseSalary.add(totalOvertimeAllowance).add(totalAllowances);
-//    BigDecimal netPay = totalPayment.subtract(totalDeductions);
-//
-//    payStub.setTotalAllowances(totalAllowances);
-//    payStub.setTotalPayment(totalPayment);
-//    payStub.setTotalDeductions(totalDeductions);
-//    payStub.setNetPay(netPay);
-//
-//    payStubDao.save(payStub);
-//
-//    return modelMapper.map(payStub, PayStubResponseDTO.class);
-//  }
 
     private void createDeductionsForPayStub(PayStubEntity payStub) {
         BigDecimal baseSalary = payStub.getBaseSalary();
@@ -221,11 +214,15 @@ public class SalaryServiceImpl implements SalaryService {
             DeductionEntity deduction = DeductionEntity.builder()
                     .deductionType(deductionType)
                     .deductionAmount(deductionAmount)
+                    .amount(deductionAmount)
                     .payStub(payStub)
+
                     .build();
+
             deductionDao.save(deduction);
         }
     }
+
 
     ///  Position 서비스
     // 회사에서 직급 추가
@@ -289,6 +286,7 @@ public class SalaryServiceImpl implements SalaryService {
         dto.setOvertimeAllowance(saved.getOvertimeAllowance());
         dto.setPositionAllowance(saved.getPositionAllowance());
         dto.setCompanyCode(saved.getCompanyCode());
+
 
         // PositionSalaryStepEntity pss = modelMapper.map(responseDTO, PositionSalaryStepEntity.class);
         // PositionSalaryStepEntity ps = positionSalaryDao.savePositionSalaryStep(pss);
@@ -382,8 +380,10 @@ public class SalaryServiceImpl implements SalaryService {
 
     @Override
     public void deleteDeduction(PayStubResponseDTO responseDTO) {
-        PayStubEntity pp = modelMapper.map(responseDTO, PayStubEntity.class);
-        payStubDao.delete(responseDTO.toEntity());
+        payStubDao.delete(modelMapper.map(responseDTO, PayStubEntity.class));
+
+        //payStubDao.delete(responseDTO.toEntity());
+
     }
 
     @Override

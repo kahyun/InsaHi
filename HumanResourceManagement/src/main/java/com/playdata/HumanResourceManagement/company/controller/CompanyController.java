@@ -1,5 +1,7 @@
 package com.playdata.HumanResourceManagement.company.controller;
 
+import com.playdata.HumanResourceManagement.addressBook.repository.ResourceRepository;
+import com.playdata.HumanResourceManagement.company.dto.CompanyResponseDTO;
 import com.playdata.HumanResourceManagement.company.dto.SignupRequestDTO;
 import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.HumanResourceManagement.company.service.CompanyService;
@@ -9,9 +11,13 @@ import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalTime;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/company")
@@ -21,6 +27,8 @@ public class CompanyController {
     private final CompanyService companyService;
     private final EmployeeService employeeService;
     private final EmailService emailService;
+    private final ResourceRepository resourceRepository;
+    private final ModelMapper modelMapper;
 
     //회사 && 대표자 정보 입력
     @PostMapping("/signup")
@@ -49,4 +57,20 @@ public class CompanyController {
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    //김다울 추가
+    @PostMapping("/start-Time")
+    public CompanyResponseDTO insertStartTime(@RequestBody CompanyResponseDTO companyResponseDTO) {
+        return companyService.insertStartTime(companyResponseDTO);
+    }
+    //김다울 추가
+   @GetMapping("/{companyCode}/start-time")
+   LocalTime getCompanyStartTime(@PathVariable("companyCode") String companyCode){
+      companyService.findByCompanyCode(companyCode);
+      Company company = companyService.findByCompanyCode(companyCode)
+               .orElseThrow(() -> new IllegalArgumentException("해당 회사가 존재하지 않습니다."));
+       return company.getStartTime();
+   };
+
+
 }

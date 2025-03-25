@@ -1,11 +1,11 @@
 package com.playdata.AttendanceSalary.atdClient;
 
+import com.playdata.AttendanceSalary.atdClient.hrmDTO.CompanyStartTimeDto;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
+import org.springframework.cglib.core.Local;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,5 +25,9 @@ public interface HrmFeignClient {
 
     @GetMapping("/employee/getallemployeeids")
     List<String> getEmployeeIds();
+
+    @PostMapping("/company/start-Time")
+    CompanyStartTimeDto insertStartTime(@RequestBody CompanyStartTimeDto companyStartTimeDto);
+
 
 }

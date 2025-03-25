@@ -1,6 +1,5 @@
 hrm:
   service:
-    #url: http://127.0.0.1:1006
     url: http://127.0.0.1:1010
 
 approval:

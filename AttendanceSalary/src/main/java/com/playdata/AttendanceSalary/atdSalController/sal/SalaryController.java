@@ -1,5 +1,6 @@
 package com.playdata.AttendanceSalary.atdSalController.sal;
 
+import com.playdata.AttendanceSalary.atdClient.hrmDTO.CompanyStartTimeDto;
 import com.playdata.AttendanceSalary.atdSalDao.sal.PositionSalaryDaoImpl;
 import com.playdata.AttendanceSalary.atdSalDto.sal.*;
 import com.playdata.AttendanceSalary.atdSalService.sal.SalaryService;
@@ -14,7 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SalaryController {
     private final SalaryService salaryService;
-    private final PositionSalaryDaoImpl positionSalaryDaoImpl;
+
+    @GetMapping("/payStub-findall")
+    public List<PayStubResponseDTO> payStubFindAll(@RequestParam("employeeId") String employeeId) {
+        return salaryService.findAllPayStub(employeeId);
+    }
 
     @PostMapping("/payStub")
     public PayStubResponseDTO payStub(@RequestParam("employeeId") String employeeId) {
