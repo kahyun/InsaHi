@@ -2,6 +2,7 @@ package com.playdata.HumanResourceManagement.employee.dao;
 
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   public Employee findById(String employeeId) {
     System.out.println("dao단 = " + employeeId);
     return employeeRepository.findById(employeeId).orElse(null);
-    }
+  }
+
+  @Override
+  public Employee findByEmployeeId(String employeeId) {
+    return employeeRepository.findById(employeeId).orElse(null);
+  }
 
     @Override
     public LocalTime findCompanyStartTimeByEmployeeId(String employeeId) {
@@ -38,21 +44,20 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         log.info("Company Entity: {}", employee.getCompany());
         log.info("Company StartTime: {}", employee.getCompany().getStartTime());
 
-        System.out.println("dao단 = " + employeeId);
-        log.info("dao단 getCompanyStartTime: {}", companyStartTime);
-        return companyStartTime;
+    System.out.println("dao단 = " + employeeId);
+    log.info("dao단 getCompanyStartTime: {}", companyStartTime);
+    return companyStartTime;
   }
 
-    @Override
-    public void update(Employee employee) {
-        employeeRepository.save(employee);
-    }
+  @Override
+  public void update(Employee employee) {
+    employeeRepository.save(employee);
+  }
 
-    @Override
+  @Override
   public List<Employee> findAll() {
     return employeeRepository.findAll();
   }
-
 
 
 }

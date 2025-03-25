@@ -25,6 +25,8 @@ export default function SignupForm() {
     const response = await signup(formData);
     console.log("서버 응답:", response);
     alert("회원가입이 완료되었습니다!");
+    alert("이메일을 확인해주세요 !!!!!");
+
 
     console.log(response); //  응답 메시지 저장
     router.push("/");
