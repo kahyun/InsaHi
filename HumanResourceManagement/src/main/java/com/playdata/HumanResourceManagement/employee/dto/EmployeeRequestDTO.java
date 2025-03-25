@@ -15,9 +15,7 @@ public class EmployeeRequestDTO {
   private String companyCode;
   private String email;
   private String phoneNumber;
-
-  //    private String teamId;
-//    private String positionSalaryId;
+  private Long positionSalaryId;
   private String departmentId;
 
 }

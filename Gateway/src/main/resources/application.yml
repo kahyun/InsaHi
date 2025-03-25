@@ -41,10 +41,10 @@ spring:
           uri: http://127.0.0.1:1010
           predicates:
             - Path=/employee/**
-            - Method=GET
+            - Method=POST
           filters:
-#            - JwtAuthorizationFilter
-             name: JwtAuthorizationFilter
+            #            - JwtAuthorizationFilter
+            name: JwtAuthorizationFilter
 
 
         - id: HumanResourceManagement
