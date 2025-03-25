@@ -3,23 +3,28 @@ package com.playdata.HumanResourceManagement.employee.service;
 import com.playdata.HumanResourceManagement.employee.authentication.EmpAuthenticationToken;
 import com.playdata.HumanResourceManagement.employee.dao.AuthorityDAO;
 import com.playdata.HumanResourceManagement.employee.dao.EmployeeDAO;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.playdata.HumanResourceManagement.employee.dto.*;
+import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
+import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
+import com.playdata.HumanResourceManagement.employee.entity.Authority;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import com.playdata.HumanResourceManagement.employee.entity.Authority;
-import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
-import java.util.Set;
-import java.time.LocalTime;
 
 
 @Slf4j
@@ -27,12 +32,12 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeDAO employeeDAO;
-    private final AuthorityDAO authorityDAO;
-    private final ModelMapper modelMapper;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final PasswordEncoder passwordEncoder;
-    private final EmployeeRepository employeeRepository;
+  private final EmployeeDAO employeeDAO;
+  private final AuthorityDAO authorityDAO;
+  private final ModelMapper modelMapper;
+  private final AuthenticationManagerBuilder authenticationManagerBuilder;
+  private final PasswordEncoder passwordEncoder;
+  private final EmployeeRepository employeeRepository;
 
   @Override
   public Employee adminInsert(AdminRequestDTO adminRequestDTO) {
@@ -94,7 +99,6 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
 
-  
   @Override
   public List<String> getAllEmployeeIds() {
     return employeeDAO.findAll().stream()
@@ -107,7 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   //mypage 왼쪽 작은 프로필
   @Override
   public ProfileCardDTO getProfileCard(String employeeId) {
-    Employee employee = employeeDAO.findById(employeeId);
+    Employee employee = employeeDAO.findByEmployeeId(employeeId);
     ProfileCardDTO ProfileCardDTO = modelMapper.map(employee, ProfileCardDTO.class);
 
     return ProfileCardDTO;
@@ -116,7 +120,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   //개인정보수정페이지
   @Override
   public EmployeeResponseDTO getEmployeeInfo(String employeeId) {
-    Employee employee = employeeDAO.findById(employeeId);
+    Employee employee = employeeDAO.findByEmployeeId(employeeId);
     EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
     return employeeResponseDTO;
   }
@@ -170,10 +174,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     return entity;
   }
 
-    @Override
-    public List<Employee> getMemberList() {
-        return employeeRepository.findAll();
-    }
+  @Override
+  public List<Employee> getMemberList() {
+    return employeeRepository.findAll();
+  }
 
 }
 

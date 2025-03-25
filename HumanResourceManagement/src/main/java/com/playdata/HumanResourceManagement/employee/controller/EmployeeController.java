@@ -3,6 +3,13 @@ package com.playdata.HumanResourceManagement.employee.controller;
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
 import com.playdata.HumanResourceManagement.employee.dto.*;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +18,15 @@ import org.springframework.security.core.Authentication;
 import java.time.LocalTime;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -57,17 +73,17 @@ public class EmployeeController {
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","))), headers, HttpStatus.OK);
 
-    }
+  }
 
 
+  @GetMapping("/{employeeId}/company/start-time")
+  public ResponseEntity<LocalTime> getCompanyStartTime(
+      @PathVariable("employeeId") String employeeId) {
+    LocalTime startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
+    log.info("controller 단 : getCompanyStartTime: {}", startTime);
 
-    @GetMapping("/{employeeId}/company/start-time")
-    public ResponseEntity<LocalTime> getCompanyStartTime(
-            @PathVariable("employeeId") String employeeId) {
-        LocalTime startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
-        log.info("controller 단 : getCompanyStartTime: {}", startTime);
-        return ResponseEntity.ok(startTime);
-    }
+    return ResponseEntity.ok(startTime);
+  }
 
 
   @GetMapping("/find")
@@ -131,17 +147,34 @@ public class EmployeeController {
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/insertemployee")
   public ResponseEntity<?> insertEmployee(
-      @RequestBody EmployeeRequestDTO employeeRequestDTO,
-      @RequestHeader("Authorization") String token) {
+      @RequestBody EmployeeRequestDTO employeeRequestDTO) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Object principal = authentication.getPrincipal();
+
+    if (!(principal instanceof MyUserDetail myUserDetail)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요합니다."));
+    }
+
+    List<String> authorities = myUserDetail.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority)
+        .toList();
+
+    if (!(authorities.contains("ROLE_ADMIN") && authorities.contains("ROLE_USER"))) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "등록 권한이 없습니다."));
+    }
+
+    employeeRequestDTO.setCompanyCode(myUserDetail.getCompanyCode());
+
     Employee employee = employeeService.employeeInsert(employeeRequestDTO);
     employeeService.addUserRoles(employee);
 
-    return ResponseEntity.ok(HttpStatus.OK);
+    return ResponseEntity.ok(Map.of("message", "직원등록 성공!"));
   }
 
-    //    채팅방 초대 멤버 조회
-    @GetMapping("/all")
-    public List<Employee> getMemberList(){
-        return employeeService.getMemberList();
-    }
+  //    채팅방 초대 멤버 조회
+  @GetMapping("/all")
+  public List<Employee> getMemberList() {
+    return employeeService.getMemberList();
+  }
 }
