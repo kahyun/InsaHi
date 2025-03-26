@@ -14,6 +14,7 @@ import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -220,7 +221,6 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
 // //    leave.setRemainingLeave(leave.getRemainingLeave() - day);
 //    leave.setUsedLeave(leave.getUsedLeave() + day);
     leave.setAdditionalLeave(leave.getAdditionalLeave() + day);
-    leave.setTotalGrantedLeave(leave.getTotalGrantedLeave() + day);
 
     annualLeaveUsageDAO.save(usage);
     annualLeaveDAO.save(leave);

@@ -75,6 +75,15 @@ public class EmployeeController {
   }
 
 
+  @GetMapping("/{employeeId}/company/start-time")
+  public ResponseEntity<Optional<LocalTime>> getCompanyStartTime(
+      @PathVariable("employeeId") String employeeId) {
+    Optional<LocalTime> startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
+    log.info("controller 단 : getCompanyStartTime: {}", startTime);
+
+    return ResponseEntity.ok(startTime);
+  }
+
 
   @GetMapping("/find")
   /// 김다울

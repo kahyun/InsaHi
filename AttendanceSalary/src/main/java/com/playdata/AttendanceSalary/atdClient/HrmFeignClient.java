@@ -4,12 +4,22 @@ import com.playdata.AttendanceSalary.atdClient.hrmDTO.CompanyStartTimeDto;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.PositionSendDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.List;
 
-@FeignClient(name = "hrmClient", url = "${hrm.service.url}")
+@FeignClient(name = "hrm", url = "${hrm.service.url}")
 public interface HrmFeignClient {
+
+  /**
+   * 특정 직원 정보를 조회
+   * @param employeeId 직원 ID
+   * @return EmployeeResponseDTO 직원 정보
+   */
+  @GetMapping("/api/employee/{employeeId}")
+  EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId);
 
   /**
    * 직급 데이터를 HRM 시스템으로 전송
@@ -29,12 +39,12 @@ public interface HrmFeignClient {
   List<PositionSendDTO> getPositions(@RequestParam("companyCode") String companyCode);
 
   /**
-   * 특정 직원 정보를 조회
+   * 특정 직원의 회사 시작 시간을 조회
    * @param employeeId 직원 ID
-   * @return EmployeeResponseDTO 직원 정보
+   * @return 회사 시작 시간 정보
    */
-  @GetMapping("/api/employee/{employeeId}")
-  EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId);
+  @GetMapping("/api/employee/{employeeId}/startTime")
+  ResponseEntity<LocalTime> getCompanyStartTime(@PathVariable("employeeId") String employeeId);
 
   /**
    * 모든 직원 ID를 조회
@@ -42,14 +52,6 @@ public interface HrmFeignClient {
    */
   @GetMapping("/api/employees/ids")
   List<String> getEmployeeIds();
-
-  /**
-   * 회사의 시작 시간을 조회
-   * @param employeeId 직원 ID
-   * @return 회사 시작 시간 정보
-   */
-  @GetMapping("/api/employee/{employeeId}/startTime")
-  CompanyStartTimeDto getCompanyStartTime(@RequestParam("employeeId") String employeeId);
 
   /**
    * 회사 시작 시간 정보 추가

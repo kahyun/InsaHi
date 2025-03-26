@@ -2,6 +2,7 @@ package com.playdata.AttendanceSalary.atdSalDto.sal;
 
 import com.playdata.AttendanceSalary.atdSalEntity.sal.AllowanceEntity;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.AllowanceType;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PayStubEntity;
 //import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

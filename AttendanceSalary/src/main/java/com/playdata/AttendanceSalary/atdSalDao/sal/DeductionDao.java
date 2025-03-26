@@ -1,6 +1,7 @@
 package com.playdata.AttendanceSalary.atdSalDao.sal;
 
 import com.playdata.AttendanceSalary.atdSalEntity.sal.DeductionEntity;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;

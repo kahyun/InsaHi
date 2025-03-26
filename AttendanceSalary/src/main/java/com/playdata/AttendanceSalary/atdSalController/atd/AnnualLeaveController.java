@@ -3,6 +3,8 @@ package com.playdata.AttendanceSalary.atdSalController.atd;
 import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveDTO;
 import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
 import com.playdata.AttendanceSalary.atdSalDto.atd.PageResponseDTO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
 import com.playdata.AttendanceSalary.atdSalService.atd.AnnualLeaveService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

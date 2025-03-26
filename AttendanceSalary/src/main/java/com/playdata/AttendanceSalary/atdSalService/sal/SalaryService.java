@@ -1,8 +1,14 @@
 package com.playdata.AttendanceSalary.atdSalService.sal;
 
 import com.playdata.AttendanceSalary.atdSalDto.sal.*;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.AllowanceEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.EmployeeAllowEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PayStubEntity;
+import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface SalaryService {
@@ -10,7 +16,7 @@ public interface SalaryService {
     List<PayStubResponseDTO> findAllPayStub(String employeeId) ;
     List<PayStubResponseDTO> findAllPayStubAndYearAndMonth(String employeeId,int year,int month) ;
 
-    /// 급여계산 로직
+        /// 급여계산 로직
     public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId);
 
     List<PositionSalaryStepResponseDTO> findPositionSalaryStepByCompanyCode(String CompanyCode);

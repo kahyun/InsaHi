@@ -18,6 +18,5 @@ public interface EmployeeDAO {
   ///  김다울 추가
   Optional<LocalTime> findCompanyStartTimeByEmployeeId(String employeeId);
 
-
   void update(Employee employee);
 }

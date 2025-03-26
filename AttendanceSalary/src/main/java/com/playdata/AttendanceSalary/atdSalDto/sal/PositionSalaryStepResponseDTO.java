@@ -1,5 +1,6 @@
 package com.playdata.AttendanceSalary.atdSalDto.sal;
 // import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;

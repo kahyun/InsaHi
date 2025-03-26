@@ -16,36 +16,36 @@ import org.springframework.security.core.Authentication;
 
 public interface EmployeeService {
 
-    Employee adminInsert(AdminRequestDTO adminRequestDTO);
+  Employee adminInsert(AdminRequestDTO adminRequestDTO);
 
-    void addAdminAndUserRoles(Employee employee);
+  void addAdminAndUserRoles(Employee employee);
 
-    Authentication login(LoginDTO employee);
+  Authentication login(LoginDTO employee);
 
-    // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
+  // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
 
-    EmployeeResponseDTO findEmployeeById(String employeeId);
+  EmployeeResponseDTO findEmployeeById(String employeeId);
 
     /// 김다울 추가
     Optional<LocalTime> findCompanyStartTimeByEmployeeId(String employeeId);
 
-    List<String> getAllEmployeeIds();
+  List<String> getAllEmployeeIds();
 
-    // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
+  // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
-    //mypage 왼쪽 작은 프로필
-    ProfileCardDTO getProfileCard(String employeeId);
+  //mypage 왼쪽 작은 프로필
+  ProfileCardDTO getProfileCard(String employeeId);
 
-    EmployeeResponseDTO getEmployeeInfo(String employeeId);
+  EmployeeResponseDTO getEmployeeInfo(String employeeId);
 
-    EmployeeResponseDTO updateEmployeeInfo(String employeeId, EmployeeUpdateDTO employeeUpdateDTO);
+  EmployeeResponseDTO updateEmployeeInfo(String employeeId, EmployeeUpdateDTO employeeUpdateDTO);
 
-    void addUserRoles(Employee employee);
+  void addUserRoles(Employee employee);
 
-    Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO);
+  Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO);
 
-    EmployeeResponseDTO updatePassword(String employeeId, UpdatePasswordDTO updatePasswordDTO);
+  EmployeeResponseDTO updatePassword(String employeeId, UpdatePasswordDTO updatePasswordDTO);
 
     List<Employee> getMemberList();
 }

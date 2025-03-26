@@ -22,30 +22,45 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final TokenManager tokenManager;
-    private final EmployeeUserDetailService employeeUserDetailService;
+  private final TokenManager tokenManager;
+  private final EmployeeUserDetailService employeeUserDetailService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(CsrfConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().permitAll())
-                .addFilterBefore(new EmployeeJwtFilter(tokenManager),
-                        UsernamePasswordAuthenticationFilter.class)
-                .userDetailsService(employeeUserDetailService)
-                .formLogin(withDefaults())
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
 
-                // 세션을 사용하지 않음 (JWT 기반)
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(CsrfConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/",
+                "/api/**",
+                "/company/signup",
+                "/employee/login",
+                "/approavl/submit", "/atdsal/**",
+                "/employee/find",
+                "/company/*/start-time",
+                "/company/start-Time").permitAll()
+            //관리자만 볼 수 있는 페이지 설정
+            .anyRequest().authenticated())
+        .addFilterBefore(new EmployeeJwtFilter(tokenManager),
+            UsernamePasswordAuthenticationFilter.class)
+        .userDetailsService(employeeUserDetailService)
+        .formLogin(withDefaults())
+
+        //세션을 사용하지 않겠다는 의미
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+    return http.build();
+  }
+
 }

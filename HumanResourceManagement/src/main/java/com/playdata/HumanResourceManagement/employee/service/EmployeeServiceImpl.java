@@ -33,151 +33,152 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeDAO employeeDAO;
-    private final AuthorityDAO authorityDAO;
-    private final ModelMapper modelMapper;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final PasswordEncoder passwordEncoder;
-    private final EmployeeRepository employeeRepository;
+  private final EmployeeDAO employeeDAO;
+  private final AuthorityDAO authorityDAO;
+  private final ModelMapper modelMapper;
+  private final AuthenticationManagerBuilder authenticationManagerBuilder;
+  private final PasswordEncoder passwordEncoder;
+  private final EmployeeRepository employeeRepository;
 
-    @Override
-    public Employee adminInsert(AdminRequestDTO adminRequestDTO) {
+  @Override
+  public Employee adminInsert(AdminRequestDTO adminRequestDTO) {
 
-        Employee entity = modelMapper.map(adminRequestDTO, Employee.class);
+    Employee entity = modelMapper.map(adminRequestDTO, Employee.class);
 
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        employeeDAO.insert(entity);
-        return entity;
+    entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+    employeeDAO.insert(entity);
+    return entity;
+  }
+
+  // ROLE_ADMIN + ROLE_USER 권한 부여 (DAO 활용)
+  @Override
+  public void addAdminAndUserRoles(Employee employee) {
+    Set<Authority> roles = new HashSet<>();
+
+    // DAO에서 ROLE_ADMIN, ROLE_USER 가져오기
+    authorityDAO.getAdminRole().ifPresent(roles::add);
+    authorityDAO.getUserRole().ifPresent(roles::add);
+
+    // Employee에 권한 추가
+    employee.setAuthorityList(roles);
+    employeeDAO.insert(employee);
+  }
+
+
+  @Override
+  public Authentication login(LoginDTO employee) {
+    //스프링시큐리티의 인증이 실행되도록 처리
+
+    // 1. 커스텀 인증 토큰 (EmpAuthenticationToken) 생성
+    EmpAuthenticationToken token =
+        new EmpAuthenticationToken(
+            employee.getEmployeeId(),
+            employee.getPassword(),
+            employee.getCompanyCode()
+        );
+
+    // 2. Spring Security의 인증 시스템을 사용하여 인증 수행
+    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
+
+    return authentication;
+
+  }
+
+  @Override
+  public EmployeeResponseDTO findEmployeeById(String employeeId) {
+    Employee employee = employeeDAO.findById(employeeId);
+    System.out.println("employee 서비스단 = " + employee.getEmployeeId());
+    System.out.println(
+        "employee.getCompany().getCompanyCode() = " + employee.getCompany().getCompanyCode());
+    return modelMapper.map(employee, EmployeeResponseDTO.class);
+  }
+
+  @Override
+  /// 김다울 추가
+  public Optional<LocalTime> findCompanyStartTimeByEmployeeId(String employeeId) {
+    return employeeDAO.findCompanyStartTimeByEmployeeId(employeeId);
+  }
+
+
+  @Override
+  public List<String> getAllEmployeeIds() {
+    return employeeDAO.findAll().stream()
+        .map(employee -> employee.getEmployeeId())
+        .collect(Collectors.toList());
+
+
+  }
+
+  //mypage 왼쪽 작은 프로필
+  @Override
+  public ProfileCardDTO getProfileCard(String employeeId) {
+    Employee employee = employeeDAO.findByEmployeeId(employeeId);
+    ProfileCardDTO ProfileCardDTO = modelMapper.map(employee, ProfileCardDTO.class);
+
+    return ProfileCardDTO;
+  }
+
+  //개인정보수정페이지
+  @Override
+  public EmployeeResponseDTO getEmployeeInfo(String employeeId) {
+    Employee employee = employeeDAO.findByEmployeeId(employeeId);
+    EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
+    return employeeResponseDTO;
+  }
+
+  //개인정보 변경
+  @Override
+  public EmployeeResponseDTO updateEmployeeInfo(String employeeId,
+      EmployeeUpdateDTO employeeUpdateDTO) {
+    Employee employee = employeeDAO.findById(employeeId);
+    modelMapper.map(employeeUpdateDTO, employee);
+    employeeDAO.update(employee);
+    EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
+
+    return employeeResponseDTO;
+  }
+
+  //비밀번호 변경
+  @Override
+  public EmployeeResponseDTO updatePassword(String employeeId,
+      UpdatePasswordDTO updatePasswordDTO) {
+    Employee employee = employeeDAO.findById(employeeId);
+    if (!passwordEncoder.matches(updatePasswordDTO.getCurrentPassword(), employee.getPassword())) {
+      throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
     }
+    String encodedNewPassword = passwordEncoder.encode(updatePasswordDTO.getNewPassword());
+    employee.setPassword(encodedNewPassword);
 
-    // ROLE_ADMIN + ROLE_USER 권한 부여 (DAO 활용)
-    @Override
-    public void addAdminAndUserRoles(Employee employee) {
-        Set<Authority> roles = new HashSet<>();
+    employeeDAO.update(employee);
+    EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
+    return employeeResponseDTO;
+  }
 
-        // DAO에서 ROLE_ADMIN, ROLE_USER 가져오기
-        authorityDAO.getAdminRole().ifPresent(roles::add);
-        authorityDAO.getUserRole().ifPresent(roles::add);
+  //user 권한만 추가
+  @Override
+  public void addUserRoles(Employee employee) {
+    Set<Authority> roles = new HashSet<>();
 
-        // Employee에 권한 추가
-        employee.setAuthorityList(roles);
-        employeeDAO.insert(employee);
-    }
+    authorityDAO.getUserRole().ifPresent(roles::add);
 
+    employee.setAuthorityList(roles);
+    employeeDAO.insert(employee);
+  }
 
-    @Override
-    public Authentication login(LoginDTO employee) {
-        //스프링시큐리티의 인증이 실행되도록 처리
+  //회원 등록
+  @Override
+  public Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO) {
+    Employee entity = modelMapper.map(employeeRequestDTO, Employee.class);
 
-        // 1. 커스텀 인증 토큰 (EmpAuthenticationToken) 생성
-        EmpAuthenticationToken token =
-                new EmpAuthenticationToken(
-                        employee.getEmployeeId(),
-                        employee.getPassword(),
-                        employee.getCompanyCode()
-                );
+    entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+    employeeDAO.insert(entity);
+    return entity;
+  }
 
-        // 2. Spring Security의 인증 시스템을 사용하여 인증 수행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
-
-        return authentication;
-
-    }
-
-    @Override
-    public EmployeeResponseDTO findEmployeeById(String employeeId) {
-        Employee employee = employeeDAO.findById(employeeId);
-        System.out.println("employee 서비스단 = " + employee.getEmployeeId());
-        System.out.println(
-                "employee.getCompany().getCompanyCode() = " + employee.getCompany().getCompanyCode());
-        return modelMapper.map(employee, EmployeeResponseDTO.class);
-    }
-
-    @Override
-    /// 김다울 추가
-    public Optional<LocalTime> findCompanyStartTimeByEmployeeId(String employeeId) {
-        return employeeDAO.findCompanyStartTimeByEmployeeId(employeeId);
-    }
-
-
-    @Override
-    public List<String> getAllEmployeeIds() {
-        return employeeDAO.findAll().stream()
-                .map(employee -> employee.getEmployeeId())
-                .collect(Collectors.toList());
-
-
-    }
-
-    //mypage 왼쪽 작은 프로필
-    @Override
-    public ProfileCardDTO getProfileCard(String employeeId) {
-        Employee employee = employeeDAO.findByEmployeeId(employeeId);
-        ProfileCardDTO ProfileCardDTO = modelMapper.map(employee, ProfileCardDTO.class);
-
-        return ProfileCardDTO;
-    }
-
-    //개인정보수정페이지
-    @Override
-    public EmployeeResponseDTO getEmployeeInfo(String employeeId) {
-        Employee employee = employeeDAO.findByEmployeeId(employeeId);
-        EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
-        return employeeResponseDTO;
-    }
-
-    //개인정보 변경
-    @Override
-    public EmployeeResponseDTO updateEmployeeInfo(String employeeId,
-                                                  EmployeeUpdateDTO employeeUpdateDTO) {
-        Employee employee = employeeDAO.findById(employeeId);
-        modelMapper.map(employeeUpdateDTO, employee);
-        employeeDAO.update(employee);
-        EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
-
-        return employeeResponseDTO;
-    }
-
-    //비밀번호 변경
-    @Override
-    public EmployeeResponseDTO updatePassword(String employeeId,
-                                              UpdatePasswordDTO updatePasswordDTO) {
-        Employee employee = employeeDAO.findById(employeeId);
-        if (!passwordEncoder.matches(updatePasswordDTO.getCurrentPassword(), employee.getPassword())) {
-            throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
-        }
-        String encodedNewPassword = passwordEncoder.encode(updatePasswordDTO.getNewPassword());
-        employee.setPassword(encodedNewPassword);
-
-        employeeDAO.update(employee);
-        EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
-        return employeeResponseDTO;
-    }
-
-    //user 권한만 추가
-    @Override
-    public void addUserRoles(Employee employee) {
-        Set<Authority> roles = new HashSet<>();
-
-        authorityDAO.getUserRole().ifPresent(roles::add);
-
-        employee.setAuthorityList(roles);
-        employeeDAO.insert(employee);
-    }
-
-    //회원 등록
-    @Override
-    public Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO) {
-        Employee entity = modelMapper.map(employeeRequestDTO, Employee.class);
-
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        employeeDAO.insert(entity);
-        return entity;
-    }
-
-    @Override
-    public List<Employee> getMemberList() {
-        return employeeRepository.findAll();
-    }
+  @Override
+  public List<Employee> getMemberList() {
+    return employeeRepository.findAll();
+  }
 
 }
+

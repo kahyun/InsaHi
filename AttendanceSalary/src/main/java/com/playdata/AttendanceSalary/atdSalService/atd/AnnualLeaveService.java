@@ -2,7 +2,8 @@ package com.playdata.AttendanceSalary.atdSalService.atd;
 
 import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveDTO;
 import com.playdata.AttendanceSalary.atdSalDto.atd.AnnualLeaveRequestDTO;
-
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AnnualLeaveUsageEntity;
 import java.util.List;
 import org.springframework.data.domain.Page;
 

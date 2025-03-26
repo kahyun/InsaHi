@@ -1,7 +1,11 @@
 package com.playdata.AttendanceSalary.atdSalRepository.sal;
 
 import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
+import lombok.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
 
@@ -14,6 +18,7 @@ import java.util.Optional;
  */
 @Repository
 public interface PositionRepository extends JpaRepository<PositionEntity, Long> {
+    List<PositionEntity> findAllByCompanyCode(@Param("companyCode") String companyCode);
 
     /**
      * 회사 코드로 직급 전체 조회
@@ -39,5 +44,4 @@ public interface PositionRepository extends JpaRepository<PositionEntity, Long> 
      * @return 직급 리스트
      */
     List<PositionEntity> findByCompanyCodeAndEmployeeId(String companyCode, String employeeId);
-    List<PositionEntity> findAllByCompanyCode(@Param("companyCode") String companyCode);
 }

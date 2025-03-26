@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,24 +22,40 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class AttendanceServiceImpl implements AttendanceService {
-
+    ///  44번째줄 통신으로 company받아와서 getStartTime
     private final AttendanceDAO attendanceDAO;
     private final HrmFeignClient hrmFeignClient;
     private final ModelMapper modelMapper;
 
+//
+//    @Override
+//    public AttendanceDTO findAttendanceByEmployeeId(String employeeId) {
+//        AttendanceEntity attendance = attendanceDAO.findAttendanceByEmployeeId(employeeId).orElseThrow(()
+//                -> new RuntimeException("서비스 널 오류"));
+//        log.info(attendance.toString());
+//        return attendance.toAttendanceDTO();
+//    }
+
     @Override
     public AttendanceDTO findAttendanceByEmployeeId(String employeeId) {
-        AttendanceEntity attendance = attendanceDAO.findAttendanceByEmployeeId(employeeId)
-                .orElseThrow(() -> new RuntimeException("서비스 널 오류"));
+        AttendanceEntity attendance = attendanceDAO.findAttendanceByEmployeeId(employeeId).orElseThrow(()
+                -> new RuntimeException("서비스 널 오류"));
+
+        //        log.info(attendance.toString());
+
         return modelMapper.map(attendance, AttendanceDTO.class);
     }
 
     @Override
     public List<AttendanceDTO> getAttendanceByEmployeeId(String employeeId) {
         List<AttendanceEntity> entities = attendanceDAO.findByEmployeeId(employeeId);
-        return entities.stream()
-                .map(attendanceEntity -> modelMapper.map(attendanceEntity, AttendanceDTO.class))
-                .collect(Collectors.toList());
+
+        // Entity -> DTO 변환
+        List<AttendanceDTO> dtoList = entities.stream()
+                .map(AttendanceEntity::toAttendanceDTO)
+                .toList();
+
+        return dtoList;
     }
 
     @Override
@@ -52,42 +69,54 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public AttendanceDTO checkIn(String employeeId) throws IllegalAccessException {
+
         EmployeeResponseDTO emp = hrmFeignClient.findEmployee(employeeId);
 
         // 1) null 처리 후 진행
         if (!attendanceDAO.findCheckOutTimeByEmployeeId(employeeId).isEmpty()) {
+            // 값이 없는 경우(null)
+            // 퇴근 시간이 없으면 예외를 발생시켜 퇴근 처리하도록 안내
             throw new RuntimeException("퇴근 처리가 되지 않았습니다. 퇴근을 먼저 해주세요.");
         }
 
         AttendanceEntity attendanceEntity = new AttendanceEntity();
         attendanceEntity.setEmployeeId(emp.getEmployeeId());
         attendanceEntity.setCompanyCode(emp.getCompanyCode());
+        // 회사별 출근 시각 지정
 
-        // 회사별 출근 시간 지정
+        // LocalTime companyHour = employee.getCompany().getStartTime();
+        /// 통신으로 company받아와서 getStartTime();
         LocalTime companyHour = hrmFeignClient.getCompanyStartTime(employeeId).getBody();
-        log.info("서비스단 companyHour = {}", companyHour);
+        System.out.println("서비스단 companyHour = " + companyHour);
 
+        // 내 출근 시간 기본값 설정
         attendanceEntity.setWorkDate(LocalDate.now());
+
         LocalDateTime todayTime = LocalDateTime.of(LocalDate.now(), companyHour);
-        boolean isWeekday = (todayTime.getDayOfWeek() != DayOfWeek.SATURDAY && todayTime.getDayOfWeek() != DayOfWeek.SUNDAY);
+        DayOfWeek today = todayTime.getDayOfWeek();
+        boolean isWeekday = (today != DayOfWeek.SATURDAY && today != DayOfWeek.SUNDAY);
 
         // 출근 시간 설정 로직
         LocalDateTime checkInTime = LocalDateTime.now();
+
         if (LocalTime.now().isBefore(companyHour) && isWeekday) {
             attendanceEntity.setAttendanceStatus(AttendanceStauts.ATTENDANCE);
             attendanceEntity.setCheckInTime(LocalDateTime.of(LocalDate.now(), companyHour));
         } else if (LocalTime.now().isAfter(companyHour) && isWeekday) {
             attendanceEntity.setAttendanceStatus(AttendanceStauts.TARDINESS);
             attendanceEntity.setCheckInTime(checkInTime);
-        } else if (!isWeekday) {
+        }
+        // 주말 출근 처리
+        if (!isWeekday) {
             attendanceEntity.setCheckInTime(checkInTime);
             attendanceEntity.setAttendanceStatus(AttendanceStauts.WEEKEND_WORK);
         }
 
+        // 출근 시간 저장
         return modelMapper.map(attendanceDAO.save(attendanceEntity), AttendanceDTO.class);
     }
 
-    @Override
+
     public void checkOut(Long id) {
         AttendanceEntity attendance = attendanceDAO.findById(id);
         LocalDateTime now = LocalDateTime.now();
@@ -109,14 +138,15 @@ public class AttendanceServiceImpl implements AttendanceService {
                 overtimeMinutesTotal = ((workHours - 8) * 60) + workMinutes;
             }
         } else {
+            // 주말은 모두 연장근무 처리
             overtimeMinutesTotal = (workHours * 60) + workMinutes;
         }
 
-        // 근무 시간 및 연장 근무 시간 저장
-        BigDecimal todayWorkHours = BigDecimal.valueOf(workMinutes).add(BigDecimal.valueOf(workHours * 60));
+        BigDecimal todayWorkHours = BigDecimal.valueOf(workMinutes).add(BigDecimal.valueOf(workHours*60));
+
         BigDecimal todayOvertimeWorkHours = BigDecimal.valueOf(overtimeMinutesTotal)
                 .divide(BigDecimal.valueOf(60), 3, RoundingMode.HALF_UP); // 소수점 3자리 반올림
-
+        // 근무 시간 및 연장 근무 시간 저장
         attendance.setWorkHours(todayWorkHours); // 총 근무 시간 (분 단위)
         attendance.setOvertimeHours(todayOvertimeWorkHours);
 

@@ -1,6 +1,8 @@
 package com.playdata.AttendanceSalary.atdSalService.sal;
 
+
 import com.playdata.AttendanceSalary.atdClient.HrmFeignClient;
+import com.playdata.AttendanceSalary.atdClient.hrmDTO.CompanyStartTimeDto;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
 import com.playdata.AttendanceSalary.atdSalDao.sal.*;
 import com.playdata.AttendanceSalary.atdSalDto.sal.*;
@@ -9,14 +11,17 @@ import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

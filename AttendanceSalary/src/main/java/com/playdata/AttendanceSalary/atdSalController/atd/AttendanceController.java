@@ -1,6 +1,9 @@
 package com.playdata.AttendanceSalary.atdSalController.atd;
 
 import com.playdata.AttendanceSalary.atdSalDto.atd.AttendanceDTO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
+
+import com.playdata.AttendanceSalary.atdSalDto.atd.AttendanceDTO;
 import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +39,7 @@ public class AttendanceController {
         AttendanceDTO attendanceDTO = attendanceService.checkIn(employeeId);
         return ResponseEntity.ok(attendanceDTO);
     }
+
 
     //  ResponseEntity<?> 으로 교체예정
     @PutMapping("/check-out")
