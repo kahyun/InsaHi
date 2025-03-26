@@ -5,7 +5,7 @@ export async function RegisterEmployeeAction(formData: FormData) {
   console.log("폼 데이터:", formObject);
   let token = "";
   if (typeof window !== "undefined") {
-    token = localStorage.getItem("accessToken") || "";
+    token = localStorage.getItem("token") || "";
   }
 
   const response = await fetch(url, {

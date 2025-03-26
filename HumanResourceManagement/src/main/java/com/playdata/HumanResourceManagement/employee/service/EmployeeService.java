@@ -1,6 +1,8 @@
 package com.playdata.HumanResourceManagement.employee.service;
 
 import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.AuthorityResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmpAuthResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
@@ -16,6 +18,7 @@ public interface EmployeeService {
 
   Employee adminInsert(AdminRequestDTO adminRequestDTO);
 
+  // Employee adminDelete(AdminRequestDTO adminRequestDTO);
   void addAdminAndUserRoles(Employee employee);
 
   Authentication login(LoginDTO employee);
@@ -31,6 +34,9 @@ public interface EmployeeService {
   List<String> getAllEmployeeIds();
 
   // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
+  List<AuthorityResponseDTO> findAuthoritiesByCompanyCode(String companyCode);
+
+  List<EmpAuthResponseDTO> findByAuthorityList_AuthorityName(String authorityName);
 
   //mypage 왼쪽 작은 프로필
   ProfileCardDTO getProfileCard(String employeeId);
@@ -45,5 +51,9 @@ public interface EmployeeService {
 
   EmployeeResponseDTO updatePassword(String employeeId, UpdatePasswordDTO updatePasswordDTO);
 
-    List<Employee> getMemberList();
+  List<Employee> getMemberList();
+
+  void addAdminRoleToEmployee(String employeeId);
+
+  void removeAdminRoleFromEmployee(String employeeId);
 }
