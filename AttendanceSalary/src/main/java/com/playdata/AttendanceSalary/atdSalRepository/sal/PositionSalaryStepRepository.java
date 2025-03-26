@@ -11,4 +11,5 @@ public interface PositionSalaryStepRepository extends JpaRepository<PositionSala
     Optional<PositionSalaryStepEntity> findByPositionSalaryId(@Param("positionSalaryId") Long positionSalaryId);
 
     List<PositionSalaryStepEntity> findByPosition_PositionId(Long positionId);
+    List<PositionSalaryStepEntity> findAllByCompanyCode(@Param("companyCode") String companyCode);
 }

@@ -1,4 +1,4 @@
-//package com.playdata.attendanceSalary.atdSalRepository.sal;
+package com.playdata.AttendanceSalary.atdSalRepository.sal;//package com.playdata.attendanceSalary.atdSalRepository.sal;
 //
 //import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
 //import org.springframework.data.jpa.repository.JpaRepository;

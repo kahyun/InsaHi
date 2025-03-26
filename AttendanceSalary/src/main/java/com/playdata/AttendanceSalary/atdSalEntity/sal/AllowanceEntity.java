@@ -1,14 +1,15 @@
 package com.playdata.AttendanceSalary.atdSalEntity.sal;
 
-import com.playdata.AttendanceSalary.atdSalDto.sal.AllowanceResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 //수당
+@Builder
 @Entity
 @Table(name = "allowance")
 @Data
@@ -37,13 +38,5 @@ public class AllowanceEntity extends DateEntity {
     // private boolean taxExemption;
     // private BigDecimal taxExemptionLimit;
 
-    public AllowanceResponseDTO toDTO() {
-        AllowanceResponseDTO dto = new AllowanceResponseDTO();
-        dto.setAllowanceId(allowanceId);
-        dto.setCompanyCode(companyCode);
-        dto.setAllowName(allowType.getDisplayName());
-        dto.setAllowSalary(allowSalary);
-//        dto.setSalaryId(salaryId);
-        return dto;
-    }
+
 }

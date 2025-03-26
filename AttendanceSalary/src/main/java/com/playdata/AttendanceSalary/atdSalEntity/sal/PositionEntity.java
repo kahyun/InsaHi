@@ -4,8 +4,6 @@ import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 /**
  * 직급(Position) 엔티티
  */

@@ -1,4 +1,4 @@
-//package com.playdata.attendanceSalary.atdSalDto.sal;
+package com.playdata.AttendanceSalary.atdSalDto.sal;//package com.playdata.attendanceSalary.atdSalDto.sal;
 //
 //import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
 //import lombok.Data;

@@ -3,8 +3,10 @@ package com.playdata.AttendanceSalary.atdSalRepository.sal;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+
 import java.util.Optional;
 
 /**
@@ -37,4 +39,5 @@ public interface PositionRepository extends JpaRepository<PositionEntity, Long> 
      * @return 직급 리스트
      */
     List<PositionEntity> findByCompanyCodeAndEmployeeId(String companyCode, String employeeId);
+    List<PositionEntity> findAllByCompanyCode(@Param("companyCode") String companyCode);
 }

@@ -1,13 +1,10 @@
 package com.playdata.AttendanceSalary.atdClient;
 
+import com.playdata.AttendanceSalary.atdClient.hrmDTO.CompanyStartTimeDto;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.PositionSendDTO;
-import com.playdata.AttendanceSalary.atdClient.hrmDTO.CompanyStartTimeDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,5 +49,13 @@ public interface HrmFeignClient {
    * @return 회사 시작 시간 정보
    */
   @GetMapping("/api/employee/{employeeId}/startTime")
-  CompanyStartTimeDTO getCompanyStartTime(@RequestParam("employeeId") String employeeId);
+  CompanyStartTimeDto getCompanyStartTime(@RequestParam("employeeId") String employeeId);
+
+  /**
+   * 회사 시작 시간 정보 추가
+   * @param companyStartTimeDto 회사 시작 시간 정보
+   * @return 추가된 회사 시작 시간 정보
+   */
+  @PostMapping("/company/start-Time")
+  CompanyStartTimeDto insertStartTime(@RequestBody CompanyStartTimeDto companyStartTimeDto);
 }

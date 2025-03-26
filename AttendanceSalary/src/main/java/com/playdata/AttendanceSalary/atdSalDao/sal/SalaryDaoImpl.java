@@ -1,4 +1,4 @@
-//package com.playdata.attendanceSalary.atdSalDao.sal;
+package com.playdata.AttendanceSalary.atdSalDao.sal;//package com.playdata.attendanceSalary.atdSalDao.sal;
 //
 ////import com.playdata.attendanceSalary.atdSalEntity.sal.SalaryEntity;
 //import com.playdata.attendanceSalary.atdSalRepository.sal.SalaryRepository;

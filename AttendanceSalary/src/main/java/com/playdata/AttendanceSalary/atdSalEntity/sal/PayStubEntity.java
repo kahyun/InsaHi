@@ -57,7 +57,6 @@ public class PayStubEntity extends DateEntity {
     private String employeeId;
     @OneToMany(mappedBy = "payStub", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AllowanceEntity> allowances = new ArrayList<>();
-
     @OneToMany(mappedBy = "payStub", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DeductionEntity> deductions = new ArrayList<>();
 
