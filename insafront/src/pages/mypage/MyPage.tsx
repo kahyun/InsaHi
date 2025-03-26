@@ -42,7 +42,7 @@ const MyPage = () => {
 
           {/* Calendar Section */}
           <div className={styles.calendarCard}>
-            <Calendar/>
+            {userData ? <Calendar employeeId={userData.employeeId}/> : <p>Loading</p>}
           </div>
         </div>
 

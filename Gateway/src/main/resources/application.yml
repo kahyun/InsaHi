@@ -33,9 +33,6 @@ spring:
             exposed-headers:
               - Authorization
 
-
-
-
       routes:
         - id: HumanResourceManagement
           uri: http://127.0.0.1:1010
@@ -52,16 +49,35 @@ spring:
           predicates:
             - Path=/employee/**
 
-
         - id: HumanResourceManagement
           uri: http://127.0.0.1:1010
           predicates:
             - Path=/company/**
 
+        - id: HumanResourceManagement
+          uri: http://127.0.0.1:1010
+          predicates:
+            - Path=/department/**
+
         - id: Chat
           uri: http://127.0.0.1:1004
           predicates:
             - Path=/chat/**
+
+        - id: ElectronicApproval
+          uri: http://127.0.0.1:1005
+          predicates:
+            - Path=/approval/**
+
+        - id: AttendanceSalary
+          uri: http://127.0.0.1:1000
+          predicates:
+            - Path=/leave/**
+
+        - id: AttendanceSalary
+          uri: http://127.0.0.1:1000
+          predicates:
+            - Path=/atdsal/**
 
 
 
