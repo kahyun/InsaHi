@@ -15,19 +15,6 @@ public interface SalaryService {
     List<AllowanceEntity> findByAllowance_CompanyCode(String CompanyCode);
 
 
-    /// Position  서비스
-    // 회사별 직급 생성
-    PositionResponseDTO insertPosition(PositionResponseDTO requestDTO, String CompanyCode);
-
-    // 직급 수정
-    void updatePosition(PositionResponseDTO requestDTO);
-
-    // 직급 삭제
-    void deletePosition(PositionResponseDTO requestDTO);
-
-    PositionResponseDTO findPosition(Long positionId);
-
-
     /// PositionSalaryStep 서비스
     PositionSalaryStepResponseDTO insertPositionSalaryStep(PositionSalaryStepResponseDTO responseDTO);
 

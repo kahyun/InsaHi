@@ -7,8 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
+public class ProfileCardDTO {
     private String employeeId;
-    private String password;
-    private String companyCode;
+    private String name;
+    private String phoneNumber;
+    private String departmentId;
+    private String positionSalaryId;
+
+
 }

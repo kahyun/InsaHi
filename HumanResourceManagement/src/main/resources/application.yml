@@ -1,11 +1,6 @@
-feign:
-  client:
-    position:
-      url: "${url.service.att}"
-
-url:
+att:
   service:
-    att: "http://localhost:1000"
+    url: http://127.0.0.1:1000
 
 server:
   port: 1010
@@ -15,9 +10,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true  # SQL 쿼리를 콘솔에 출력
-    packages-to-scan:
-      - com.playdata.HumanResourceManagement
-      - com.playdata.AttendanceSalary
 
     properties:
       hibernate:

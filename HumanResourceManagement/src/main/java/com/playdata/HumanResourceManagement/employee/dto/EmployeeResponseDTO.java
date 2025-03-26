@@ -1,19 +1,17 @@
 package com.playdata.HumanResourceManagement.employee.dto;
 
-
-import com.playdata.AttendanceSalary.atdSalDto.sal.PositionResponseDTO;
+import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeResponseDTO {
 
-    private Long id;
     private String employeeId;
     private String password;
     private String name;
@@ -27,10 +25,9 @@ public class EmployeeResponseDTO {
     private String departmentId;
     private String teamId;
     private String state;
-    private String positionSalaryId;
-
-    // 직급 정보 추가
-    private PositionResponseDTO position;
+    private Long positionSalaryId;
+    private LocalDate hireDate;
+    private LocalDate retireDate;
 
 
 }

@@ -1,7 +1,7 @@
 package com.playdata.AttendanceSalary.atdSalService.sal;
 
 
-import com.playdata.AttendanceSalary.ahrmClient.HrmFeignClient;
+import com.playdata.AttendanceSalary.atdClient.HrmFeignClient;
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.EmployeeResponseDTO;
 import com.playdata.AttendanceSalary.atdSalDao.sal.*;
 import com.playdata.AttendanceSalary.atdSalDto.sal.*;
@@ -314,31 +314,13 @@ public class SalaryServiceImpl implements SalaryService {
   }
 
   ///  Position 서비스
-  // 회사에서 직급 추가
-  @Override
-  public PositionResponseDTO insertPosition(PositionResponseDTO requestDTO, String CompanyCode) {
-    PositionEntity position = requestDTO.toEntity();
-    PositionEntity pp = positionDao.savePosition(position);
-    return modelMapper.map(pp, PositionResponseDTO.class);
-  }
 
-  @Override
-  public void updatePosition(PositionResponseDTO requestDTO) {
-    PositionEntity position = requestDTO.toEntity();
-    positionDao.savePosition(position);
-  }
+  // hrm 에서 Position 리스트 조회
+  // hrm 에서 Position 리스트 삭제
+  // hrm 에서 Position 리스트 추가
 
-  // 회사에서 직급 삭제
-  @Override
-  public void deletePosition(PositionResponseDTO requestDTO) {
-    PositionEntity position = requestDTO.toEntity();
-    positionDao.deletePosition(position);
-  }
 
-  @Override
-  public PositionResponseDTO findPosition(Long positionId) {
-    return modelMapper.map(positionDao.findById(positionId), PositionResponseDTO.class);
-  }
+
 
   /// positionSalaryStep 서비스
   @Override

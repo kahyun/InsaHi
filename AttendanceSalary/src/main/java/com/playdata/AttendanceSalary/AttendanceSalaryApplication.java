@@ -1,4 +1,4 @@
-package com.playdata.attendanceSalary;
+package com.playdata.AttendanceSalary;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

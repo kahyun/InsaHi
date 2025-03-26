@@ -1,7 +1,5 @@
 package com.playdata.HumanResourceManagement.employee.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionEntity;
 import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.publicEntity.FileEntity;
@@ -10,25 +8,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "employee")
-@PersistenceUnit(unitName = "default")
 public class Employee {
 
     @Id
     @Column(name = "employee_id", unique = true, length = 36)
     private String employeeId;
-
-    @Column(name = "start_time")
-    private LocalTime startTime;
 
     @Column(nullable = false)
     private String password;
@@ -37,23 +29,16 @@ public class Employee {
     private String email;
     private String phoneNumber;
     private String address;
+    private String gender;
+    private String state;  // 상태 (Active, Inactive 등)
+    private String positionName; // 직급명
 
-    // 직급 엔티티 참조
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_id")
-    private PositionEntity position; // 직급(PositionEntity)와 연관
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "department_id", nullable = true)
-    @JsonBackReference
     private DepartmentEntity department;
 
-    private String teamId;
-    private String state;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_code", referencedColumnName = "company_code", nullable = true)
-    @JsonBackReference
     private Company company;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,52 +52,27 @@ public class Employee {
     )
     private Set<Authority> authorityList;
 
-    // 직급명 반환
-    public String getPositionName() {
-        return position != null ? position.getPositionName() : "직급명 없음";
+    private LocalDate birthday; // 생일
+    private LocalDate hireDate; // 입사일
+    private LocalDate retireDate; // 퇴사일
+
+    // 부서 ID 반환 (null일 경우 null 처리)
+    public String getDepartmentId() {
+        return department != null ? department.getDepartmentId() : null;
     }
 
-    // 직급 ID 반환
-    public Long getPositionId() {
-        return position != null ? position.getPositionId() : null; // 직급 ID를 반환
-    }
-
-    // 엔티티 저장 전 초기화 작업
-    @PrePersist
-    public void prePersist() {
-        if (this.password == null || this.password.isEmpty()) {
-            this.password = "1234"; // 기본 비밀번호 설정
-        }
-        if (this.authorityList == null) {
-            this.authorityList = new HashSet<>();
-        }
-        if (this.employeeId == null) {
-            this.employeeId = "2025" + UUID.randomUUID().toString().substring(0, 4); // employeeId 생성
-        }
-    }
-
-    // 부서 정보 반환
-    public String getDepartmentInfo() {
-        return department != null ? department.getDepartmentName() : "Department is null";
-    }
-
-    // 부서 변경 메서드
-    public void changeDepartment(DepartmentEntity newDepartment) {
-        this.department = newDepartment;
-    }
-
-    // 직원 상태 반환
+    // 상태 반환, null일 경우 "상태 없음" 처리
     public String getStatus() {
-        return state != null ? state : "Status not available";
+        return state != null ? state : "상태 없음";
     }
 
-    // 회사 코드 반환
+    // 회사 코드 반환, null일 경우 null 처리
     public String getCompanyCode() {
         return company != null ? company.getCompanyCode() : null;
     }
 
-    // 직원 이름 반환
-    public String getEmployeeName() {
-        return name != null ? name : "이름 없음";
+    // 권한 목록에서 역할을 반환 (예시: 첫 번째 권한의 이름 반환)
+    public String getRole() {
+        return authorityList != null && !authorityList.isEmpty() ? authorityList.iterator().next().getAuthorityName() : "역할 없음";
     }
 }

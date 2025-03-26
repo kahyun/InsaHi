@@ -2,11 +2,13 @@ package com.playdata.HumanResourceManagement.employee.dao;
 
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import java.time.LocalTime;
+
+import java.util.Optional;
 
 
 @Slf4j
@@ -14,27 +16,30 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-  private final EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
-  @Override
-  public void insert(Employee employee) {
-    employeeRepository.save(employee);
-  }
-
-
+    @Override
+    public void insert(Employee employee) {
+        employeeRepository.save(employee);
+    }
 
 
 
-  @Override
-  public Employee findById(String employeeId) {
-    System.out.println("dao단 = " + employeeId);
-    return employeeRepository.findById(employeeId).orElse(null);
+
+    @Override
+    public Employee findById(String employeeId) {
+        System.out.println("dao단 = " + employeeId);
+        return employeeRepository.findById(employeeId).orElse(null);
     }
 
     @Override
-    public LocalTime findCompanyStartTimeByEmployeeId(String employeeId) {
-        LocalTime companyStartTime = employeeRepository.findCompanyStartTimeByEmployeeId(employeeId);
-        employeeRepository.findById(employeeId).orElse(null);
+    public Employee findByEmployeeId(String employeeId) {
+        return employeeRepository.findById(employeeId).orElse(null);
+    }
+
+    @Override
+    public Optional<LocalTime> findCompanyStartTimeByEmployeeId(String employeeId) {
+        Optional<LocalTime> companyStartTime = employeeRepository.findCompanyStartTimeByEmployeeId(employeeId);
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
         log.info("Employee Entity: {}", employee);
         log.info("Company Entity: {}", employee.getCompany());
@@ -43,13 +48,17 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         System.out.println("dao단 = " + employeeId);
         log.info("dao단 getCompanyStartTime: {}", companyStartTime);
         return companyStartTime;
-  }
+    }
 
-  @Override
-  public List<Employee> findAll() {
-    return employeeRepository.findAll();
-  }
+    @Override
+    public void update(Employee employee) {
+        employeeRepository.save(employee);
+    }
 
+    @Override
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
+    }
 
 
 }

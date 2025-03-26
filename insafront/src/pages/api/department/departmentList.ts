@@ -1,8 +1,6 @@
-
-// pages/api/[companyCode]/department/departmentList.ts
-
+// pages/api/[companyCode]/department/list.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getDepartmentList } from '@/lib/getDepartmentList'; // 외부 API 호출 함수
+import { getDepartmentList } from '@/lib/getDepartmentList'; // 실제 API 호출 로직
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { companyCode } = req.query;
