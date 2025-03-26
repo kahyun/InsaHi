@@ -46,6 +46,48 @@ public class EmployeeController {
   private final EmployeeService employeeService;
   private final TokenManager tokenManager;
 
+
+  @GetMapping("/auth-list")
+  public List<EmpAuthResponseDTO> getEmployeesByCompanyAndAuthority(
+      @RequestParam("companyCode") String companyCode,
+      @RequestParam("authorityName") String authorityName) {
+
+    List<AuthorityResponseDTO> authorityList = employeeService.findAuthoritiesByCompanyCode(
+        companyCode);
+
+    boolean exists = authorityList.stream()
+        .anyMatch(auth -> auth.getAuthorityName().equals(authorityName));
+    if (!exists) {
+      return List.of(); // 빈 리스트
+    }
+
+    List<EmpAuthResponseDTO> allByAuthority = employeeService.findByAuthorityList_AuthorityName(
+        authorityName);
+
+    List<EmpAuthResponseDTO> result = allByAuthority.stream()
+        .filter(emp -> emp.getCompanyCode().equals(companyCode))
+        .collect(Collectors.toList());
+
+    return result;
+  }
+//  // 회사의 권한리스트
+//  @GetMapping("/auth-list")
+//  public List<AuthorityResponseDTO> getEmployeeAuthList(
+//      @RequestParam("companyCode") String companyCode) {
+//    List<AuthorityResponseDTO> authList = employeeService.findAuthoritiesByCompanyCode(companyCode);
+//    log.info("getEmployeeAuthList: {}", authList);
+//    return authList;
+//  }
+//
+//  @GetMapping("/auth-list2")
+//  public List<EmpAuthResponseDTO> getEmployeeAuthList2(
+//      @RequestParam("authorityName") String authorityName) {
+//    List<EmpAuthResponseDTO> authlist2 = employeeService.findByAuthorityList_AuthorityName(
+//        authorityName);
+//    log.info("getEmployeeAuthList2: {}", authlist2);
+//    return authlist2;
+//  }
+
   //login
   @PostMapping("/login")
   public ResponseEntity<Map> login(@RequestBody LoginDTO loginDTO) {
@@ -77,12 +119,12 @@ public class EmployeeController {
 
 
   @GetMapping("/{employeeId}/company/start-time")
-  public ResponseEntity<LocalTime> getCompanyStartTime(
+  public LocalTime getCompanyStartTime(
       @PathVariable("employeeId") String employeeId) {
     LocalTime startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
     log.info("controller 단 : getCompanyStartTime: {}", startTime);
 
-    return ResponseEntity.ok(startTime);
+    return startTime;
   }
 
 
@@ -170,6 +212,18 @@ public class EmployeeController {
     employeeService.addUserRoles(employee);
 
     return ResponseEntity.ok(Map.of("message", "직원등록 성공!"));
+  }
+
+  @PostMapping("/grant-admin")
+  public ResponseEntity<String> grantAdmin(@RequestParam("employeeId") String employeeId) {
+    employeeService.addAdminRoleToEmployee(employeeId);
+    return ResponseEntity.ok("관리자 권한이 부여됐습니다.");
+  }
+
+  @DeleteMapping("/delete-admin")
+  public ResponseEntity<String> revokeAdmin(@RequestParam("employeeId") String employeeId) {
+    employeeService.removeAdminRoleFromEmployee(employeeId);
+    return ResponseEntity.ok("관리자 권한이 삭제됐습니다.");
   }
 
   //    채팅방 초대 멤버 조회
