@@ -13,6 +13,7 @@ public class AdminRequestDTO {
   private String password;
   private String name;
   private String companyCode;
+  private String departmentId;
   private String email;
   private String phoneNumber;
 
