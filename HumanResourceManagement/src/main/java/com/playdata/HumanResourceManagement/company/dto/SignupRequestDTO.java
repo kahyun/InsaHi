@@ -21,10 +21,10 @@ public class SignupRequestDTO {
   //employee
   private String employeeId;
   private String password;
-  private String address;
   private String name;
   private String email;
   private String phoneNumber;
+  private String departmentId;
 
   public CompanyRequestDTO companySignupRequestDTO() {
     return new CompanyRequestDTO(companyCode, companyName, companyAddress, headCount, createdAt,
@@ -32,6 +32,7 @@ public class SignupRequestDTO {
   }
 
   public AdminRequestDTO AdminSignupRequestDTO() {
-    return new AdminRequestDTO(employeeId, password, name, companyCode, email, phoneNumber);
+    return new AdminRequestDTO(employeeId, password, name, companyCode, departmentId, email,
+        phoneNumber);
   }
 }
