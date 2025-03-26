@@ -1,9 +1,10 @@
 import React from 'react';
 
 type User = {
-  id: string;
+  employeeId: string;
   name: string;
   department: string;
+  authorityList: string[];
 };
 
 type Props = {
@@ -13,15 +14,17 @@ type Props = {
 };
 
 export default function UserCard({user, actionType, onAction}: Props) {
+
   return (
       <div className="user-card">
-        <span>{user.name}</span>
-        <span className="department">{user.department}</span>
+        <div className="user-info">
+          <span className="name">{user.name} ({user.employeeId})</span>
+        </div>
         <button
             className={`action-button ${actionType}`}
             onClick={() => onAction(user)}
         >
-          {actionType === 'grant' ? '+' : '-'}
+          {actionType === 'grant' ? 'Admin 권한 부여' : 'Admin 권한 제거'}
         </button>
       </div>
   );

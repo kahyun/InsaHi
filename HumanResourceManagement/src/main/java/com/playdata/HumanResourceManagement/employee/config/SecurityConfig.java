@@ -41,12 +41,17 @@ public class SecurityConfig {
     http
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/",
+            .requestMatchers("/**",
                 "/company/signup",
                 "/employee/login",
-                "/approavl/submit", "/atdsal/**",
+                "/approavl/submit",
+                "/atdsal/**",
                 "/employee/find",
                 "/company/*/start-time",
+                "/employee/*/start-time",
+                "/employee/*/company/start-time",
+                "/employee/start-Time",
+                "/employee/auth-list",
                 "/company/start-Time").permitAll()
             //관리자만 볼 수 있는 페이지 설정
             .anyRequest().authenticated())

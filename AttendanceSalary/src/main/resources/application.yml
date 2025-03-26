@@ -24,9 +24,9 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-    #  ddl-auto: none
-     #ddl-auto: create
-     ddl-auto: update
+      #  ddl-auto: none
+      #ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
