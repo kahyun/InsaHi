@@ -7,12 +7,14 @@ import com.playdata.ElectronicApproval.repository.ApprovalLineRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class ApprovalLineDAOImpl implements ApprovalLineDAO {
 
   private final ApprovalLineRepository approvalLineRepository;
@@ -64,6 +66,7 @@ public class ApprovalLineDAOImpl implements ApprovalLineDAO {
 
   @Override
   public Optional<ApprovalLineEntity> findById(String id) {
+    log.info("  public Optional<ApprovalLineEntity> findById(String id) ::: {}", id);
     return approvalLineRepository.findById(id);
   }
 

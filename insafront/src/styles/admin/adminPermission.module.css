@@ -1,0 +1,68 @@
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: Arial, sans-serif;
+}
+
+.section-title {
+  margin-top: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.user-list {
+  margin-top: 15px;
+}
+
+.admin-list {
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.department-section {
+  margin-top: 20px;
+}
+
+.department-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.user-card .department {
+  color: #888;
+  font-size: 13px;
+  margin-left: 10px;
+  flex: 1;
+}
+
+.action-button {
+  font-size: 16px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.action-button.grant {
+  background-color: #d0f0d0;
+}
+
+.action-button.revoke {
+  background-color: #f0d0d0;
+}

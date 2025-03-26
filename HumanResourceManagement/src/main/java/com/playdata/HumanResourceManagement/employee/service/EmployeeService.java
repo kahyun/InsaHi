@@ -1,22 +1,26 @@
 package com.playdata.HumanResourceManagement.employee.service;
 
-import com.playdata.HumanResourceManagement.employee.dto.*;
+import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
+import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
-import org.springframework.security.core.Authentication;
-
-import java.util.List;
 import java.time.LocalTime;
+import java.util.List;
+import org.springframework.security.core.Authentication;
 
 public interface EmployeeService {
 
-    Employee adminInsert(AdminRequestDTO adminRequestDTO);
+  Employee adminInsert(AdminRequestDTO adminRequestDTO);
 
-    void addAdminAndUserRoles(Employee employee);
+  void addAdminAndUserRoles(Employee employee);
 
-    Authentication login(LoginDTO employee);
+  Authentication login(LoginDTO employee);
 
-
-    // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
+  // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
 
   EmployeeResponseDTO findEmployeeById(String employeeId);
@@ -28,14 +32,18 @@ public interface EmployeeService {
 
   // Employee getUser(EmployeeRequestDTO employeeRequestDTO);
 
-    //mypage 왼쪽 작은 프로필
-    ProfileCardDTO getProfileCard(String employeeId);
+  //mypage 왼쪽 작은 프로필
+  ProfileCardDTO getProfileCard(String employeeId);
 
-    EmployeeResponseDTO getEmployeeInfo(String employeeId);
+  EmployeeResponseDTO getEmployeeInfo(String employeeId);
 
-    EmployeeResponseDTO updateEmployeeInfo(String employeeId);
+  EmployeeResponseDTO updateEmployeeInfo(String employeeId, EmployeeUpdateDTO employeeUpdateDTO);
 
-    void addUserRoles(Employee employee);
+  void addUserRoles(Employee employee);
 
-    Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO);
+  Employee employeeInsert(EmployeeRequestDTO employeeRequestDTO);
+
+  EmployeeResponseDTO updatePassword(String employeeId, UpdatePasswordDTO updatePasswordDTO);
+
+    List<Employee> getMemberList();
 }

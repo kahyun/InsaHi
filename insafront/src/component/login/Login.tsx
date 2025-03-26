@@ -1,14 +1,14 @@
 import {FormEvent, useState} from "react";
 import styles from "@/styles/login/Login.module.css";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import {login} from "@/api/action";
 import Link from "next/link";
 
 export default function Login() {
-    const [companyCode, setCompanyCode] = useState("");
-    const [employeeId, setEmployeeId] = useState("");
-    const [password, setPassword] = useState("");
-    const router = useRouter();
+  const [companyCode, setCompanyCode] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
   async function loginHandleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); // 기본 동작(페이지 새로고침) 방지
@@ -22,18 +22,22 @@ export default function Login() {
     // 서버 액션 호출
     const token = await login(loginData);
 
-        if (token) {
-            console.log("✅ 로그인 성공! 받은 토큰:", token.jwt);
-            console.log("✅ 로그인 성공! 받은 토큰:", token.employeeId);
-            localStorage.setItem("accessToken", token.jwt); // 토큰 저장
-            localStorage.setItem("employeeId", token.employeeId);
-            router.push("/mypage/MyPage");
-            // window.location.href = "/mypage/MyPage";
-            alert("로그인 성공! 🎉");
-        } else {
-            alert("로그인 실패 ❌");
-        }
+    if (token) {
+      console.log("✅ 로그인 성공! 받은 토큰:", token);
+      // localStorage.setItem("accessToken", token); // 토큰 저장
+      // localStorage.setItem("employeeId", employeeId);
+      // localStorage.setItem("companyCode",companyCode);
+      localStorage.setItem("accessToken", token.jwt); // 토큰 저장
+      localStorage.setItem("employeeId", token.employeeId);
+      localStorage.setItem("companyCode", token.companyCode);
+      localStorage.setItem("auth", token.auth);
+      router.push("/mypage/MyPage");
+      // window.location.href = "/mypage/MyPage";
+      alert("로그인 성공! 🎉");
+    } else {
+      alert("로그인 실패 ❌");
     }
+  }
 
   return (
       <div className={styles.container}>

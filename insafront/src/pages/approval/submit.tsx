@@ -5,8 +5,6 @@ interface FormData {
   id: string;
   name: string;
   text: string;
-  approvers: string;
-  referencedIds: string;
 }
 
 const SubmitPage = () => {
@@ -14,20 +12,102 @@ const SubmitPage = () => {
     id: '',
     name: '',
     text: '',
-    approvers: '',
-    referencedIds: ''
   });
   const [companyCode, setCompanyCode] = useState<string>('');
   const [employeeId, setEmployeeIdToken] = useState<string | null>(null);
+  const [approvers, setApprovers] = useState<string[]>(['']);
+  const [referencedIds, setReferencedIds] = useState<string[]>(['']);
+
+  const [approverErrors, setApproverErrors] = useState<string[]>(['']);
+  const [referencedErrors, setReferencedErrors] = useState<string[]>(['']);
+  const handleApproverChange = (index: number, value: string) => {
+    const updated = [...approvers];
+    updated[index] = value;
+    setApprovers(updated);
+
+    const errors = [...approverErrors];
+    errors[index] = value.trim() === '' ? '결재자 ID를 입력하세요.' : '';
+    setApproverErrors(errors);
+  };
+
+  const handleReferencedChange = (index: number, value: string) => {
+    const updated = [...referencedIds];
+    updated[index] = value;
+    setReferencedIds(updated);
+
+    const errors = [...referencedErrors];
+    errors[index] = value.trim() === '' ? '참조자 ID를 입력하세요.' : '';
+    setReferencedErrors(errors);
+  };
+
+
+  const addApproverField = () => {
+    setApprovers([...approvers, '']);
+    setApproverErrors([...approverErrors, '']);
+  };
+
+  const removeApproverField = (index: number) => {
+    const updated = [...approvers];
+    updated.splice(index, 1);
+    setApprovers(updated);
+
+    const errors = [...approverErrors];
+    errors.splice(index, 1);
+    setApproverErrors(errors);
+  };
+
+  const addReferencedField = () => {
+    setReferencedIds([...referencedIds, '']);
+    setReferencedErrors([...referencedErrors, '']);
+  };
+
+  const removeReferencedField = (index: number) => {
+    const updated = [...referencedIds];
+    updated.splice(index, 1);
+    setReferencedIds(updated);
+
+    const errors = [...referencedErrors];
+    errors.splice(index, 1);
+    setReferencedErrors(errors);
+  };
+  const [allUsers, setAllUsers] = useState<{ employeeId: string; name: string }[]>([]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedEmployeeId = localStorage.getItem('employeeId') || 'defaultId';
-      const storedcompanyCode = localStorage.getItem('companyCode') || 'defaultId';
+      const storedCompanyCode = localStorage.getItem('companyCode') || 'defaultId';
       setEmployeeIdToken(storedEmployeeId);
-      setCompanyCode(storedcompanyCode);
+      setCompanyCode(storedCompanyCode);
+
+      let token = localStorage.getItem("accessToken");
+      if (token && !token.startsWith("Bearer ")) {
+        token = `Bearer ${token}`;
+      }
+
+      if (!token) {
+        console.error("토큰이 없습니다.");
+        return;
+      }
+
+      fetch("http://127.0.0.1:1006/employee/all", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("사용자 목록 조회 실패");
+        return res.json();
+      })
+      .then((data) => {
+        const filtered = data.filter((user: any) => user.employeeId !== storedEmployeeId);
+        setAllUsers(filtered);
+      })
+      .catch(err => console.error("사용자 목록 불러오기 에러:", err));
     }
   }, []);
+
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value} = e.target;
@@ -45,6 +125,17 @@ const SubmitPage = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const isApproverValid = approvers.every(v => v.trim() !== '');
+    const isReferencedValid = referencedIds.every(v => v.trim() !== '');
+
+    if (!isApproverValid || !isReferencedValid) {
+      const updatedApproverErrors = approvers.map(v => v.trim() === '' ? '결재자 ID를 입력하세요.' : '');
+      const updatedReferencedErrors = referencedIds.map(v => v.trim() === '' ? '참조자 ID를 입력하세요.' : '');
+      setApproverErrors(updatedApproverErrors);
+      setReferencedErrors(updatedReferencedErrors);
+      alert('결재자 및 참조자 ID를 모두 입력해주세요.');
+      return;
+    }
 
     const formPayload = new FormData();
 
@@ -54,9 +145,10 @@ const SubmitPage = () => {
       text: formData.text,
       companyCode: companyCode,
       employeeId: employeeId,
-      approvers: formData.approvers.split(',').map(item => item.trim()),
-      referencedIds: formData.referencedIds.split(',').map(item => item.trim())
+      approvers: approvers.filter(v => v.trim() !== ''),
+      referencedIds: referencedIds.filter(v => v.trim() !== '')
     };
+
     formPayload.append('jsonData', JSON.stringify(jsonData));
 
     files.forEach(file => {
@@ -108,27 +200,60 @@ const SubmitPage = () => {
             </div>
 
             <div className={styles.submitFormGroup}>
-              <label className={styles.submitLabel}>결재자 (쉼표로 구분)</label>
-              <input
-                  type="text"
-                  name="approvers"
-                  className={styles.submitInput}
-                  value={formData.approvers}
-                  onChange={handleInputChange}
-                  placeholder="예: user1,user2"
-              />
+              <label className={styles.submitLabel}>결재자</label>
+              {approvers.map((value, index) => (
+                  <div key={index} className={styles.inputWithRemove}>
+                    <select
+                        className={styles.submitInput}
+                        value={value}
+                        onChange={(e) => handleApproverChange(index, e.target.value)}
+                    >
+                      <option value="">-- 결재자 선택 --</option>
+                      {allUsers.map(user => (
+                          <option key={user.employeeId} value={user.employeeId}>
+                            {user.name} ({user.employeeId})
+                          </option>
+                      ))}
+                    </select>
+                    {approvers.length > 1 && (
+                        <button type="button" onClick={() => removeApproverField(index)}
+                                className={styles.removeButton}>🗑️</button>
+                    )}
+                    {approverErrors[index] &&
+                        <p className={styles.errorText}>{approverErrors[index]}</p>}
+                  </div>
+              ))}
+
+              <button type="button" onClick={addApproverField} className={styles.addButton}>+ 추가
+              </button>
             </div>
 
             <div className={styles.submitFormGroup}>
-              <label className={styles.submitLabel}>참조자 (쉼표로 구분)</label>
-              <input
-                  type="text"
-                  name="referencedIds"
-                  className={styles.submitInput}
-                  value={formData.referencedIds}
-                  onChange={handleInputChange}
-                  placeholder="예: ref1,ref2"
-              />
+              <label className={styles.submitLabel}>참조자</label>
+              {referencedIds.map((value, index) => (
+                  <div key={index} className={styles.inputWithRemove}>
+                    <select
+                        className={styles.submitInput}
+                        value={value}
+                        onChange={(e) => handleReferencedChange(index, e.target.value)}
+                    >
+                      <option value="">-- 참조자 선택 --</option>
+                      {allUsers.map(user => (
+                          <option key={user.employeeId} value={user.employeeId}>
+                            {user.name} ({user.employeeId})
+                          </option>
+                      ))}
+                    </select>
+                    {referencedIds.length > 1 && (
+                        <button type="button" onClick={() => removeReferencedField(index)}
+                                className={styles.removeButton}>🗑️</button>
+                    )}
+                    {referencedErrors[index] &&
+                        <p className={styles.errorText}>{referencedErrors[index]}</p>}
+                  </div>
+              ))}
+              <button type="button" onClick={addReferencedField} className={styles.addButton}>+ 추가
+              </button>
             </div>
 
             <div className={styles.submitFormGroup}>

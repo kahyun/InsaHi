@@ -3,6 +3,7 @@ package com.playdata.AttendanceSalary.atdSalService.sal;
 import com.playdata.AttendanceSalary.atdSalDto.sal.*;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.AllowanceEntity;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.EmployeeAllowEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.sal.PayStubEntity;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
@@ -11,15 +12,17 @@ import java.util.Optional;
 
 
 public interface SalaryService {
-    /// 급여계산 로직
+
+    List<PayStubResponseDTO> findAllPayStub(String employeeId) ;
+    List<PayStubResponseDTO> findAllPayStubAndYearAndMonth(String employeeId,int year,int month) ;
+
+        /// 급여계산 로직
     public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId);
 
-    List<AllowanceEntity> findByAllowance_CompanyCode(String CompanyCode);
-
-
+    List<PositionSalaryStepResponseDTO> findPositionSalaryStepByCompanyCode(String CompanyCode);
     /// Position  서비스
     // 회사별 직급 생성
-    PositionResponseDTO insertPosition(PositionResponseDTO requestDTO, String CompanyCode);
+    PositionResponseDTO insertPosition(PositionResponseDTO requestDTO, String companyCode);
 
     // 직급 수정
     void updatePosition(PositionResponseDTO requestDTO);
@@ -47,6 +50,9 @@ public interface SalaryService {
     void deleteAllowance(AllowanceResponseDTO responseDTO);
 
     AllowanceResponseDTO findAllowance(Long allowanceId);
+
+    List<AllowanceResponseDTO> findAllowancesByCompanyCode(String CompanyCode);
+
 
     /// Deduction 서비스
     DeductionResponseDTO insertDeduction(DeductionResponseDTO responseDTO);
@@ -79,7 +85,7 @@ public interface SalaryService {
 
     EmployeeAllowDTO findEmployeeAllowByEmployeeId(Long employeeId);
 
-
+    List<PositionResponseDTO> findPositionsByCompanyCode(String companyCode);
 }
 //
 //    /// Salary 서비스
