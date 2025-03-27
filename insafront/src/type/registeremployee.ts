@@ -4,7 +4,8 @@ export interface RegisterEmployeeDTO {
   password: string;
   email: string;
   department: string;
-  positionSalaryId: BigInteger;
+  positionId: string;
   phoneNumber: string;
+  hireDate: string;
 
 }

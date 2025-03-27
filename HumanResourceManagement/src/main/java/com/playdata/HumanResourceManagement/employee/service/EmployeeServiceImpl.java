@@ -43,6 +43,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
   @Override
+  // 직급 호봉 업데이트
+  public void updateEmployee(String employeeId, Long positionSalaryId) {
+    //인원을 찾고
+    Employee employee = employeeDAO.findByEmployeeId(employeeId);
+    employee.setPositionSalaryId(positionSalaryId);
+    employeeDAO.insert(employee);
+  }
+
+  @Override
   public List<EmpAuthResponseDTO> findByAuthorityList_AuthorityName(String authorityName) {
     List<Employee> employees = employeeRepository.findByAuthorityList_AuthorityName(authorityName);
     return employees.stream().map(e -> modelMapper.

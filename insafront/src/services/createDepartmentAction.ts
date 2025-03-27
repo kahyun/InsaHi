@@ -1,12 +1,9 @@
 // src/services/createDepartmentAction.ts
 
-import axios from "axios";
-
 import {
-  DepartmentListForCreate,
-  ActionBasedOrganizationChartForCreateDTO
+  ActionBasedOrganizationChartForCreateDTO,
+  DepartmentListForCreate
 } from "@/type/DepartmentListForCreate";
-import {useEffect, useState} from "react";
 import accessToken from "@/lib/accessToken";
 
 const BASE_URL = "http://127.0.0.1:1006/department";
@@ -44,5 +41,6 @@ export const submitDepartment = async (
       `${BASE_URL}/${companyCode}/create`,
       payload
   );
+  console.log("resresresresresrtesres" + payload.parentDepartmentId)
   return res.data;
 };

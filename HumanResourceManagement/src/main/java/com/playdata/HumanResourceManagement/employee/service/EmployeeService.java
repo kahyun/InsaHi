@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 
 public interface EmployeeService {
 
+  void updateEmployee(String employeeId, Long positionSalaryId);
+
   Employee adminInsert(AdminRequestDTO adminRequestDTO);
 
   // Employee adminDelete(AdminRequestDTO adminRequestDTO);
