@@ -5,9 +5,10 @@ interface RoomCreateModalProps {
     onClose: () => void;
     onRoomCreated: () => void;
     currentUserName: string | null;
+    currentUserId: string | null;
 }
 
-const RoomCreateModal: React.FC<RoomCreateModalProps> = ({ visible, onClose, onRoomCreated, currentUserName }) => {
+const RoomCreateModal: React.FC<RoomCreateModalProps> = ({ visible, onClose, onRoomCreated, currentUserName,currentUserId }) => {
     const [roomName, setRoomName] = useState("");
     const [members, setMembers] = useState<string[]>([]);
     const [allUsers, setAllUsers] = useState<{ employeeId: string; name: string }[]>([]);
@@ -41,10 +42,17 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({ visible, onClose, onR
                 return res.json();
             })
             .then((data: { employeeId: string; name: string }[]) => {
-                const filteredUsers = data.filter(user => user.employeeId !== currentUserName);
+                const filteredUsers = data.filter(user => user.employeeId !== currentUserId);
                 setAllUsers(filteredUsers); // 👈 전체 사용자 정보 보관
             })
             .catch((err) => console.error("회원 목록 불러오기 실패:", err));
+    }, [visible]);
+
+    useEffect(() => {
+        if (visible) {
+            setRoomName('');
+            setMembers([]);
+        }
     }, [visible]);
 
     function createRoom() {
@@ -55,23 +63,24 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({ visible, onClose, onR
         const selectedMemberIds  = allUsers
             .filter((user) => members.includes(user.employeeId))
             .map((user) => user.name);
+//          로그인한 유저도 멤버로 포함
+        const finalMembers = [...selectedMemberIds];
+        if (currentUserName && !finalMembers.includes(currentUserName)) {
+            finalMembers.push(currentUserName);
+        }
 
-        // ✅ 현재 로그인 유저 name 가져오기
-        const creatorName = allUsers.find((user) => user.employeeId === currentUserName)?.name || "익명";
-
-        let currentUserName;
         const requestBody = {
             roomName,
-            members: selectedMemberIds ,
+            members: finalMembers ,
             creatorName: currentUserName || "익명",
         };
+
         fetch("http://127.0.0.1:1006/chat/rooms", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(requestBody),
         })
             .then(() => {
-                alert("방 생성 완료!");
                 onRoomCreated();
                 onClose();
             })

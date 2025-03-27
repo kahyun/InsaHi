@@ -38,7 +38,6 @@ public class ChatService {
         if (existingMessage.isPresent()) {
             ChatMessage message = existingMessage.get();
             message.setDeleted(true);
-            message.setContent("삭제된 메시지입니다.");
             return chatMessageRepository.save(message);
         } else {
             throw new RuntimeException("메시지를 찾을 수 없습니다.");

@@ -25,8 +25,8 @@ public class ChatRoomService {
         return savedRoom;
     }
 
-    public List<ChatRoom> getRoomsForMember(String employeeId) {
-        return chatRoomRepository.findByMemberContaining(employeeId);
+    public List<ChatRoom> getRoomsForMember(String name) {
+        return chatRoomRepository.findByNameContaining(name);
     }
 
     public ChatRoom addMember(String roomId, String newMemberName) {
