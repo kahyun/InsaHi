@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import ContextMenu from "./ContextMenu";
+// import ContextMenu from "./ContextMenu";
 
 interface Message {
-    chatId?: string;
+    chatId: string;
     name: string;
-    roomId: string;
     content: string;
-    read: boolean,
     deleted?: boolean;
 }
 
@@ -18,11 +16,11 @@ interface ChatAreaProps {
 
 const ChatArea: React.FC<ChatAreaProps> = ({ currentUserName, currentRoomId, stompClient }) => {
     const [messages, setMessages] = useState<Message[]>([]);
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; chatId: string | null }>({
+    const [contextMenu, setContextMenu] = useState<{ visible: boolean; x: number; y: number; msg: Message | null }>({
+        visible: false,
         x: 0,
         y: 0,
-        visible: false,
-        chatId: null,
+        msg: null,
     });
     const messageRef = useRef<HTMLInputElement>(null);
 
@@ -45,19 +43,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ currentUserName, currentRoomId, sto
         const subscription = stompClient.subscribe(`/topic/messages/${currentRoomId}`, (message: any) => {
             const newMessage = JSON.parse(message.body);
             console.log("📨 실시간 메시지 도착:", newMessage);
-
-            setMessages((prev) => {
-                const filtered = prev.filter(
-                    (msg) =>
-                        !(
-                            msg.content === newMessage.content &&
-                            msg.name === newMessage.name &&
-                            msg.roomId === newMessage.roomId &&
-                            !msg.chatId // chatId 없는 건 임시로 간주
-                        )
-                );
-                return [...filtered, newMessage];
-            });
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
 
         return () => subscription.unsubscribe();
@@ -69,25 +55,12 @@ const ChatArea: React.FC<ChatAreaProps> = ({ currentUserName, currentRoomId, sto
         const message = messageRef.current.value.trim();
         if (!message) return;
 
-        const tempMessage = {
-            chatId: undefined,
-            name: currentUserName!,
-            content: message,
-            roomId: currentRoomId,
-            createdAt: new Date().toISOString(),
-            read: false,
-            deleted: false
-        };
-
-        // ✅ 먼저 뷰에 보여줌
-        setMessages((prev) => [...prev, tempMessage]);
+        const formData = new FormData();
+        formData.append("name", currentUserName!);
+        formData.append("roomId", currentRoomId);
+        formData.append("content", message);
 
         try {
-            const formData = new FormData();
-            formData.append("name", currentUserName!);
-            formData.append("roomId", currentRoomId);
-            formData.append("content", message);
-
             const res = await fetch("http://127.0.0.1:1006/chat/send", {
                 method: "POST",
                 body: formData,
@@ -97,55 +70,35 @@ const ChatArea: React.FC<ChatAreaProps> = ({ currentUserName, currentRoomId, sto
                 const errText = await res.text();
                 throw new Error("전송 실패: " + errText);
             }
-
             messageRef.current.value = ""; // 입력창 비우기
         } catch (error) {
             console.error("메시지 전송 오류:", error);
         }
     }
-    const bottomRef = useRef<HTMLDivElement | null>(null);
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
 
-    const handleContextMenu = (event: React.MouseEvent, chatId: string) => {
-        event.preventDefault();
-        setContextMenu({
-            x: event.clientX + window.scrollX,
-            y: event.clientY + window.scrollY,
-            visible: true,
-            chatId,
-        });
-    };
-
-// 삭제 버튼 눌렀을 때
-    const handleDelete = () => {
-        if (contextMenu.chatId) {
-            handleDeleteMessage(contextMenu.chatId);
+    // ✅ 우클릭 메뉴 열기
+    function handleContextMenu(e: React.MouseEvent, msg: Message) {
+        e.preventDefault();
+        if (msg.name !== currentUserName) {
+            alert("본인이 보낸 메시지만 삭제 가능합니다.");
+            return;
         }
-        setContextMenu({ ...contextMenu, visible: false });
-    };
+        setContextMenu({ visible: true, x: e.pageX, y: e.pageY, msg });
+    }
 
     // ✅ 메시지 삭제
-    const handleDeleteMessage = async (chatId: string) => {
-        try {
-            const res = await fetch(`http://127.0.0.1:1006/chat/messages/${chatId}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+    function handleDeleteMessage() {
+        if (!contextMenu.msg) return;
+        const chatId = contextMenu.msg.chatId;
 
-            if (!res.ok) {
-                throw new Error("메시지 삭제 실패");
-            }
-
-            setMessages((prev) => prev.map((msg) =>
-                msg.chatId === chatId ? { ...msg, deleted: true } : msg));
-        } catch (err) {
-            console.error("삭제 오류:", err);
-        }
-    };
+        fetch(`http://127.0.0.1:1006/chat/messages/${chatId}`, { method: "DELETE" })
+            .then((res) => {
+                if (!res.ok) throw new Error("삭제 실패");
+                setMessages((prev) => prev.map((m) => (m.chatId === chatId ? { ...m, deleted: true } : m)));
+            })
+            .catch((err) => console.error(err))
+            .finally(() => setContextMenu({ visible: false, x: 0, y: 0, msg: null }));
+    }
 
     return (
             <div style={{
@@ -161,11 +114,10 @@ const ChatArea: React.FC<ChatAreaProps> = ({ currentUserName, currentRoomId, sto
             }}>
                 {messages.map((msg) => (
                     <div
-                        key={msg.chatId || `${msg.name}-${msg.content}-${msg.roomId}`}
-                        onContextMenu={(e) => handleContextMenu(e, msg.chatId ?? "")}
+                        key={msg.chatId}
+                        onContextMenu={(e) => handleContextMenu(e, msg)}
                         style={{
-                            display: "block",
-                            padding: "10px",
+                            display: "block",                            padding: "10px",
                             backgroundColor: msg.name === currentUserName ? "#e1ffc7" : "#f1f1f1",
                             marginBottom: "10px",
                             borderRadius: "10px",
@@ -173,21 +125,19 @@ const ChatArea: React.FC<ChatAreaProps> = ({ currentUserName, currentRoomId, sto
                             minWidth: "120px",
                             alignSelf: msg.name === currentUserName ? "flex-end" : "flex-start",
                             wordBreak: "break-word",
-                            color: "#000",
+                            color: "#000", // 혹시라도 글자색과 배경색이 겹칠까봐 지정
                         }}
                     >
                         <strong>{msg.name}</strong>: {msg.deleted ? <i>삭제된 메시지입니다.</i> : msg.content}
                     </div>
                 ))}
 
-                <div ref={bottomRef} />
-
-                {/* 메시지 입력창 */}
+            {/* 메시지 입력창 */}
                 <div
                     style={{
                         position: "fixed",
                         bottom: 0,
-                        left: "25%",
+                        left: "25%", // ChatRoomList의 너비만큼 띄움
                         width: "75%",
                         backgroundColor: "#fff",
                         padding: "10px",
@@ -196,31 +146,21 @@ const ChatArea: React.FC<ChatAreaProps> = ({ currentUserName, currentRoomId, sto
                         boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
                     }}
                 >
-                    <input
-                        type="text"
-                        ref={messageRef}
-                        placeholder="메시지를 입력하세요"
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") sendMessage();
-                        }}
-                        style={{ flex: 1, padding: "5px" }}
-                    />
-                    <button onClick={sendMessage} style={{ marginLeft: "5px" }}>
-                        전송
-                    </button>
+                    <input type="text" ref={messageRef} placeholder="메시지를 입력하세요" onKeyDown={(e) => {
+                        if (e.key === "Enter") sendMessage();
+                    }} style={{flex: 1, padding: "5px"}}/>
+                    <button onClick={sendMessage} style={{marginLeft: "5px"}}>전송</button>
                 </div>
 
-                {/* 우클릭 삭제 메뉴 */}
-                {contextMenu.visible && (
-                    <ContextMenu
-                        x={contextMenu.x}
-                        y={contextMenu.y}
-                        visible={contextMenu.visible}
-                        onClose={() => setContextMenu({ ...contextMenu, visible: false })}
-                        onDelete={handleDelete}
-                    />
-                )}
-            </div>
+                {/*/!* Context Menu (우클릭 메뉴) *!/*/}
+                {/*<ContextMenu*/}
+                {/*    x={contextMenu.x}*/}
+                {/*    y={contextMenu.y}*/}
+                {/*    visible={contextMenu.visible}*/}
+                {/*    onClose={() => setContextMenu({ visible: false, x: 0, y: 0, msg: null })}*/}
+            {/*    menuItems={[{ label: "삭제", onClick: handleDeleteMessage }]}*/}
+            {/*/>*/}
+        </div>
     );
 };
 

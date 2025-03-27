@@ -15,5 +15,4 @@ public class ChatMessageResponse {
     private String content;
     private String imageUrl;
     private LocalDateTime createdAt;
-    private boolean deleted;
 }

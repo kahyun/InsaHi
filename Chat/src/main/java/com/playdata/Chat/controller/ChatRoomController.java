@@ -1,12 +1,9 @@
 package com.playdata.Chat.controller;
 
-import com.playdata.Chat.dto.ChatRoomResponse;
 import com.playdata.Chat.dto.RoomCreateRequest;
 import com.playdata.Chat.entity.ChatRoom;
-import com.playdata.Chat.repository.ChatRoomRepository;
 import com.playdata.Chat.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,16 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
-    private final ChatRoomRepository chatRoomRepository;
 
     @PostMapping
     public ChatRoom createRoom(@RequestBody RoomCreateRequest roomCreateRequest) {
         return chatRoomService.createRoom(roomCreateRequest.getRoomName(), roomCreateRequest.getMembers(),roomCreateRequest.getCreatorName());
 
     }
-    @GetMapping("/member/{name}")
-    public List<ChatRoom> getRoomsForMember(@PathVariable String name) {
-        return chatRoomService.getRoomsForMember(name);
+    @GetMapping("/member/{employeeId}")
+    public List<ChatRoom> getRoomsForMember(@PathVariable String employeeId) {
+        return chatRoomService.getRoomsForMember(employeeId);
     }
 
     @PostMapping("/{roomId}/members")
@@ -37,13 +33,4 @@ public class ChatRoomController {
     public ChatRoom removeMemberFromRoom(@PathVariable String roomId, @PathVariable String name) {
         return chatRoomService.removeMember(roomId,name);
     }
-
-    @GetMapping("/{roomId}")
-    public ResponseEntity<ChatRoom> getRoomById(@PathVariable String roomId) {
-        return chatRoomRepository.findById(roomId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-
 }
