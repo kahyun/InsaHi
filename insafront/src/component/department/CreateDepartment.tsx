@@ -2,51 +2,75 @@
 
 import {useState, useEffect} from "react";
 import {getParentDepartments, submitDepartment} from "@/services/createDepartmentAction";
+import {DepartmentListForCreate} from "@/type/DepartmentListForCreate";
 
-const useLocalStorage = (key: string, defaultValue: string | null = null) => {
-  const [storedValue, setStoredValue] = useState<string | null>(defaultValue);
+const useLocalStorage = (key: string, defaultValue = '') => {
+  const [value, setValue] = useState<string>(defaultValue);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const value = localStorage.getItem(key);
-      setStoredValue(value);
-    }
+    const storedValue = localStorage.getItem(key);
+    setValue(storedValue ?? defaultValue);
   }, [key]);
 
-  return storedValue;
+  return value;
 };
+
 
 export default function CreateDepartmentPage() {
   const [departmentName, setDepartmentName] = useState("");
-  const [parentDepartments, setParentDepartments] = useState([]);
+  const [parentDepartments, setParentDepartments] = useState<DepartmentListForCreate[]>([]);
   const [selectedParentId, setSelectedParentId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const companyCode = useLocalStorage("companyCode", "");
-
+  const accessToken = useLocalStorage("accessToken", "")
+  console.log(accessToken);
+  // ✅ 상위 부서 목록 가져오기
   useEffect(() => {
     if (companyCode) {
-      getParentDepartments()
+      getParentDepartments(companyCode)
       .then(setParentDepartments)
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error("부서 목록 조회 실패:", err);
+        alert("부서 목록을 불러오는 데 실패했습니다.");
+      });
     }
   }, [companyCode]);
 
+  useEffect(() => {
+    console.log("📦 parentDepartments 변경됨:", parentDepartments);
+  }, [parentDepartments]);
+
+  // ✅ 부서 생성 요청 처리
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!companyCode) {
+      alert("회사 코드가 없습니다.");
+      return;
+    }
+
     const payload = {
       departmentName,
-      parentDepartmentId: selectedParentId || null,
+      parentDepartmentId: selectedParentId,
       departmentLevel: 1,
     };
 
     try {
-      await submitDepartment(companyCode!, payload);
-      alert("부서가 생성되었습니다!");
+      setLoading(true);
+      await submitDepartment(companyCode, payload);
+      alert("부서가 성공적으로 생성되었습니다!");
+
+      const updatedList = await getParentDepartments(companyCode);
+      setParentDepartments(updatedList); // 🔥 여기가 핵심
+
       setDepartmentName("");
       setSelectedParentId("");
     } catch (error) {
-      alert("생성 중 오류가 발생했습니다.");
+      console.error("부서 생성 실패:", error);
+      alert("부서 생성 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +97,7 @@ export default function CreateDepartmentPage() {
                 className="w-full border rounded p-2"
             >
               <option value="">없음 (최상위)</option>
-              {parentDepartments.map((dept: any) => (
+              {parentDepartments.map((dept) => (
                   <option key={dept.departmentId} value={dept.departmentId}>
                     {dept.departmentName}
                   </option>
@@ -83,9 +107,12 @@ export default function CreateDepartmentPage() {
 
           <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              disabled={loading}
+              className={`w-full px-4 py-2 rounded text-white ${
+                  loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+              }`}
           >
-            부서 등록
+            {loading ? "등록 중..." : "부서 등록"}
           </button>
         </form>
       </div>
