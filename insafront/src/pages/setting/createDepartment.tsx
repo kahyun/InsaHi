@@ -37,6 +37,10 @@ export default function CreateDepartmentPage() {
     }
   }, [companyCode]);
 
+  useEffect(() => {
+    console.log("📦 parentDepartments 변경됨:", parentDepartments);
+  }, [parentDepartments]);
+
   // ✅ 부서 생성 요청 처리
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +60,10 @@ export default function CreateDepartmentPage() {
       setLoading(true);
       await submitDepartment(companyCode, payload);
       alert("부서가 성공적으로 생성되었습니다!");
+
+      const updatedList = await getParentDepartments(companyCode);
+      setParentDepartments(updatedList); // 🔥 여기가 핵심
+
       setDepartmentName("");
       setSelectedParentId("");
     } catch (error) {

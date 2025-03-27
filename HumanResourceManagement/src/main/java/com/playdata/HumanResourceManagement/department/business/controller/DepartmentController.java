@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/department")
 @RequiredArgsConstructor
+
 public class DepartmentController {
 
   private final CreateDeptService createDeptService;
@@ -25,7 +26,8 @@ public class DepartmentController {
    * 조직도 리스트 조회 (캐시 또는 DB 조회)
    */
   @GetMapping("{companyCode}/list")
-  public ResponseEntity<List<FullOrganizationChartDTO>> getOrganizationChart(String companyCode) {
+  public ResponseEntity<List<FullOrganizationChartDTO>> getOrganizationChart(
+      @PathVariable("companyCode") String companyCode) {
     // Redis 사용 없이 DB에서 직접 가져오는 부분으로 변경
     List<FullOrganizationChartDTO> organizationChart = mappingDeptService.getOrganizationChart(
         companyCode);

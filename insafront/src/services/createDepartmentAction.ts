@@ -26,6 +26,7 @@ export const getParentDepartments = async (
   const res = await accessToken.get<DepartmentListForCreate[]>(
       `${BASE_URL}/${companyCode}/list`
   );
+  console.log(res.data)
   return res.data;
 };
 
