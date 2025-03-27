@@ -5,7 +5,6 @@ import RoomCreateModal from "@/component/chat/RoomCreateModal";
 import SockJS from "sockjs-client";
 import Stomp, {Client} from "stompjs";
 import {useRouter} from "next/router";
-import RoomInfoModal from "@/component/chat/RoomInfoModal";
 
 
 const SOCKET_URL = "http://127.0.0.1:1006/chat/ws-stomp"; //  Spring Boot와 일치
@@ -23,27 +22,6 @@ export default function Chat() {
     const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const router = useRouter();
-    const [reloadRooms, setReloadRooms] = useState(false);
-    const [roomInfoModalVisible, setRoomInfoModalVisible] = useState(false);
-    const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-    const [selectedRoomInfo, setSelectedRoomInfo] = useState<{
-        roomId: string;
-        roomName: string;
-        members: string[];
-        createdAt: string;
-        creatorName: string;
-    } | null>(null);
-
-    const handleViewRoomInfo = (room: {
-        roomId: string;
-        roomName: string;
-        members: string[];
-        createdAt: string;
-        creatorName: string;
-    }) => {
-        setSelectedRoomInfo(room);
-        setRoomInfoModalVisible(true);
-    };
 
     useEffect(() => {
         if (typeof window === "undefined") return;
@@ -91,7 +69,7 @@ export default function Chat() {
                 const employeeId = payload.sub?.trim();
                 if (employeeId) {
                     setCurrentUserId(employeeId);
-                    const res = await fetch(`http://127.0.0.1:1006/employee/find?employeeId=${employeeId}`, {
+                    const res = await fetch(`http://localhost:1006/employee/find?employeeId=${employeeId}`, {
                         method: "GET",
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -122,30 +100,17 @@ export default function Chat() {
     return (
         <div style={{display: "flex", flexDirection: "row", marginTop: "50px"}}>
             <ChatRoomList
-                currentUserName={currentUserName}
+                currentUserId={currentUserId}
                 stompClient={stompClientRef.current}
-                onSelectRoom={(roomId: string) => {setCurrentRoomId(roomId);setSelectedRoomId(roomId);}}
-                reloadRooms={reloadRooms}
+                onSelectRoom={(roomId: string) => setCurrentRoomId(roomId)}
                 onCreateRoom={() => setShowCreateModal(true)}
-                onViewRoomInfo={(room) => {
-                    setSelectedRoomInfo(room);
-                    setRoomInfoModalVisible(true);
-                }}
-                selectedRoomId={selectedRoomId}
             />
-            <RoomInfoModal
-                visible={roomInfoModalVisible}
-                onClose={() => setRoomInfoModalVisible(false)}
-                room={selectedRoomInfo}
-            />
-
             <ChatArea currentUserName={currentUserName} currentRoomId={currentRoomId} stompClient={stompClientRef.current}/>
             <RoomCreateModal
                 visible={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                onRoomCreated={() => setReloadRooms(prev => !prev)}
+                onRoomCreated={() => console.log("방 생성 완료")}
                 currentUserName={currentUserName}
-                currentUserId={currentUserId}
             />
         </div>
     );

@@ -80,8 +80,7 @@ public class ChatRestController {
                 chatMessage.getName(),
                 chatMessage.getContent(),
                 chatMessage.getImageUrl(),
-                chatMessage.getCreatedAt(),
-                chatMessage.getDeleted()
+                chatMessage.getCreatedAt()
         ));
     }
 //    @GetMapping("/files/{storedFileName:.+}")

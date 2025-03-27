@@ -1,38 +1,24 @@
 import React, { useEffect, useState } from "react";
 // import RoomCreateModal from "./RoomCreateModal";
-import RoomInfoModal from "./RoomInfoModal";
+// import RoomInfoModal from "./RoomInfoModal";
 // import ContextMenu from "./ContextMenu";
 
 interface ChatRoom {
     roomId: string;
     roomName: string;
-    members: string[];
-    createdAt: string;
-    creatorName: string;
 }
 
 interface ChatRoomListProps {
-    currentUserName: string | null;
+    currentUserId: string | null;
     stompClient: any;
     onSelectRoom: (roomId: string) => void;
     onCreateRoom: () => void;
-    reloadRooms: boolean;
-    onViewRoomInfo: (room: {
-        roomId: string;
-        roomName: string;
-        members: string[];
-        createdAt: string;
-        creatorName: string;
-    }) => void;
-    selectedRoomId: string | null;
 }
 
-const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserName, stompClient, onSelectRoom, reloadRooms, onCreateRoom,onViewRoomInfo,selectedRoomId  }) => {
+const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserId, stompClient, onSelectRoom, onCreateRoom  }) => {
     const [rooms, setRooms] = useState<ChatRoom[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [roomInfo, setRoomInfo] = useState<ChatRoom | null>(null);
-    const [roomInfoModalVisible, setRoomInfoModalVisible] = useState(false);
-    const [selectedRoomInfo, setSelectedRoomInfo] = useState<any>(null);
     const [contextMenu, setContextMenu] = useState<{ visible: boolean; x: number; y: number; room: ChatRoom | null }>({
         visible: false,
         x: 0,
@@ -41,9 +27,9 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserName, stompClien
     });
 
     useEffect(() => {
-        if (!currentUserName) return;
+        if (!currentUserId) return;
         fetchRooms();
-    }, [currentUserName, reloadRooms]);
+    }, [currentUserId]);
 
     function fetchRooms() {
         const token = localStorage.getItem("accessToken");
@@ -52,7 +38,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserName, stompClien
             return;
         }
 
-        fetch(`http://127.0.0.1:1006/chat/rooms/member/${currentUserName}`, {
+        fetch(`http://127.0.0.1:1006/chat/rooms/member/${currentUserId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
@@ -76,30 +62,11 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserName, stompClien
     function handleContextMenu(e: React.MouseEvent, room: ChatRoom) {
         e.preventDefault();
         setContextMenu({ visible: true, x: e.pageX, y: e.pageY, room });
-
-        const token = localStorage.getItem("accessToken");
-        if (!token) return;
-
-        fetch(`http://127.0.0.1:1006/chat/rooms/${room.roomId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setSelectedRoomInfo(data); // 모달에 보여줄 데이터 저장
-                setRoomInfoModalVisible(true); // 모달 열기
-            })
-            .catch((err) => {
-                console.error("방 정보 불러오기 실패", err);
-            });
     }
-
 
     function handleLeaveRoom() {
         if (!contextMenu.room) return;
-        fetch(`http://127.0.0.1:1006/chat/rooms/${contextMenu.room.roomId}/members/${currentUserName}`, {
+        fetch(`http://127.0.0.1:1006/chat/rooms/${contextMenu.room.roomId}/members/${currentUserId}`, {
             method: "DELETE",
         })
             .then(() => {
@@ -124,15 +91,11 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserName, stompClien
     } as const;
 
     const headerStyle = {
-        padding: "16px",
-        backgroundColor: "#3D67D7",
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: "1.1rem",
-        borderBottom: "1px solid #ccc",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between", // 🔥 버튼이 옆으로 정렬됨
+        backgroundColor: "#5c7fbc", // 🔥 진한 파란색으로 변경
+        padding: "10px",
     };
 
     const addButtonStyle = {
@@ -151,7 +114,6 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserName, stompClien
     };
 
     return (
-        <>
         <div style={containerStyle}>
             <div style={headerStyle}>
                 <h2 style={{ margin: 0, fontSize: "18px" }}>채팅방 목록</h2>
@@ -162,34 +124,32 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ currentUserName, stompClien
                 {rooms.map((room) => (
                     <div
                         key={room.roomId}
-                        onClick={() => handleRoomClick(room.roomId)}
-                        onContextMenu={(e) => {
-                            e.preventDefault(); // 기본 우클릭 메뉴 막기
-                            handleContextMenu(e, room);
-                        }}
-                        style={{
-                            padding: "12px",
-                            backgroundColor: room.roomId === selectedRoomId ? "#d6e0f0" : "white",
-                            borderBottom: "1px solid #eee",
-                            cursor: "pointer",
-                        }}
+                        style={{ padding: 10, borderBottom: "1px solid white", cursor: "pointer" }}
+                        onDoubleClick={() => handleRoomClick(room.roomId)}
+                        onContextMenu={(e) => handleContextMenu(e, room)}
                     >
                         {room.roomName}
                     </div>
                 ))}
             </div>
         </div>
-    {roomInfoModalVisible && selectedRoomInfo && (
-        <RoomInfoModal
-            visible={roomInfoModalVisible}
-            onClose={() => setRoomInfoModalVisible(false)}
-            room={selectedRoomInfo}
-        />
-    )}
 
-    </>
+            // // {/*<RoomCreateModal*/}
+            // {/*    visible={showCreateModal}*/}
+            // {/*    onClose={() => setShowCreateModal(false)}*/}
+            // {/*    onRoomCreated={fetchRooms}*/}
+            // {/*    currentUser={currentUser}*/}
+            // {/*/>*/}
+            // {/*<RoomInfoModal visible={!!roomInfo} onClose={() => setRoomInfo(null)} room={roomInfo} />*/}
+            //
+            // {/*<ContextMenu*/}
+            // {/*    x={contextMenu.x}*/}
+            // {/*    y={contextMenu.y}*/}
+            // {/*    visible={contextMenu.visible}*/}
+            // {/*    onClose={() => setContextMenu({ visible: false, x: 0, y: 0, room: null })}*/}
+            // {/*    menuItems={[{ label: "나가기", onClick: handleLeaveRoom }]}*/}
+            // // {/*/>*/}
     );
-
 };
 
 export default ChatRoomList;
