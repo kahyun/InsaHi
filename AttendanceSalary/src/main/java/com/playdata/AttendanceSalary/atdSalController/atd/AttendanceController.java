@@ -34,10 +34,20 @@ public class AttendanceController {
 
 
   @PostMapping("/checkin")
-  public ResponseEntity<?> checkIn(@RequestParam("employeeId") String employeeId) throws Exception {
-    AttendanceDTO attendanceDTO = attendanceService.checkIn(employeeId);
-    log.info(attendanceDTO.toString());
-    return ResponseEntity.ok(attendanceDTO);
+  public ResponseEntity<?> checkIn(@RequestParam("employeeId") String employeeId) {
+    try {
+      AttendanceDTO attendanceDTO = attendanceService.checkIn(employeeId);
+      log.info(attendanceDTO.toString());
+      return ResponseEntity.ok(attendanceDTO);
+    } catch (Exception e) {
+      log.error("Check-in 중 예외 발생 (employeeId: {}): {}", employeeId, e.getMessage(), e);
+
+      // 예외 메시지에 Feign 디코딩 문제라면 별도 메시지 제공
+      if (e.getMessage() != null && e.getMessage().contains("HttpMessageConverter")) {
+        return ResponseEntity.internalServerError().body("HRM 서버 응답 처리 중 문제가 발생했습니다. 관리자에게 문의하세요.");
+      }
+      return ResponseEntity.internalServerError().body("체크인 처리 중 오류가 발생했습니다.");
+    }
   }
 
   //  ResponseEntity<?> 으로 교체예정

@@ -41,11 +41,12 @@ public class SecurityConfig {
     http
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/**",
+            .requestMatchers("/"
+                , "/approval/**",
                 "/company/signup",
                 "/employee/login"
-//                ,
-//               "/approavl/submit",
+//                "/employee/find",
+//                "/approavl/submit",
 //                "/atdsal/**",
 //                "/employee/find",
 //                "/company/*/start-time",

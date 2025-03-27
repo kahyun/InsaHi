@@ -90,6 +90,11 @@ public class SalaryController {
     return salaryService.insertPositionSalaryStep(responseDTO);
   }
 
+  @GetMapping("/position-name")
+  public String getPositionName(@RequestParam("stepId") Long stepId) {
+    return salaryService.findPositionNameByPositionSalaryStepId(stepId);
+  }
+
   @PutMapping("/step-update")
   public void positionupdate(@RequestBody PositionSalaryStepResponseDTO responseDTO) {
     salaryService.updatePositionSalaryStep(responseDTO);

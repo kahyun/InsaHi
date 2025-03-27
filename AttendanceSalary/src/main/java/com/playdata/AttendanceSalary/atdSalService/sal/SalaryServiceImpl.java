@@ -67,6 +67,15 @@ public class SalaryServiceImpl implements SalaryService {
   }
 
   @Override
+  public String findPositionNameByPositionSalaryStepId(Long stepId) {
+    PositionSalaryStepEntity stepEntity = positionSalaryDao.findPositionSalaryById(stepId)
+        .orElseThrow(() -> new RuntimeException("해당 PositionSalaryStep이 존재하지 않습니다."));
+
+    PositionEntity position = stepEntity.getPosition();
+    return position.getPositionName();
+  }
+
+  @Override
   public List<PayStubResponseDTO> findAllPayStubAndYearAndMonth(String employeeId, int year,
       int month) {
     return null;
