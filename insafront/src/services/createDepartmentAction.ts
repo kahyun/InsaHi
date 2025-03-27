@@ -1,8 +1,8 @@
 // src/services/createDepartmentAction.ts
 
 import {
-  DepartmentListForCreate,
-  ActionBasedOrganizationChartForCreateDTO
+  ActionBasedOrganizationChartForCreateDTO,
+  DepartmentListForCreate
 } from "@/type/DepartmentListForCreate";
 import accessToken from "@/lib/accessToken";
 
@@ -41,5 +41,6 @@ export const submitDepartment = async (
       `${BASE_URL}/${companyCode}/create`,
       payload
   );
+  console.log("resresresresresrtesres" + payload.parentDepartmentId)
   return res.data;
 };

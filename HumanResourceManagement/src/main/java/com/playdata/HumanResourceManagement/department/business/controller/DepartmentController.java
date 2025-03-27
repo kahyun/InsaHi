@@ -5,14 +5,19 @@ import com.playdata.HumanResourceManagement.department.business.dto.newDto.FullO
 import com.playdata.HumanResourceManagement.department.business.dto.newDto.OrganizationStructureDTO;
 import com.playdata.HumanResourceManagement.department.business.service.CreateDeptService;
 import com.playdata.HumanResourceManagement.department.business.service.MappingDeptService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/department")
@@ -49,11 +54,12 @@ public class DepartmentController {
    */
   @PostMapping("{companyCode}/create")
   public ResponseEntity<ActionBasedOrganizationChartDTO> createDepartment(
-      @PathVariable String companyCode,
+      @PathVariable("companyCode") String companyCode,
       @RequestBody OrganizationStructureDTO request) {
+
     log.info("companyCode::{}", companyCode);
-    log.info("request:{}", request.getParentDepartmentId());
-    log.info("request:{}", request.getDepartmentName());
+    log.info("getParentDepartmentId:{}", request.getParentDepartmentId());
+    log.info("getDepartmentName:{}", request.getDepartmentName());
     ActionBasedOrganizationChartDTO createdDepartment = createDeptService.createDepartment(
         companyCode, request);
     log.info("createdDepartment:{}", createdDepartment.getDepartmentName());
