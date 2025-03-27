@@ -2,20 +2,21 @@ package com.playdata.AttendanceSalary.atdSalController.atd;
 
 import com.playdata.AttendanceSalary.atdSalDto.atd.AttendanceDTO;
 import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
-
-import com.playdata.AttendanceSalary.atdSalDto.atd.AttendanceDTO;
 import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 내 출근시간이랑, 회사 출근시간 계산 다르개
- * 출근  버튼 , 퇴근
+ * 내 출근시간이랑, 회사 출근시간 계산 다르개 출근  버튼 , 퇴근
  */
 @Slf4j
 @RestController
@@ -23,23 +24,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AttendanceController {
 
-    private final AttendanceService attendanceService;
+  private final AttendanceService attendanceService;
 
-    @GetMapping("/checkin/{employeeId}")
-    public List<AttendanceDTO> getAttendanceByEmployeeId(@PathVariable("employeeId") String employeeId) {
-        List<AttendanceDTO> attendanceDTOList = new ArrayList<>();
+  @GetMapping("/checkin/{employeeId}")
+  public List<AttendanceDTO> getAttendanceByEmployeeId(
+      @PathVariable("employeeId") String employeeId) {
+    List<AttendanceDTO> attendanceDTOList = attendanceService.getAttendanceByEmployeeId(employeeId);
+    return attendanceDTOList;
+  }
 
-        attendanceDTOList = attendanceService.getAttendanceByEmployeeId(employeeId);
-        return attendanceDTOList;
-    }
 
-
-    @PostMapping("/checkin")
-    public ResponseEntity<?> checkIn(@RequestParam("employeeId") String employeeId) throws Exception {
-        AttendanceDTO attendanceDTO = attendanceService.checkIn(employeeId);
-        return ResponseEntity.ok(attendanceDTO);
-    }
-
+  @PostMapping("/checkin")
+  public ResponseEntity<?> checkIn(@RequestParam("employeeId") String employeeId) throws Exception {
+    AttendanceDTO attendanceDTO = attendanceService.checkIn(employeeId);
+    log.info(attendanceDTO.toString());
+    return ResponseEntity.ok(attendanceDTO);
+  }
 
     //  ResponseEntity<?> 으로 교체예정
     @PutMapping("/check-out")

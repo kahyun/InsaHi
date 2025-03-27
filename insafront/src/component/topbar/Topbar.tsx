@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
-import Sidebar1 from "../sidebar/Sidebar1";
-import Sidebar2 from "../sidebar/Sidebar2";
-import Sidebar4 from "../sidebar/Sidebar4";
-import Sidebar5 from "../sidebar/Sidebar5";
-import Sidebar6 from "../sidebar/Sidebar6";
 
 
 import styles from "@/styles/Topbar.module.css";
@@ -14,8 +9,13 @@ import EmployeeInfoAction from "@/api/mypage/employeeinfoaction";
 import useSSE from "@/component/approval/useSSE";
 import Toast from "@/component/approval/Toast";
 
-const TopBar = () => {
-  const [activeSidebar, setActiveSidebar] = useState<string | null>(null);
+type TopBarProps = {
+  activeSidebar: string | null;
+  setActiveSidebar: (sidebar: string | null) => void;
+};
+
+const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
+
   const [hasNotification, setHasNotification] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -86,7 +86,7 @@ const TopBar = () => {
                 <Link
                     href="#"
                     className={styles.topmenulink}
-                    onClick={() => setActiveSidebar("sidebar1")}
+                    onClick={() => setActiveSidebar(activeSidebar === "sidebar1" ? null : "sidebar1")}
                 >
                   근태/급여
                 </Link>
@@ -95,7 +95,7 @@ const TopBar = () => {
                 <Link
                     href="#"
                     className={styles.topmenulink}
-                    onClick={() => setActiveSidebar("sidebar2")}
+                    onClick={() => setActiveSidebar(activeSidebar === "sidebar2" ? null : "sidebar2")}
                 >
                   전자결재
                 </Link>
@@ -105,7 +105,7 @@ const TopBar = () => {
                 <Link
                     href="#"
                     className={styles.topmenulink}
-                    onClick={() => setActiveSidebar("sidebar3")}
+                    onClick={() => setActiveSidebar(activeSidebar === "sidebar3" ? null : "sidebar3")}
                 >
                   주소록
                 </Link>
@@ -114,18 +114,18 @@ const TopBar = () => {
                 <Link
                     href="#"
                     className={styles.topmenulink}
-                    onClick={() => setActiveSidebar("sidebar4")}
+                    onClick={() => setActiveSidebar(activeSidebar === "sidebar4" ? null : "sidebar4")}
                 >
                   회의실
                 </Link>
               </li>
               <li><Link href="#"
                         className={styles.topmenulink}
-                        onClick={() => setActiveSidebar("sidebar5")}
+                        onClick={() => setActiveSidebar(activeSidebar === "sidebar5" ? null : "sidebar5")}
               >게시판</Link></li>
-              <li><Link href="#"
+              <li><Link href="/admin/RegisterEmployee"
                         className={styles.topmenulink}
-                        onClick={() => setActiveSidebar("sidebar6")}
+                        onClick={() => setActiveSidebar(activeSidebar === "sidebar6" ? null : "sidebar6")}
               >인사관리</Link></li>
             </ul>
 
@@ -134,7 +134,7 @@ const TopBar = () => {
               <Link
                   href="/chat"
                   className={styles.topmenulink}
-                  style={{ cursor: "pointer" }}
+                  style={{cursor: "pointer"}}
               >
                 채팅
               </Link>
@@ -148,14 +148,6 @@ const TopBar = () => {
           </nav>
         </header>
 
-        {/* 조건부 Sidebar 렌더링 */}
-        <div className={styles.topsidebarcontainer}>
-          {activeSidebar === "sidebar1" && <Sidebar1/>}
-          {activeSidebar === "sidebar2" && <Sidebar2/>}
-          {activeSidebar === "sidebar4" && <Sidebar4/>}
-          {activeSidebar === "sidebar5" && <Sidebar5/>}
-          {activeSidebar === "sidebar6" && <Sidebar6/>}
-        </div>
         {/* 전자결재 - Toast 알림 */}
         {toastMessage && (
             <Toast message={toastMessage} onClose={() => setToastMessage(null)}/>

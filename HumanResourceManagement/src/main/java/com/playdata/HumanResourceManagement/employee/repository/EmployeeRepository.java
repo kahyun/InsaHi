@@ -1,5 +1,7 @@
 package com.playdata.HumanResourceManagement.employee.repository;
 
+import com.playdata.HumanResourceManagement.department.business.entity.DepartmentEntity;
+import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import java.time.LocalTime;
@@ -28,6 +30,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
      */
     List<Employee> findAll();
 
+  Optional<Employee> findById(String employeeId);
+  // 부서 ID로 직원 조회
     /**
      * 특정 부서에 속한 직원 목록 조회
      */
@@ -49,6 +53,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
      */
     @Query("SELECT e.company.startTime FROM Employee e WHERE e.employeeId = :employeeId")
     Optional<LocalTime> findCompanyStartTimeByEmployeeId(@Param("employeeId") String employeeId);
+
+  List<Employee> findByAuthorityList_AuthorityName(String authorityName);
+
+  // 회사의 권한 조회
+  @Query("SELECT DISTINCT a FROM Employee e JOIN e.authorityList a WHERE e.company.companyCode = :companyCode")
+  List<Authority> findAuthoritiesByCompanyCode(@Param("companyCode") String companyCode);
 
     /**
      * 부서 ID를 이용하여 직원 목록을 조회

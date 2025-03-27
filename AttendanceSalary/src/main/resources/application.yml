@@ -6,6 +6,8 @@ approval:
   service:
     url: http://127.0.0.1:1005
 
+
+
 server:
   port: 1000
 
@@ -22,8 +24,9 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      # ddl-auto 설정: 자동 스키마 생성 및 수정 방지 권장
-      ddl-auto: update  # 개발 환경에서만 사용, 프로덕션에서는 none 추천
+      #  ddl-auto: none
+      #ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -37,3 +40,4 @@ logging:
         type:
           descriptor:
             sql: trace
+

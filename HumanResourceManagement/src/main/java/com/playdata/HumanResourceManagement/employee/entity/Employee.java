@@ -108,10 +108,14 @@ public class Employee {
         }
     }
 
-    // 부서 이름 반환
-    public String getDepartmentInfo() {
-        return department != null ? department.getDepartmentName() : "Department is null";
-    }
+  public String getCompanyCode() {
+    return company != null ? company.getCompanyCode() : null;
+  }
+
+  // 부서 이름 반환 (부서가 없는 경우 "Department is null" 반환)
+  public String getDepartmentInfo() {
+    return department != null ? department.getDepartmentName() : "Department is null";
+  }
 
     // 부서 변경
     public void changeDepartment(DepartmentEntity newDepartment) {

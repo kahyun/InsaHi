@@ -4,6 +4,8 @@ import com.playdata.HumanResourceManagement.employee.authentication.EmpAuthentic
 import com.playdata.HumanResourceManagement.employee.dao.AuthorityDAO;
 import com.playdata.HumanResourceManagement.employee.dao.EmployeeDAO;
 import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.AuthorityResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmpAuthResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
@@ -39,6 +41,33 @@ public class EmployeeServiceImpl implements EmployeeService {
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
   private final PasswordEncoder passwordEncoder;
   private final EmployeeRepository employeeRepository;
+
+
+  @Override
+  public List<EmpAuthResponseDTO> findByAuthorityList_AuthorityName(String authorityName) {
+    List<Employee> employees = employeeRepository.findByAuthorityList_AuthorityName(authorityName);
+    return employees.stream().map(e -> modelMapper.
+            map(e, EmpAuthResponseDTO.class))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public void addAdminRoleToEmployee(String employeeId) {
+    employeeDAO.addAdminRoleToEmployee(employeeId);
+  }
+
+  @Override
+  public void removeAdminRoleFromEmployee(String employeeId) {
+    employeeDAO.removeAdminRoleFromEmployee(employeeId);
+  }
+
+  @Override
+  public List<AuthorityResponseDTO> findAuthoritiesByCompanyCode(String companyCode) {
+    List<Authority> authorities = employeeDAO.findAuthoritiesByCompanyCode(companyCode);
+    return authorities.stream().map(
+        authority -> modelMapper
+            .map(authority, AuthorityResponseDTO.class)).collect(Collectors.toList());
+  }
 
   @Override
   public Employee adminInsert(AdminRequestDTO adminRequestDTO) {
@@ -87,9 +116,6 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public EmployeeResponseDTO findEmployeeById(String employeeId) {
     Employee employee = employeeDAO.findById(employeeId);
-    System.out.println("employee 서비스단 = " + employee.getEmployeeId());
-    System.out.println(
-        "employee.getCompany().getCompanyCode() = " + employee.getCompany().getCompanyCode());
     return modelMapper.map(employee, EmployeeResponseDTO.class);
   }
 

@@ -28,7 +28,7 @@ const ProfileCard = ({
           <h3>간편 메뉴</h3>
           <div className={styles.buttonContainer}>
             <Link href="/approval/submit" className={styles.menuItem}>기안하기</Link>
-            <Link href="#" className={styles.menuItem}>결재 진행 중</Link>
+            <Link href="/approval/file/[approvalFileId]]" className={styles.menuItem}>전자결재 보기</Link>
             <Link href="#" className={styles.menuItem}>결재 완료</Link>
           </div>
         </div>
