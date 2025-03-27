@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface EmployeeDAO {
 
+
+  // 회원 정보 수정
   void insert(Employee employee);
 
   Employee findById(String employeeId);

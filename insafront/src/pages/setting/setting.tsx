@@ -9,7 +9,21 @@ const Setting: React.FC = () => {
   const [companyCodeFromToken, setCompanyCodeFromToken] = useState<string>('');
   const [companyStartTime, setCompanyStartTime] = useState<string>('');
   const [newStartTime, setNewStartTime] = useState<string>('');
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
+  const [selectedPositionSalaryId, setSelectedPositionSalaryId] = useState<string>('');
+  const [positionPage, setPositionPage] = useState(1);
+  const [allowancePage, setAllowancePage] = useState(1);
+  const [salaryStepPage, setSalaryStepPage] = useState(1);
+  const [selectedPositionFilter, setSelectedPositionFilter] = useState<string>('');
 
+// 한 페이지에 보여줄 개수
+  const ITEMS_PER_PAGE = 5;
+
+// 페이징 처리 함수
+  const paginate = (array: any[], page: number) => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return array.slice(start, start + ITEMS_PER_PAGE);
+  };
   // ✅ 회사 시작 시간 조회 (GET)
   const handleGetStartTime = async () => {
     if (!companyCodeFromToken) {
@@ -71,7 +85,28 @@ const Setting: React.FC = () => {
     } else {
       alert('회사 코드가 없습니다. 다시 로그인 해주세요.');
     }
+
+    if (employeeId) {
+      setSelectedEmployeeId(employeeId);
+    }
   }, []);
+
+  const handleUpdateSalaryStep = async () => {
+    if (!selectedEmployeeId || !selectedPositionSalaryId) {
+      alert('직급/호봉을 입력해주세요.');
+      return;
+    }
+    try {
+      console.log(selectedPositionSalaryId)
+      const url = `http://127.0.0.1:1006/employee/update-salary-step?employeeId=${selectedEmployeeId}&positionSalaryId=${Number(selectedPositionSalaryId)}`;
+      console.log(url)
+      await fetcher(url, {method: 'PUT'});
+      alert('대표자의 직급 호봉이 성공적으로 업데이트되었습니다.');
+    } catch (error) {
+      console.error('업데이트 실패:', error);
+      alert('대표자 직급 호봉 업데이트에 실패했습니다.');
+    }
+  };
 
   const {
     allowances,
@@ -93,6 +128,13 @@ const Setting: React.FC = () => {
     handlePositionSalaryStepChange,
     handleSubmitPositionSalaryStep
   } = usePositionSalaryStepActions(companyCodeFromToken);
+
+  const totalPositionPages = Math.ceil(positions.length / ITEMS_PER_PAGE);
+  const totalAllowancePages = Math.ceil(allowances.length / ITEMS_PER_PAGE);
+  const filteredSalarySteps = selectedPositionFilter
+      ? positionSalarySteps.filter((step) => step.positionId === Number(selectedPositionFilter))
+      : positionSalarySteps;
+  const totalSalaryStepPages = Math.ceil(filteredSalarySteps.length / ITEMS_PER_PAGE);
 
   return (
       <div className={styles.pageWrapper}>
@@ -124,13 +166,28 @@ const Setting: React.FC = () => {
               </tr>
               </thead>
               <tbody>
-              {positions.map((position) => (
+              {paginate(positions, positionPage).map((position) => (
                   <tr key={position.positionId}>
                     <td>{position.positionName}</td>
                   </tr>
               ))}
               </tbody>
             </table>
+            <div className={styles.pagination}>
+              {Array.from({length: totalPositionPages}, (_, i) => (
+                  <button
+                      key={i + 1}
+                      onClick={() => setPositionPage(i + 1)}
+                      className={styles.button}
+                      style={{
+                        margin: '0 2px',
+                        backgroundColor: positionPage === i + 1 ? '#ccc' : undefined
+                      }}
+                  >
+                    {i + 1}
+                  </button>
+              ))}
+            </div>
           </div>
 
           {/* 수당 추가 */}
@@ -176,7 +233,7 @@ const Setting: React.FC = () => {
               </tr>
               </thead>
               <tbody>
-              {allowances.map((item) => (
+              {paginate(allowances, allowancePage).map((item) => (
                   <tr key={item.allowanceId}>
                     <td>
                       {allowanceTypes.find(type => type.value === item.allowType)?.label || item.allowType}
@@ -186,6 +243,21 @@ const Setting: React.FC = () => {
               ))}
               </tbody>
             </table>
+            <div className={styles.pagination}>
+              {Array.from({length: totalAllowancePages}, (_, i) => (
+                  <button
+                      key={i + 1}
+                      onClick={() => setAllowancePage(i + 1)}
+                      className={styles.button}
+                      style={{
+                        margin: '0 2px',
+                        backgroundColor: allowancePage === i + 1 ? '#ccc' : undefined
+                      }}
+                  >
+                    {i + 1}
+                  </button>
+              ))}
+            </div>
           </div>
 
           <div className={styles.section}>
@@ -289,7 +361,28 @@ const Setting: React.FC = () => {
             </button>
           </div>
 
-          <h3>직급별 호봉 목록</h3>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '10px'
+          }}>
+            <h3>직급별 호봉 목록</h3>
+            <div className={styles.inlineForm}>
+              <label>직급명 필터</label>
+              <select
+                  value={selectedPositionFilter}
+                  onChange={(e) => setSelectedPositionFilter(e.target.value)}
+              >
+                <option value="">전체 보기</option>
+                {positions.map((position) => (
+                    <option key={position.positionId} value={position.positionId}>
+                      {position.positionName}
+                    </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <table className={styles.userTable}>
             <thead>
             <tr>
@@ -302,8 +395,8 @@ const Setting: React.FC = () => {
             </tr>
             </thead>
             <tbody>
-            {positionSalarySteps.map((item) => (
-                <tr key={item.positionSalaryStepId}>
+            {paginate(filteredSalarySteps, salaryStepPage).map((item) => (
+                <tr key={item.positionSalaryId}>
                   <td>
                     {positions.find(pos => pos.positionId === item.positionId)?.positionName || item.positionId}
                   </td>
@@ -316,6 +409,44 @@ const Setting: React.FC = () => {
             ))}
             </tbody>
           </table>
+          <div className={styles.pagination}>
+            {Array.from({length: totalSalaryStepPages}, (_, i) => (
+                <button
+                    key={i + 1}
+                    onClick={() => setSalaryStepPage(i + 1)}
+                    className={styles.button}
+                    style={{
+                      margin: '0 2px',
+                      backgroundColor: salaryStepPage === i + 1 ? '#ccc' : undefined
+                    }}
+                >
+                  {i + 1}
+                </button>
+            ))}
+          </div>
+        </div>
+        {/* 대표자 직급 호봉 설정 */}
+        <div className={styles.inlineForm} style={{marginTop: '30px'}}>
+          <h3>대표자 직급 호봉 설정</h3>
+
+          <label>직급 호봉 ID</label>
+          <select
+              value={selectedPositionSalaryId}
+              onChange={(e) => setSelectedPositionSalaryId(e.target.value)}
+          >
+            <option value="">호봉 선택</option>
+            {positionSalarySteps.map((item) => (
+                <option
+                    key={item.positionSalaryId}
+                    value={item.positionSalaryId}
+                >
+                  {positions.find(pos => pos.positionId === item.positionId)?.positionName || item.positionId} - {item.salaryStepId}호봉
+                </option>
+            ))}
+          </select>
+          <button onClick={handleUpdateSalaryStep} className={styles.buttonInline}>
+            대표자 직급 호봉 업데이트
+          </button>
         </div>
       </div>
   );

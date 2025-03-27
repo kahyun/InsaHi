@@ -11,7 +11,10 @@ export const fetchSalarySteps = async (companyCode: string): Promise<PositionSal
     throw error;
   }
 };
-
+export const updateEmployeeSalaryStep = async (employeeId: string, positionSalaryId: number) => {
+  const url = `http://localhost:1006/employee/update-salary-step?employeeId=${employeeId}&positionSalaryId=${positionSalaryId}`;
+  return await fetch(url, {method: 'PUT'});
+};
 // 직급/호봉 추가
 export const insertSalaryStep = async (stepData: PositionSalaryStepEntity, companyCode: string): Promise<PositionSalaryStepEntity> => {
   try {
