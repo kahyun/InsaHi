@@ -1,6 +1,7 @@
 // src/component/department/SelectDepartment.tsx
 import React from "react";
 import {DepartmentListForCreate} from "@/type/DepartmentListForCreate";
+import styles from "@/styles/setting/setdepartment.module.css"
 
 interface Props {
   departments: DepartmentListForCreate[];
@@ -29,11 +30,10 @@ const renderOptions = (
 export default function SelectDepartment({departments, selected, onChange}: Props) {
   return (
       <div>
-        <label className="block text-sm font-medium">상위 부서 (선택)</label>
         <select
             value={selected}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full border rounded p-2"
+            className={styles.input}
         >
           {renderOptions(departments)}
         </select>

@@ -52,6 +52,7 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("employeeId");
     localStorage.removeItem("companyCode");
+    localStorage.removeItem("auth");
     alert("로그아웃 되었습니다.");
     router.push("/");
   };

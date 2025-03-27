@@ -1,6 +1,6 @@
 // src/pages/setting/setdepartment.tsx
 
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getParentDepartments, submitDepartment} from "@/services/createDepartmentAction";
 import {DepartmentListForCreate} from "@/type/DepartmentListForCreate";
 import FormDepartment from "@/component/department/FormDepartment";
@@ -32,6 +32,12 @@ export default function CreateDepartmentPage() {
     }
   }, [companyCode]);
 
+  useEffect(() => {
+    if (parentDepartments.length > 0 && selectedParentId === "") {
+      setSelectedParentId(parentDepartments[0].departmentId); // 첫 번째 부서 자동 선택
+    }
+  }, [parentDepartments, selectedParentId]);
+
   const handleSubmit = async ({departmentName}: { departmentName: string }) => {
     if (!companyCode) return alert("회사 코드가 없습니다.");
 
@@ -59,10 +65,13 @@ export default function CreateDepartmentPage() {
       <div className="p-6 max-w-md mx-auto bg-white rounded shadow">
         <h2 className="text-xl font-bold mb-4">부서 등록</h2>
         <div className="mt-4">
+          <label className="block text-sm font-medium">상위 부서 (선택)</label>
+
           <SelectDepartment
               departments={parentDepartments}
               selected={selectedParentId}
               onChange={setSelectedParentId}
+
           />
         </div>
         <FormDepartment onSubmit={handleSubmit} loading={loading}/>
