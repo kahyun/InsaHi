@@ -1,8 +1,7 @@
 package com.playdata.HumanResourceManagement.employee.repository;
 
-import com.playdata.HumanResourceManagement.department.business.entity.DepartmentEntity;
-import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
+import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import java.time.LocalTime;
 import java.util.List;

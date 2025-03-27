@@ -108,9 +108,6 @@ public class Employee {
         }
     }
 
-  public String getCompanyCode() {
-    return company != null ? company.getCompanyCode() : null;
-  }
 
   // 부서 이름 반환 (부서가 없는 경우 "Department is null" 반환)
   public String getDepartmentInfo() {

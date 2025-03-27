@@ -120,7 +120,7 @@ public class EmployeeController {
   @GetMapping("/{employeeId}/company/start-time")
   public LocalTime getCompanyStartTime(
       @PathVariable("employeeId") String employeeId) {
-    LocalTime startTime = employeeService.findCompanyStartTimeByEmployeeId(employeeId);
+    LocalTime startTime = employeeService.findCxompanyStartTimeByEmployeeId(employeeId);
     log.info("controller 단 : getCompanyStartTime: {}", startTime);
 
     return startTime;

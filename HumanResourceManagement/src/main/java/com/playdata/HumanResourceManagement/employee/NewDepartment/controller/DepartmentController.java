@@ -1,16 +1,16 @@
-package com.playdata.HumanResourceManagement.department.business.controller;
+package com.playdata.HumanResourceManagement.employee.NewDepartment.controller;
 
-import com.playdata.HumanResourceManagement.department.business.dto.newDto.ActionBasedOrganizationChartDTO;
-import com.playdata.HumanResourceManagement.department.business.dto.newDto.FullOrganizationChartDTO;
-import com.playdata.HumanResourceManagement.department.business.dto.newDto.OrganizationStructureDTO;
-import com.playdata.HumanResourceManagement.department.business.service.CreateDeptService;
-import com.playdata.HumanResourceManagement.department.business.service.MappingDeptService;
+
+import com.playdata.HumanResourceManagement.employee.NewDepartment.dto.ActionBasedOrganizationChartDTO;
+import com.playdata.HumanResourceManagement.employee.NewDepartment.dto.FullOrganizationChartDTO;
+import com.playdata.HumanResourceManagement.employee.NewDepartment.dto.OrganizationStructureDTO;
+import com.playdata.HumanResourceManagement.employee.NewDepartment.service.NewCreateDeptService;
+import com.playdata.HumanResourceManagement.employee.NewDepartment.service.NewMappingDeptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -19,8 +19,8 @@ import java.util.List;
 
 public class DepartmentController {
 
-  private final CreateDeptService createDeptService;
-  private final MappingDeptService mappingDeptService;
+  private final NewCreateDeptService createDeptService;
+  private final NewMappingDeptService mappingDeptService;
 
   /**
    * 조직도 리스트 조회 (캐시 또는 DB 조회)

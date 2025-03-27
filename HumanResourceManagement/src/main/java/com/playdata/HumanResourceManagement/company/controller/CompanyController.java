@@ -6,9 +6,10 @@ import com.playdata.HumanResourceManagement.company.dto.SignupRequestDTO;
 import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.HumanResourceManagement.company.service.CompanyService;
 import com.playdata.HumanResourceManagement.company.service.EmailService;
-import com.playdata.HumanResourceManagement.department.business.dto.newDto.ActionBasedOrganizationChartDTO;
-import com.playdata.HumanResourceManagement.department.business.dto.newDto.OrganizationStructureDTO;
-import com.playdata.HumanResourceManagement.department.business.service.CreateDeptService;
+
+import com.playdata.HumanResourceManagement.employee.NewDepartment.dto.ActionBasedOrganizationChartDTO;
+import com.playdata.HumanResourceManagement.employee.NewDepartment.dto.OrganizationStructureDTO;
+import com.playdata.HumanResourceManagement.employee.NewDepartment.service.NewCreateDeptService;
 import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
@@ -33,7 +34,7 @@ public class CompanyController {
   private final CompanyService companyService;
   private final EmployeeService employeeService;
   private final EmailService emailService;
-  private final CreateDeptService createDeptService;
+  private final NewCreateDeptService createDeptService;
   private final ResourceRepository resourceRepository;
   private final ModelMapper modelMapper;
 
