@@ -51,6 +51,21 @@ public class SalaryServiceImpl implements SalaryService {
   private final HrmFeignClient hrmFeignClient;
   private final AttendanceServiceImpl attendanceServiceImpl;
 
+  public EmployeeResponseDTO updatePositionSalary(EmployeeResponseDTO employeeResponse) {
+
+    EmployeeResponseDTO employeeResponseDTO = hrmFeignClient.findEmployee(
+        employeeResponse.getEmployeeId());
+
+    Optional<PositionSalaryStepEntity> settingSalaryStep =
+        positionSalaryDao.findPositionSalaryById(employeeResponse.getPositionSalaryId());
+
+    settingSalaryStep.ifPresent(positionSalaryStep ->
+        employeeResponseDTO.setPositionSalaryId(positionSalaryStep.getPositionSalaryId())
+    );
+
+    return employeeResponseDTO;
+  }
+
   @Override
   public List<PayStubResponseDTO> findAllPayStubAndYearAndMonth(String employeeId, int year,
       int month) {
