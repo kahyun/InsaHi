@@ -1,5 +1,6 @@
 package com.playdata.AttendanceSalary.atdSalEntity.sal;
 
+import com.playdata.AttendanceSalary.atdSalDto.sal.AllowanceResponseDTO;
 import com.playdata.common.publicEntity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

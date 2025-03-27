@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PositionSalaryStepEntity extends DateEntity {
-    //직급 호봉 테이블
+//직급 호봉 테이블
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "position_salary_id")

@@ -36,12 +36,4 @@ public interface PositionRepository extends JpaRepository<PositionEntity, Long> 
      */
     Optional<PositionEntity> findById(Long id);
 
-    /**
-     * 회사 코드와 직원 ID로 직급 조회
-     *
-     * @param companyCode 회사 코드
-     * @param employeeId 직원 ID
-     * @return 직급 리스트
-     */
-    List<PositionEntity> findByCompanyCodeAndEmployeeId(String companyCode, String employeeId);
 }
