@@ -6,6 +6,7 @@ import com.playdata.HumanResourceManagement.department.business.dto.newDto.Organ
 import com.playdata.HumanResourceManagement.department.business.service.CreateDeptService;
 import com.playdata.HumanResourceManagement.department.business.service.MappingDeptService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/department")
 @RequiredArgsConstructor
-
+@Slf4j
 public class DepartmentController {
 
   private final CreateDeptService createDeptService;
@@ -32,10 +33,14 @@ public class DepartmentController {
     List<FullOrganizationChartDTO> organizationChart = mappingDeptService.getOrganizationChart(
         companyCode);
 
+    log.info("companyCode::{}", companyCode);
     if (organizationChart.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+    for (FullOrganizationChartDTO fullOrganizationChart : organizationChart) {
+      log.info("companyCode::{}", companyCode);
+      log.info("fullOrganizationChart.{}", fullOrganizationChart.getDepartmentId());
+    }
     return ResponseEntity.ok(organizationChart);
   }
 
@@ -46,10 +51,13 @@ public class DepartmentController {
   public ResponseEntity<ActionBasedOrganizationChartDTO> createDepartment(
       @PathVariable String companyCode,
       @RequestBody OrganizationStructureDTO request) {
-
+    log.info("companyCode::{}", companyCode);
+    log.info("request:{}", request.getParentDepartmentId());
+    log.info("request:{}", request.getDepartmentName());
     ActionBasedOrganizationChartDTO createdDepartment = createDeptService.createDepartment(
         companyCode, request);
-
+    log.info("createdDepartment:{}", createdDepartment.getDepartmentName());
+    log.info("createdDepartment:{}", createdDepartment.getDepartmentId());
     return ResponseEntity.status(HttpStatus.CREATED).body(createdDepartment);
   }
 

@@ -1,12 +1,9 @@
 // src/services/createDepartmentAction.ts
 
-import axios from "axios";
-
 import {
   DepartmentListForCreate,
   ActionBasedOrganizationChartForCreateDTO
 } from "@/type/DepartmentListForCreate";
-import {useEffect, useState} from "react";
 import accessToken from "@/lib/accessToken";
 
 const BASE_URL = "http://127.0.0.1:1006/department";
