@@ -64,7 +64,7 @@ spring:
           predicates:
             - Path=/chat/**
 
-        - id: atdsal
+        - id: AttendanceSalary
           uri: http://127.0.0.1:1000
           predicates:
             - Path=/atdsal/**
@@ -78,10 +78,10 @@ spring:
           predicates:
             - Path=/leave/**
 
-#        - id: AttendanceSalary
-#          uri: http://127.0.0.1:1000
-#          predicates:
-#            - Path=/atdsal/**
+  #        - id: AttendanceSalary
+  #          uri: http://127.0.0.1:1000
+  #          predicates:
+  #            - Path=/atdsal/**
 
 
 

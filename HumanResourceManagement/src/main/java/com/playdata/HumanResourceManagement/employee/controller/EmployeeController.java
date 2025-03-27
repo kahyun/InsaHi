@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestController
@@ -112,13 +113,22 @@ public class EmployeeController {
     return startTime;
   }
 
-
-  @GetMapping("/find")
-  /// 김다울
-  public EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId) {
+  @GetMapping(value = "/find", produces = "application/json")
+  public ResponseEntity<EmployeeResponseDTO> findEmployee(
+      @RequestParam("employeeId") String employeeId) {
     EmployeeResponseDTO employeeResponseDTO = employeeService.findEmployeeById(employeeId);
-    return employeeResponseDTO;
+    if (employeeResponseDTO == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 직원을 찾을 수 없습니다.");
+    }
+    return ResponseEntity.ok(employeeResponseDTO);
   }
+
+//  @GetMapping(value = "/find")
+//  /// 김다울
+//  public EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId) {
+//    EmployeeResponseDTO employeeResponseDTO = employeeService.findEmployeeById(employeeId);
+//    return employeeResponseDTO;
+//  }
 
 
   @GetMapping("/getallemployeeids")
