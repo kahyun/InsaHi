@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/department")
 @RequiredArgsConstructor
 
-public class DepartmentController {
+public class NewDepartmentController {
 
   private final NewCreateDeptService createDeptService;
   private final NewMappingDeptService mappingDeptService;

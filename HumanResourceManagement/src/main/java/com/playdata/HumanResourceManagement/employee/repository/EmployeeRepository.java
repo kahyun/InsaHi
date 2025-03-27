@@ -51,7 +51,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
      * 직원 ID로 회사 출근 시간 조회
      */
     @Query("SELECT e.company.startTime FROM Employee e WHERE e.employeeId = :employeeId")
-    Optional<LocalTime> findCompanyStartTimeByEmployeeId(@Param("employeeId") String employeeId);
+    LocalTime findCompanyStartTimeByEmployeeId(@Param("employeeId") String employeeId);
 
   List<Employee> findByAuthorityList_AuthorityName(String authorityName);
 

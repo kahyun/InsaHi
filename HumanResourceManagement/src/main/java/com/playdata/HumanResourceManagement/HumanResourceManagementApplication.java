@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.playdata.HumanResourceManagement.department.feign")
+@EnableFeignClients
 public class HumanResourceManagementApplication {
   public static void main(String[] args) {
     SpringApplication.run(HumanResourceManagementApplication.class, args);

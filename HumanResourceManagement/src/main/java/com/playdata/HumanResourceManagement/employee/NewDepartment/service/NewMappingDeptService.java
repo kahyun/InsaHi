@@ -25,9 +25,9 @@ public class NewMappingDeptService {
   @Transactional(readOnly = true)
   public List<FullOrganizationChartDTO> getOrganizationChart(String companyCode) {
     return departmentRepository.findAllByCompanyCode(companyCode).stream()
-        .filter(dept -> dept.getParentDepartmentId() == null)
-        .map(this::buildHierarchy)
-        .collect(Collectors.toList());
+            .filter(dept -> dept instanceof DepartmentEntity && ((DepartmentEntity) dept).getParentDepartmentId() == null) // 타입 체크 후 필터링
+            .map(dept -> buildHierarchy((DepartmentEntity) dept)) // dept를 DepartmentEntity로 캐스팅
+            .collect(Collectors.toList());
   }
 
   /**

@@ -18,7 +18,6 @@ import com.playdata.HumanResourceManagement.employee.repository.EmployeeReposito
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +43,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
   @Override
+  // 직급 호봉 업데이트
+  public void updateEmployee(String employeeId, Long positionSalaryId) {
+    //인원을 찾고
+    Employee employee = employeeDAO.findByEmployeeId(employeeId);
+    employee.setPositionSalaryId(positionSalaryId);
+    employeeDAO.insert(employee);
+  }
+
+  @Override
   public List<EmpAuthResponseDTO> findByAuthorityList_AuthorityName(String authorityName) {
     List<Employee> employees = employeeRepository.findByAuthorityList_AuthorityName(authorityName);
     return employees.stream().map(e -> modelMapper.
-            map(e, EmpAuthResponseDTO.class))
-        .collect(Collectors.toList());
+                    map(e, EmpAuthResponseDTO.class))
+            .collect(Collectors.toList());
   }
 
   @Override
@@ -62,11 +70,16 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
+  public LocalTime findCxompanyStartTimeByEmployeeId(String employeeId) {
+    return null;
+  }
+
+  @Override
   public List<AuthorityResponseDTO> findAuthoritiesByCompanyCode(String companyCode) {
     List<Authority> authorities = employeeDAO.findAuthoritiesByCompanyCode(companyCode);
     return authorities.stream().map(
-        authority -> modelMapper
-            .map(authority, AuthorityResponseDTO.class)).collect(Collectors.toList());
+            authority -> modelMapper
+                    .map(authority, AuthorityResponseDTO.class)).collect(Collectors.toList());
   }
 
   @Override
@@ -100,11 +113,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     // 1. 커스텀 인증 토큰 (EmpAuthenticationToken) 생성
     EmpAuthenticationToken token =
-        new EmpAuthenticationToken(
-            employee.getEmployeeId(),
-            employee.getPassword(),
-            employee.getCompanyCode()
-        );
+            new EmpAuthenticationToken(
+                    employee.getEmployeeId(),
+                    employee.getPassword(),
+                    employee.getCompanyCode()
+            );
 
     // 2. Spring Security의 인증 시스템을 사용하여 인증 수행
     Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
@@ -121,7 +134,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   /// 김다울 추가
-  public Optional<LocalTime> findCompanyStartTimeByEmployeeId(String employeeId) {
+  public LocalTime findCompanyStartTimeByEmployeeId(String employeeId) {
     return employeeDAO.findCompanyStartTimeByEmployeeId(employeeId);
   }
 
@@ -129,8 +142,8 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public List<String> getAllEmployeeIds() {
     return employeeDAO.findAll().stream()
-        .map(employee -> employee.getEmployeeId())
-        .collect(Collectors.toList());
+            .map(employee -> employee.getEmployeeId())
+            .collect(Collectors.toList());
 
 
   }
@@ -155,7 +168,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   //개인정보 변경
   @Override
   public EmployeeResponseDTO updateEmployeeInfo(String employeeId,
-      EmployeeUpdateDTO employeeUpdateDTO) {
+                                                EmployeeUpdateDTO employeeUpdateDTO) {
     Employee employee = employeeDAO.findById(employeeId);
     modelMapper.map(employeeUpdateDTO, employee);
     employeeDAO.update(employee);
@@ -167,7 +180,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   //비밀번호 변경
   @Override
   public EmployeeResponseDTO updatePassword(String employeeId,
-      UpdatePasswordDTO updatePasswordDTO) {
+                                            UpdatePasswordDTO updatePasswordDTO) {
     Employee employee = employeeDAO.findById(employeeId);
     if (!passwordEncoder.matches(updatePasswordDTO.getCurrentPassword(), employee.getPassword())) {
       throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
@@ -207,4 +220,3 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
 }
-

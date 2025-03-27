@@ -12,11 +12,11 @@ import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.security.core.Authentication;
 
 public interface EmployeeService {
+
+  void updateEmployee(String employeeId, Long positionSalaryId);
 
   Employee adminInsert(AdminRequestDTO adminRequestDTO);
 
@@ -30,8 +30,8 @@ public interface EmployeeService {
 
   EmployeeResponseDTO findEmployeeById(String employeeId);
 
-    /// 김다울 추가
-    Optional<LocalTime> findCompanyStartTimeByEmployeeId(String employeeId);
+  /// 김다울 추가
+  LocalTime findCompanyStartTimeByEmployeeId(String employeeId);
 
   List<String> getAllEmployeeIds();
 
