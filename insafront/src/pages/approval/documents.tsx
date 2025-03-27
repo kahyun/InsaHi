@@ -65,7 +65,7 @@ const DocumentsPage = () => {
       const sortParam = `&sort=createdAt,${sortOrder}`;
 
       const response = await fetch(
-          `http://127.0.0.1:1005/approval/list/${employeeId}/${menu}?page=${pageParam}&size=10${statusParam}${sortParam}`
+          `http://127.0.0.1:1006/approval/list/${employeeId}/${menu}?page=${pageParam}&size=10${statusParam}${sortParam}`
       );
 
       if (!response.ok) throw new Error('문서 목록 불러오기 실패');

@@ -5,7 +5,7 @@ const useSSE = (employeeId: string | null, onMessage: (msg: string) => void) => 
   useEffect(() => {
     if (!employeeId) return;
 
-    const eventSource = new EventSource(`http://127.0.0.1:1005/api/sse/subscribe/${employeeId}`);
+    const eventSource = new EventSource(`http://127.0.0.1:1006/approval/sse/subscribe/${employeeId}`);
 
     eventSource.onmessage = (event) => {
       console.log('기본 메세지: ', event.data);

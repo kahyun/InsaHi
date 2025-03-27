@@ -74,8 +74,8 @@ const SubmitPage = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedEmployeeId = localStorage.getItem('employeeId') || 'defaultId';
-      const storedCompanyCode = localStorage.getItem('companyCode') || 'defaultId';
+      const storedEmployeeId = localStorage.getItem('employeeId') || '';
+      const storedCompanyCode = localStorage.getItem('companyCode') || '';
       setEmployeeIdToken(storedEmployeeId);
       setCompanyCode(storedCompanyCode);
 
@@ -97,11 +97,14 @@ const SubmitPage = () => {
         }
       })
       .then(res => {
+        console.log(res)
         if (!res.ok) throw new Error("사용자 목록 조회 실패");
         return res.json();
       })
       .then((data) => {
-        const filtered = data.filter((user: any) => user.employeeId !== storedEmployeeId);
+        console.log(data);
+        const filtered = data
+        .filter((user: any) => user.employeeId !== storedEmployeeId && user.companyCode === storedCompanyCode);
         setAllUsers(filtered);
       })
       .catch(err => console.error("사용자 목록 불러오기 에러:", err));
@@ -156,7 +159,7 @@ const SubmitPage = () => {
     });
 
     try {
-      const response = await fetch('http://127.0.0.1:1005/approval/submit', {
+      const response = await fetch('http://127.0.0.1:1006/approval/submit', {
         method: 'POST',
         body: formPayload
       });
