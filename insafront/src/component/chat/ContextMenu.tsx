@@ -5,10 +5,10 @@ interface ContextMenuProps {
     y: number;
     visible: boolean;
     onClose: () => void;
-    menuItems: { label: string; onClick: () => void }[];
+    onDelete: () => void;
 }
 
-const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, visible, onClose, menuItems }) => {
+const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, visible, onClose, onDelete }) => {
     if (!visible) return null;
 
     return (
@@ -17,18 +17,17 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, visible, onClose, menuI
                 position: "absolute",
                 top: y,
                 left: x,
-                background: "white",
+                backgroundColor: "white",
                 border: "1px solid #ccc",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                zIndex: 9999,
                 padding: "5px",
-                zIndex: 1000,
             }}
-            onMouseLeave={onClose}
+            onClick={onClose}
         >
-            {menuItems.map((item, index) => (
-                <div key={index} onClick={item.onClick} style={{ padding: "5px", cursor: "pointer" }}>
-                    {item.label}
-                </div>
-            ))}
+            <div onClick={onDelete} style={{ padding: "8px", cursor: "pointer" }}>
+                삭제
+            </div>
         </div>
     );
 };
