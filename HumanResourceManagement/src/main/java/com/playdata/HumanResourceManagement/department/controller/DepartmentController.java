@@ -1,7 +1,9 @@
 package com.playdata.HumanResourceManagement.department.controller;
 
 import com.playdata.HumanResourceManagement.department.dto.OrganizationDTO;
+import com.playdata.HumanResourceManagement.department.dto.UserDataDTO;
 import com.playdata.HumanResourceManagement.department.service.CreateDeptService;
+import com.playdata.HumanResourceManagement.department.service.EmployeeDataService;
 import com.playdata.HumanResourceManagement.department.service.MappingDeptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentController {
 
+    private final EmployeeDataService employeeDataService;
     private final CreateDeptService createDeptService;
     private final MappingDeptService mappingDeptService;
 
@@ -52,5 +55,32 @@ public class DepartmentController {
     public ResponseEntity<List<OrganizationDTO>> getOrganizationChart(@PathVariable String companyCode) {
         List<OrganizationDTO> organizationChart = mappingDeptService.getOrganizationChart(companyCode);
         return ResponseEntity.ok(organizationChart);
+    }
+
+    /**
+     * 회사 코드+부서 정보 따른 직원 목록 조회
+     *
+     * @param companyCode 회사 코드
+     * @param departmentId 부서 코드
+     * @return 직원 리스트
+     */
+    @GetMapping("/{departmentId}/list")
+    public List<UserDataDTO> getEmployee(
+            @PathVariable String companyCode,
+            @PathVariable String departmentId
+    ) {
+        return employeeDataService.getEmployeesByDepartment(companyCode, departmentId);
+    }
+
+    /**
+     * 전체 직원 목록 조회
+     *
+     * @param companyCode 회사 코드
+     * @return 전체 직원 리스트
+     */
+    @GetMapping("/employees")
+    public ResponseEntity<List<UserDataDTO>> getAllEmployees(@PathVariable String companyCode) {
+        List<UserDataDTO> allEmployees = employeeDataService.getAllEmployees(companyCode);
+        return ResponseEntity.ok(allEmployees);
     }
 }

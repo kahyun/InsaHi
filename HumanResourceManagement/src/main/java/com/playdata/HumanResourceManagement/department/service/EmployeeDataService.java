@@ -1,17 +1,23 @@
 package com.playdata.HumanResourceManagement.department.service;
 
 import com.playdata.AttendanceSalary.atdClient.hrmDTO.PositionSendDTO;
+import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.repository.CompanyRepository;
 import com.playdata.HumanResourceManagement.department.dto.OrganizationDTO;
 import com.playdata.HumanResourceManagement.department.dto.PositionDownloadDTO;
 import com.playdata.HumanResourceManagement.department.dto.UserDataDTO;
 import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
+import com.playdata.HumanResourceManagement.department.repository.DepartmentRepository;
+import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
 import com.playdata.HumanResourceManagement.department.feign.AttFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,31 +26,8 @@ public class EmployeeDataService {
 
     private final EmployeeRepository employeeRepository;
     private final AttFeignClient attFeignClient;
-
-    /**
-     * 회사 코드와 직급 정보를 받아 직원을 직급과 함께 조회합니다.
-     *
-     * @param companyCode      회사 코드
-     * @param positionSendDTOs 직급 정보 DTO 목록
-     * @return 직급과 함께 매핑된 직원 목록
-     */
-    public List<OrganizationDTO> getEmployeesWithPosition(String companyCode, List<PositionSendDTO> positionSendDTOs) {
-        // 회사 코드에 해당하는 직원 목록 조회
-        List<Employee> employees = employeeRepository.findByCompany_CompanyCode(companyCode);
-
-        return employees.stream()
-                .map(employee -> {
-                    // 직원 정보 추출
-                    UserDataDTO userDataDTO = convertToUserDataDTO(employee);
-
-                    // 직급 정보 추출
-                    List<PositionDownloadDTO> positions = getPositionsFromAttFeignClient(employee);
-
-                    // OrganizationDTO 반환 (부서 정보는 null로 처리)
-                    return OrganizationDTO.fromEntityAndUserData(null, List.of(userDataDTO), positions);
-                })
-                .collect(Collectors.toList());
-    }
+    private final CompanyRepository companyRepository;
+    private final DepartmentRepository departmentRepository;
 
     /**
      * 직원 엔티티를 UserDataDTO로 변환하는 메서드
@@ -58,29 +41,52 @@ public class EmployeeDataService {
                 employee.getName(),
                 employee.getPositionName(),
                 employee.getEmail(),
-                employee.getPhoneNumber(),  // 전화번호 추가
-                employee.getAddress(),       // 주소 추가
-                employee.getGender(),        // 성별 추가
-                employee.getBirthday(),      // 생년월일 추가
-                employee.getDepartmentId(),  // 부서 ID 추가
-                employee.getStatus(),        // 상태 추가
-                employee.getHireDate(),      // 입사일 추가
-                employee.getRetireDate()     // 퇴사일 추가
+                employee.getPhoneNumber(),
+                employee.getAddress(),
+                employee.getGender(),
+                employee.getBirthday(),
+                employee.getDepartmentId(),
+                employee.getStatus(),
+                employee.getHireDate(),
+                employee.getRetireDate()
         );
     }
 
     /**
-     * ATT 시스템에서 직급 정보를 가져오는 메서드
+     * 회사 코드로 직원 목록 조회 (DB에서 불러오기)
      *
-     * @param employee 직원 엔티티
-     * @return 직급 정보 리스트
+     * @param companyCode 회사 코드
+     * @return 직원 목록
      */
-    private List<PositionDownloadDTO> getPositionsFromAttFeignClient(Employee employee) {
-        PositionDownloadDTO positionDownloadDTO = attFeignClient.getPositionDownloadDTO(employee.getCompanyCode());
+    public List<UserDataDTO> getAllEmployees(String companyCode) {
+        // 회사 코드로 모든 직원을 조회
+        List<Employee> employees = employeeRepository.findByCompany_CompanyCode(companyCode);
 
-        // 직급 정보 필터링
-        return positionDownloadDTO.getPositions().stream()
-                .filter(position -> position.getEmployeeId().equals(employee.getEmployeeId())) // 직원 ID로 필터링
+        // Employee 목록을 UserDataDTO로 변환 후 반환
+        return employees.stream()
+                .map(this::convertToUserDataDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 부서 ID와 회사 코드로 직원 목록 조회
+     *
+     * @param companyCode 회사 코드
+     * @param departmentId 부서 코드
+     * @return 직원 목록
+     */
+    public List<UserDataDTO> getEmployeesByDepartment(String companyCode, String departmentId) {
+        // 회사 코드로 모든 직원을 조회한 후, 부서 ID로 필터링
+        List<Employee> employees = employeeRepository.findByCompany_CompanyCode(companyCode);
+
+        // 부서 ID가 일치하는 직원들만 필터링
+        List<Employee> filteredEmployees = employees.stream()
+                .filter(emp -> emp.getDepartment() != null && emp.getDepartment().getDepartmentId().equals(departmentId))
+                .collect(Collectors.toList());
+
+        // 필터링된 직원 목록을 UserDataDTO로 변환 후 반환
+        return filteredEmployees.stream()
+                .map(this::convertToUserDataDTO)
                 .collect(Collectors.toList());
     }
 
@@ -90,10 +96,54 @@ public class EmployeeDataService {
      * @param userDTO 사용자 정보
      * @return 추가된 사용자 정보
      */
-    public UserDataDTO addUser(UserDataDTO userDTO) {
+    public UserDataDTO create(UserDataDTO userDTO) {
+        // UserDataDTO를 Employee 엔티티로 변환
         Employee employee = new Employee();
-        // userDTO의 데이터를 employee 엔티티로 변환하여 저장하는 로직 (DB 저장 로직은 예시로 생략)
-        return userDTO;
+        employee.setEmployeeId(userDTO.getEmployeeId());
+        employee.setName(userDTO.getName());
+
+        // 권한 설정
+        Authority authority = new Authority();
+        authority.setAuthorityName(userDTO.getRole());
+        employee.setAuthorityList(new HashSet<>(Set.of(authority)));
+
+        // 회사 코드
+        Company company = companyRepository.findByCompanyCode1(userDTO.getCompanyCode());
+        employee.setCompany(company);
+
+        // 부서 코드
+        DepartmentEntity department = departmentRepository.findByDepartmentId(userDTO.getDepartmentId());
+        employee.setDepartment(department);
+
+        // 나머지 사용자 정보 설정
+        employee.setEmail(userDTO.getEmail());
+        employee.setPhoneNumber(userDTO.getPhoneNumber());
+        employee.setAddress(userDTO.getAddress());
+        employee.setGender(userDTO.getGender());
+        employee.setBirthday(userDTO.getBirthday());
+        employee.setState(userDTO.getState());
+        employee.setHireDate(userDTO.getHireDate());
+        employee.setRetireDate(userDTO.getRetireDate());
+        employee.setPositionName(userDTO.getPositionName());
+
+        // 저장
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // 저장된 Employee 엔티티를 UserDataDTO로 변환하여 반환
+        return new UserDataDTO(
+                savedEmployee.getEmployeeId(),
+                savedEmployee.getName(),
+                savedEmployee.getPositionName(),
+                savedEmployee.getEmail(),
+                savedEmployee.getPhoneNumber(),
+                savedEmployee.getAddress(),
+                savedEmployee.getGender(),
+                savedEmployee.getBirthday(),
+                savedEmployee.getDepartmentId(),
+                savedEmployee.getStatus(),
+                savedEmployee.getHireDate(),
+                savedEmployee.getRetireDate()
+        );
     }
 
     /**
@@ -107,32 +157,5 @@ public class EmployeeDataService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         employeeRepository.delete(employee);
         return convertToUserDataDTO(employee);
-    }
-
-    /**
-     * 회사 코드로 직원 목록 조회 (DB에서 불러오기)
-     *
-     * @param companyCode 회사 코드
-     * @return 직원 목록
-     */
-    public List<UserDataDTO> getAllEmployees(String companyCode) {
-        List<Employee> employees = employeeRepository.findByCompany_CompanyCode(companyCode);
-
-        return employees.stream()
-                .map(emp -> new UserDataDTO(
-                        emp.getEmployeeId(),
-                        emp.getName(),
-                        emp.getPositionName(),
-                        emp.getEmail(),
-                        emp.getPhoneNumber(),  // 전화번호 추가
-                        emp.getAddress(),       // 주소 추가
-                        emp.getGender(),        // 성별 추가
-                        emp.getBirthday(),      // 생년월일 추가
-                        emp.getDepartmentId(),  // 부서 ID 추가
-                        emp.getStatus(),        // 상태 추가
-                        emp.getHireDate(),      // 입사일 추가
-                        emp.getRetireDate()     // 퇴사일 추가
-                ))
-                .collect(Collectors.toList());
     }
 }

@@ -23,6 +23,7 @@ public interface DepartmentRepository extends JpaRepository<DepartmentEntity, St
 
     // 3. 부모 부서 ID로 하위 부서 조회
     List<DepartmentEntity> findByParentDepartmentId(DepartmentEntity parent);
-
+    DepartmentEntity findByDepartmentId(String departmentId);
     Collection<Object> findAllByCompanyCode(String companyCode);
+
 }

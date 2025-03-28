@@ -1,55 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // next router 사용
-import { Department } from '@/type/Department';
-import { getDepartmentList } from '@/lib/getDepartmentList'; // 부서 데이터 가져오기
-import DepartmentView from '@/component/department/DepartmentView'; // 부서 렌더링 컴포넌트
-import DepartmentSide from '@/component/sidebar/DepartmentSide'; // 사이드바 컴포넌트
+// DepartmentListPage.tsx
+import { AppProps } from 'next/app'; // AppProps 가져오기
+import IndexLayout from "@/component/department/layout/indexLayout"; // MainLayout을 IndexLayout으로 변경
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const DepartmentListPage = () => {
-    const router = useRouter();
-    const { companyCode } = router.query; // 쿼리에서 companyCode 가져오기
+// QueryClient 생성
+const queryClient = new QueryClient();
 
-    const [departmentList, setDepartmentList] = useState<Department[]>([]);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (companyCode) {
-            const fetchDepartments = async () => {
-                try {
-                    const data = await getDepartmentList(companyCode as string);
-                    setDepartmentList(data); // 데이터를 받아오면 상태 업데이트
-                } catch (error) {
-                    setError('부서 데이터를 가져오는 데 실패했습니다.');
-                }
-            };
-            fetchDepartments();
-        }
-    }, [companyCode]);
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
-    if (departmentList.length === 0) {
-        return <div>부서 데이터를 로딩 중...</div>;
-    }
-
+function DepartmentListPage({ Component, pageProps }: AppProps) { // AppProps 타입 사용
     return (
-        <div className="flex min-h-screen">
-            {/* 사이드바 */}
-            <aside className="w-1/4 p-4">
-                <DepartmentSide departments={departmentList} companyCode={companyCode as string} />
-            </aside>
-
-            {/* 메인 콘텐츠 */}
-            <main className="w-3/4 p-4">
-                <h1 className="text-2xl font-bold mb-6">조직도</h1>
-                {departmentList.map((department) => (
-                    <DepartmentView key={department.departmentId} department={department} />
-                ))}
-            </main>
-        </div>
+        <QueryClientProvider client={queryClient}>
+            {/* IndexLayout으로 감싸서 페이지 내용 표시 */}
+            <IndexLayout>
+                <Component {...pageProps} />
+            </IndexLayout>
+            {/* ToastContainer는 레이아웃 외부로 빼서 최상단에 위치 */}
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+        </QueryClientProvider>
     );
-};
+}
 
 export default DepartmentListPage;
