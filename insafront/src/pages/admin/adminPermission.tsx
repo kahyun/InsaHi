@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import UserCard from '@/component/admin/UserCard';
 import '@/styles/admin/adminPermission.module.css';
 
+
 // 실제 API 응답 타입
 type RawUser = {
   employeeId: string;
@@ -59,6 +60,7 @@ export default function AdminPermissionPage() {
 
     fetchUsers();
   }, []);
+
 
   const grantAdmin = async (user: User) => {
     try {
