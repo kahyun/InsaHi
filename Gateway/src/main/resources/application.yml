@@ -64,7 +64,7 @@ spring:
           predicates:
             - Path=/chat/**
 
-        - id: atdsal
+        - id: AttendanceSalary
           uri: http://127.0.0.1:1000
           predicates:
             - Path=/atdsal/**
@@ -72,16 +72,18 @@ spring:
           uri: http://127.0.0.1:1005
           predicates:
             - Path=/approval/**
+          filters:
+            - PreserveHostHeader
 
         - id: AttendanceSalary
           uri: http://127.0.0.1:1000
           predicates:
             - Path=/leave/**
 
-#        - id: AttendanceSalary
-#          uri: http://127.0.0.1:1000
-#          predicates:
-#            - Path=/atdsal/**
+  #        - id: AttendanceSalary
+  #          uri: http://127.0.0.1:1000
+  #          predicates:
+  #            - Path=/atdsal/**
 
 
 

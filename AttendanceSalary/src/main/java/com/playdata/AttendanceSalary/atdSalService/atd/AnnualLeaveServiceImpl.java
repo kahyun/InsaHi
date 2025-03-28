@@ -45,7 +45,7 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
     // dto 의 유효성 검사 는 프론트에서도 해야
     //AnnualLeaveRequestDTO 는 usage 에 대한 dto , entity insert
     // 중복 신청 체크
-    log.info("employeeId::{},companyCode::{},dto::{}", employeeId, companyCode, dto);
+//    log.info("employeeId::{},companyCode::{},dto::{}", employeeId, companyCode, dto);
     boolean hasOverlap = annualLeaveUsageDAO.existsOverlappingLeave(employeeId, dto.getStartDate(),
         dto.getStopDate());
     log.info("hasOverlap::{}", hasOverlap);
@@ -229,7 +229,7 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
 
 
   // 휴가 등록 - 매달 발생
-  @Scheduled(cron = "0 0 0 1 * ?")
+  @Scheduled(cron = "0 */10 * * * ?", zone = "Asia/Seoul")
   public void executeLeaveGrant() {
     log.info("==== 연차/월차 자동 지급 배치 시작 ====");
 
@@ -257,6 +257,7 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
 
 
   private void grantLeaveToEmployee(String employeeId) {
+    log.info("employeeId::{}", employeeId);
     // feign으로 employee 에서 입사 일시 받아와서 재직 기간 계산
     LocalDate hireDate = findEmployee(employeeId).getHireDate();
     String companyCode = findEmployee(employeeId).getCompanyCode();
@@ -266,26 +267,30 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
     int totalMonths = period.getYears() * 12 + period.getMonths();
     int yearsWorked = period.getYears();
 
+    log.info("period::{}", period);
+    log.info("totalMonths::{}", totalMonths);
+    log.info("yearsWorked::{}", yearsWorked);
+
     // 연차 엔티티 생성 (새로 지급하기 위한 객체)
     AnnualLeaveDTO dto = new AnnualLeaveDTO();
     dto.setEmployeeId(employeeId);
     dto.setCompanyCode(companyCode);
-
+    log.info("dto::{}", dto);
     // 1년 미만 재직자 → 월차 1일 지급
     if (totalMonths < 12) {
-      if (today.getDayOfMonth() == 1) { // 매월 1일에만 지급
-        setMonthlyLeave(dto);
-        annualLeaveDAO.save(convertToAnnualLeaveEntity(dto));
-        log.info("[월차 지급] {} / {}월차 1일 지급 완료", employeeId, totalMonths);
-      }
+      setMonthlyLeave(dto);
+      annualLeaveDAO.save(convertToAnnualLeaveEntity(dto));
+      log.info("[월차 지급] {} / {}개월차 지급 완료", employeeId, totalMonths);
       return; // 여기서 끝냄
     }
+
     // 1년 이상 재직자 → 매년 입사달에 지급 (1일마다 조회하므로 입사한 달 1일에 지급)
     if (today.getMonthValue() == hireDate.getMonthValue()) {
       setAnnualLeave(dto, yearsWorked);
       annualLeaveDAO.save(convertToAnnualLeaveEntity(dto));
       log.info("[연차 지급] {} / {}년차 연차 지급 완료", employeeId, yearsWorked);
     }
+//    log.info("")
   }
 
   private void setMonthlyLeave(AnnualLeaveDTO dto) {
@@ -306,13 +311,13 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
     long id = findEmployee(dto.getEmployeeId()).getPositionSalaryId();
     PositionSalaryStepEntity positionSalaryStepEntity = positionSalaryDao.findPositionSalaryById(
         id).orElseThrow(() -> new RuntimeException("직급호봉 id를 찾기 못했습니다. 잘못된 직급호봉 id."));
-    int baseAnnualLeave = positionSalaryStepEntity.getBaseAnnualLeave();
-    //positionFeignClient.getBaseAnnualLeave(dto.getEmployeeId());
     int additionalLeave = yearsWorked; // 근속연수에 따라 1년마다 1개씩 추가
-    int totalGrantedLeave = baseAnnualLeave + additionalLeave;
+    int baseAnnualLeave = positionSalaryStepEntity.getBaseAnnualLeave() + additionalLeave;
+    //positionFeignClient.getBaseAnnualLeave(dto.getEmployeeId());
+    int totalGrantedLeave = baseAnnualLeave;
 
     dto.setBaseLeave(baseAnnualLeave);
-    dto.setAdditionalLeave(additionalLeave);
+    dto.setAdditionalLeave(0);
     dto.setTotalGrantedLeave(totalGrantedLeave);
     dto.setRemainingLeave(totalGrantedLeave);
     dto.setUsedLeave(0);

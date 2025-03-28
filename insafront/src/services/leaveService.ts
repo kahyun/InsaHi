@@ -75,7 +75,7 @@ export const rejectLeave = async (data: AnnualLeaveRequestDTO): Promise<string> 
 
 // 추가 연차 승인
 export const approveAdditionalLeave = async (data: AnnualLeaveRequestDTO): Promise<string> => {
-  const res = await axios.put<string>(`${API_BASE}/approve/additional`, data);
+  const res = await axios.put<string>(`${API_BASE}/additional`, data);
   return res.data;
 };
 

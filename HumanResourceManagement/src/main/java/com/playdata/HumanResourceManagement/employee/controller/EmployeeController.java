@@ -1,7 +1,15 @@
 package com.playdata.HumanResourceManagement.employee.controller;
 
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
-import com.playdata.HumanResourceManagement.employee.dto.*;
+import com.playdata.HumanResourceManagement.employee.dto.AuthorityResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmpAuthResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
+import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
+import com.playdata.HumanResourceManagement.employee.dto.MyUserDetail;
+import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
+import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import java.time.LocalTime;
@@ -12,12 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import java.time.LocalTime;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,15 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.*;
-import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestController
@@ -45,6 +43,11 @@ public class EmployeeController {
   private final EmployeeService employeeService;
   private final TokenManager tokenManager;
 
+  @PutMapping("/update-salary-step")
+  public void updateSalaryStep(@RequestParam("employeeId") String employeeId,
+      @RequestParam("positionSalaryId") Long positionSalaryId) {
+    employeeService.updateEmployee(employeeId, positionSalaryId);
+  }
 
   @GetMapping("/auth-list")
   public List<EmpAuthResponseDTO> getEmployeesByCompanyAndAuthority(
@@ -69,23 +72,6 @@ public class EmployeeController {
 
     return result;
   }
-//  // 회사의 권한리스트
-//  @GetMapping("/auth-list")
-//  public List<AuthorityResponseDTO> getEmployeeAuthList(
-//      @RequestParam("companyCode") String companyCode) {
-//    List<AuthorityResponseDTO> authList = employeeService.findAuthoritiesByCompanyCode(companyCode);
-//    log.info("getEmployeeAuthList: {}", authList);
-//    return authList;
-//  }
-//
-//  @GetMapping("/auth-list2")
-//  public List<EmpAuthResponseDTO> getEmployeeAuthList2(
-//      @RequestParam("authorityName") String authorityName) {
-//    List<EmpAuthResponseDTO> authlist2 = employeeService.findByAuthorityList_AuthorityName(
-//        authorityName);
-//    log.info("getEmployeeAuthList2: {}", authlist2);
-//    return authlist2;
-//  }
 
   //login
   @PostMapping("/login")
@@ -126,13 +112,22 @@ public class EmployeeController {
     return startTime;
   }
 
-
-  @GetMapping("/find")
-  /// 김다울
-  public EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId) {
+  @GetMapping(value = "/find", produces = "application/json")
+  public ResponseEntity<EmployeeResponseDTO> findEmployee(
+      @RequestParam("employeeId") String employeeId) {
     EmployeeResponseDTO employeeResponseDTO = employeeService.findEmployeeById(employeeId);
-    return employeeResponseDTO;
+    if (employeeResponseDTO == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 직원을 찾을 수 없습니다.");
+    }
+    return ResponseEntity.ok(employeeResponseDTO);
   }
+
+//  @GetMapping(value = "/find")
+//  /// 김다울
+//  public EmployeeResponseDTO findEmployee(@RequestParam("employeeId") String employeeId) {
+//    EmployeeResponseDTO employeeResponseDTO = employeeService.findEmployeeById(employeeId);
+//    return employeeResponseDTO;
+//  }
 
 
   @GetMapping("/getallemployeeids")

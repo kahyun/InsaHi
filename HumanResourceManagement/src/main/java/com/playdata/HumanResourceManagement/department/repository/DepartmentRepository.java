@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity, String> {
 
-    // 1. 회사 코드로 모든 부서 조회
-    List<DepartmentEntity> findByCompanyCode(String companyCode);
+  // 1. 회사 코드로 모든 부서 조회
+  List<DepartmentEntity> findAllByCompanyCode(String companyCode);
 
     // 2. 회사 코드와 부서 ID로 부서 삭제
     @Modifying

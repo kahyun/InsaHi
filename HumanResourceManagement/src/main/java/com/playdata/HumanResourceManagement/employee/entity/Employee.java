@@ -6,6 +6,19 @@ import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.publicEntity.FileEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,8 +58,15 @@ public class Employee {
     @Column(name = "hire_date")
     private LocalDate hireDate;
 
-    @Column(name = "retire_date")
-    private LocalDate retireDate;
+  @ManyToOne(fetch = FetchType.LAZY, optional = true)
+  @JoinColumn(name = "department_id", nullable = true)  // 외래키 컬럼만 지정
+  @JsonBackReference  // 순환 참조 방지
+  private DepartmentEntity department; // 부서
+  private String teamId;
+  private String state; // 상태 (Active, Inactive 등)
+  private Long positionSalaryId; //직급호봉
+  private LocalDate hireDate;
+  private LocalDate retireDate;
 
     @Column(name = "birthday")
     private LocalDate birthday;

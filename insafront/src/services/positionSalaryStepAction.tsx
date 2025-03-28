@@ -3,8 +3,10 @@ import {
   deleteSalaryStep,
   fetchSalarySteps,
   insertSalaryStep,
+  updateEmployeeSalaryStep
 } from '@/services/positionSalaryStepService';
 import {PositionSalaryStepEntity} from '@/type/Setting';
+
 
 export const usePositionSalaryStepActions = (companyCode: string) => {
   const [positionSalarySteps, setPositionSalarySteps] = useState<PositionSalaryStepEntity[]>([]);
@@ -12,7 +14,7 @@ export const usePositionSalaryStepActions = (companyCode: string) => {
     baseAnnualLeave: 0,
     overtimeAllowance: 0,
     positionAllowance: 0,
-    positionSalaryStepId: 0,
+    positionSalaryId: 0,
     positionId: 0,
     salaryStepId: 0,
     baseSalary: 0,
@@ -34,6 +36,16 @@ export const usePositionSalaryStepActions = (companyCode: string) => {
       console.log(data)
     } catch (error) {
       console.error('직급호봉 조회 실패', error);
+    }
+  };
+
+  const handleUpdateEmployeeSalaryStep = async (employeeId: string, positionSalaryId: number) => {
+    try {
+      await updateEmployeeSalaryStep(employeeId, positionSalaryId);
+      alert('대표자의 직급 호봉이 성공적으로 업데이트되었습니다.');
+    } catch (error) {
+      console.error('대표자 직급 호봉 업데이트 실패', error);
+      alert('업데이트에 실패했습니다.');
     }
   };
 
@@ -60,7 +72,7 @@ export const usePositionSalaryStepActions = (companyCode: string) => {
         baseAnnualLeave: 0,
         overtimeAllowance: 0,
         positionAllowance: 0,
-        positionSalaryStepId: 0,
+        positionSalaryId: 0,
         positionId: 0,
         salaryStepId: 0,
         baseSalary: 0,
@@ -73,6 +85,7 @@ export const usePositionSalaryStepActions = (companyCode: string) => {
       console.error('직급호봉 추가 실패', error);
     }
   };
+
 
   // 직급호봉 삭제 함수
   const handleDeletePositionSalaryStep = async (step: PositionSalaryStepEntity) => {
@@ -92,6 +105,7 @@ export const usePositionSalaryStepActions = (companyCode: string) => {
     newPositionSalaryStep,
     handlePositionSalaryStepChange,
     handleSubmitPositionSalaryStep,
-    handleDeletePositionSalaryStep
+    handleDeletePositionSalaryStep,
+    handleUpdateEmployeeSalaryStep
   };
 };

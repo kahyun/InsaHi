@@ -42,7 +42,8 @@ public class AnnualLeaveController {
   }
 
   @GetMapping("/remaining/{employeeId}")
-  public ResponseEntity<AnnualLeaveDTO> getRemainingLeave(@PathVariable String employeeId) {
+  public ResponseEntity<AnnualLeaveDTO> getRemainingLeave(
+      @PathVariable("employeeId") String employeeId) {
     try {
       AnnualLeaveDTO latestLeave = annualLeaveService.findLatestAnnualLeave(employeeId);
       return ResponseEntity.ok(latestLeave);
@@ -54,7 +55,7 @@ public class AnnualLeaveController {
   // 직원의 휴가 신청 내역 조회
   @GetMapping("/getemployeeleavel/{employeeId}/{status}")
   public ResponseEntity<List<AnnualLeaveRequestDTO>> getLeaveUsageByEmployeeId(
-      @PathVariable String employeeId, @PathVariable String status) {
+      @PathVariable("employeeId") String employeeId, @PathVariable("status") String status) {
     try {
       List<AnnualLeaveRequestDTO> usageList = annualLeaveService.findAllByEmployeeIdAndLeaveApprovalStatus(
           employeeId, status);
@@ -66,8 +67,8 @@ public class AnnualLeaveController {
 
   @GetMapping("/getmyleave/{employeeId}/{status}")
   public ResponseEntity<PageResponseDTO<AnnualLeaveRequestDTO>> getLeaveUsageByEmployeeId(
-      @PathVariable String employeeId,
-      @PathVariable String status,
+      @PathVariable("employeeId") String employeeId,
+      @PathVariable("status") String status,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
       @RequestParam(defaultValue = "createDate,desc") String sort
@@ -109,7 +110,7 @@ public class AnnualLeaveController {
 
   @GetMapping("/usage/{companyCode}/{status}")
   public ResponseEntity<PageResponseDTO<AnnualLeaveRequestDTO>> getLeaveUsageByCompanyWithPagination(
-      @PathVariable String companyCode, @PathVariable String status,
+      @PathVariable("companyCode") String companyCode, @PathVariable("status") String status,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
       @RequestParam(defaultValue = "createDate,desc") String sort
@@ -136,7 +137,7 @@ public class AnnualLeaveController {
   }
 
   @GetMapping("/detail/{id}")
-  public ResponseEntity<AnnualLeaveRequestDTO> getLeaveDetailById(@PathVariable Long id) {
+  public ResponseEntity<AnnualLeaveRequestDTO> getLeaveDetailById(@PathVariable("id") Long id) {
     log.info("getLeaveDetailById :: {}", id);
     try {
       AnnualLeaveRequestDTO dto = annualLeaveService.findById(id);
@@ -171,7 +172,7 @@ public class AnnualLeaveController {
   }
 
   // 추가 연차 승인
-  @PutMapping("/approve/additional")
+  @PutMapping("/additional")
   public ResponseEntity<String> approveAdditionalLeave(
       @RequestBody AnnualLeaveRequestDTO requestDTO) {
     try {

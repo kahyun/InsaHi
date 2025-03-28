@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import UserCard from '@/component/admin/UserCard';
 import '@/styles/admin/adminPermission.module.css';
 
+
 // 실제 API 응답 타입
 type RawUser = {
   employeeId: string;
@@ -32,7 +33,14 @@ export default function AdminPermissionPage() {
 
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:1006/employee/auth-list?companyCode=${companyCode}&authorityName=${ROLE_USER}`);
+        const token = localStorage.getItem('accessToken');
+        const res = await fetch(`http://127.0.0.1:1006/employee/auth-list?companyCode=${companyCode}&authorityName=${ROLE_USER}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? {Authorization: `Bearer ${token}`} : {}),
+          },
+        });
+
         const rawData: RawUser[] = await res.json();
 
         const data: User[] = rawData.map((user) => ({
@@ -42,7 +50,6 @@ export default function AdminPermissionPage() {
 
         const adminList = data.filter((user) => user.authorityList.includes('ROLE_ADMIN'));
         const userList = data.filter((user) => !user.authorityList.includes('ROLE_ADMIN'));
-
 
         setAdmins(adminList);
         setUsers(userList);
@@ -54,10 +61,16 @@ export default function AdminPermissionPage() {
     fetchUsers();
   }, []);
 
+
   const grantAdmin = async (user: User) => {
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`http://127.0.0.1:1006/employee/grant-admin?employeeId=${user.employeeId}`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? {Authorization: `Bearer ${token}`} : {}),
+        },
       });
       const message = await res.text();
       alert(message);
@@ -72,8 +85,13 @@ export default function AdminPermissionPage() {
 
   const revokeAdmin = async (user: User) => {
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`http://127.0.0.1:1006/employee/delete-admin?employeeId=${user.employeeId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? {Authorization: `Bearer ${token}`} : {}),
+        },
       });
       const message = await res.text();
       alert(message);
