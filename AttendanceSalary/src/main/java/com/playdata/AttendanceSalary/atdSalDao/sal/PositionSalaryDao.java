@@ -19,5 +19,4 @@ public interface PositionSalaryDao {
 
   List<AddPersonPositionSalaryDTO> findAllPositionSalaryInfo(String companyCode);
 
-  List<PositionSalaryStepEntity> findAllByCompanyCode(String companyCode);
 }

@@ -16,6 +16,6 @@ public class DepartmentService {
     }
 
     public List<DepartmentEntity> getDepartmentsByCompanyCode(String companyCode) {
-        return departmentRepository.findByCompanyCode(companyCode);
+        return departmentRepository.findByCompanyCode1(companyCode);
     }
 }

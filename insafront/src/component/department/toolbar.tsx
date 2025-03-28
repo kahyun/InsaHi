@@ -1,6 +1,6 @@
 import { FolderInput, UserMinus, UserPlus, UsersRound } from "lucide-react";
 import { useState } from "react";
-import AddUserModal from "./AddUserModal"; // AddUserModal 컴포넌트 import
+import AddUserModal from "@/component/department/modal/AddUserModal"; // AddUserModal 컴포넌트 import
 
 export function Toolbar() {
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);

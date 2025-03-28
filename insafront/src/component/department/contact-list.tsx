@@ -1,4 +1,4 @@
-import { Checkbox } from "@/component/ui/checkbox";  // Checkbox 컴포넌트를 사용하기 위해 임포트
+import { Checkbox } from "@/component/department/ui/checkbox";
 
 type Contact = {
   id: number;

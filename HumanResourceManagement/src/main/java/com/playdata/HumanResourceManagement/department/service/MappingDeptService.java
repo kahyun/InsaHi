@@ -26,7 +26,7 @@ public class MappingDeptService {
      * @return 회사의 모든 부서와 해당 부서에 속한 직원 목록
      */
     public List<OrganizationDTO> getOrganizationChart(String companyCode) {
-        List<DepartmentEntity> departments = departmentRepository.findByCompanyCode(companyCode);
+        List<DepartmentEntity> departments = departmentRepository.findByCompanyCode1(companyCode);
 
         return departments.stream()
                 .map(department -> {

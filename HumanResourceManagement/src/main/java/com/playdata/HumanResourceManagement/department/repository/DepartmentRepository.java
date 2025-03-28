@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity, String> {
@@ -15,15 +14,19 @@ public interface DepartmentRepository extends JpaRepository<DepartmentEntity, St
   // 1. 회사 코드로 모든 부서 조회
   List<DepartmentEntity> findAllByCompanyCode(String companyCode);
 
-    // 2. 회사 코드와 부서 ID로 부서 삭제
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM DepartmentEntity d WHERE d.companyCode = :companyCode AND d.departmentId = :departmentId")
-    void deleteByCompanyCodeAndDepartmentId(@Param("companyCode") String companyCode, @Param("departmentId") String departmentId);
+  // 2. 회사 코드와 부서 ID로 부서 삭제
+  @Modifying
+  @Transactional
+  @Query("DELETE FROM DepartmentEntity d WHERE d.companyCode = :companyCode AND d.departmentId = :departmentId")
+  void deleteByCompanyCodeAndDepartmentId(@Param("companyCode") String companyCode, @Param("departmentId") String departmentId);
 
-    // 3. 부모 부서 ID로 하위 부서 조회
-    List<DepartmentEntity> findByParentDepartmentId(DepartmentEntity parent);
-    DepartmentEntity findByDepartmentId(String departmentId);
-    Collection<Object> findAllByCompanyCode(String companyCode);
+  // 3. 부모 부서 ID로 하위 부서 조회
+  List<DepartmentEntity> findByParentDepartmentId(DepartmentEntity parent);
 
+  // 4. 회사 코드로 부서 조회
+  @Query("SELECT d FROM DepartmentEntity d WHERE d.companyCode = :companyCode")
+  List<DepartmentEntity> findByCompanyCode1(@Param("companyCode") String companyCode);
+
+  // 5. 부서 ID로 부서 조회
+  DepartmentEntity findByDepartmentId(String departmentId);
 }

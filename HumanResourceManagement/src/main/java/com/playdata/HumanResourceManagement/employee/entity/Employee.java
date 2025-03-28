@@ -47,7 +47,6 @@ public class Employee {
     private String state;
     private String positionName;
     private Long positionSalaryId;
-    private String teamId;
 
     @Column(name = "start_time")
     private LocalTime startTime;
@@ -62,19 +61,10 @@ public class Employee {
   @JoinColumn(name = "department_id", nullable = true)  // 외래키 컬럼만 지정
   @JsonBackReference  // 순환 참조 방지
   private DepartmentEntity department; // 부서
-  private String teamId;
-  private String state; // 상태 (Active, Inactive 등)
-  private Long positionSalaryId; //직급호봉
-  private LocalDate hireDate;
   private LocalDate retireDate;
 
     @Column(name = "birthday")
     private LocalDate birthday;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id", nullable = true)
-    @JsonBackReference
-    private DepartmentEntity department;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_code", referencedColumnName = "company_code", nullable = true)
