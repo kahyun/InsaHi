@@ -6,6 +6,7 @@ import styles from "@/styles/Topbar.module.css";
 import EmployeeInfoAction from "@/api/mypage/employeeinfoaction";
 import useSSE from "@/component/approval/useSSE";
 import Toast from "@/component/approval/Toast";
+import {flushSync} from "react-dom";
 
 type TopBarProps = {
   activeSidebar: string | null;
@@ -44,7 +45,9 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
 
   // SSE 알림 수신
   useSSE(employeeId, (message) => {
-    setHasNotification(true);
+    flushSync(() => {
+      setHasNotification(true);
+    });
     setToastMessage(message);
   });
 
@@ -100,7 +103,7 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
                   근태/급여
                 </Link>
               </li>
-              <li>
+              <li className={styles.topmenuapproval}>
                 <Link href="#" className={styles.topmenulink}
                       onClick={() => setActiveSidebar(activeSidebar === "sidebar2" ? null : "sidebar2")}>
                   전자결재

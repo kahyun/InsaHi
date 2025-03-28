@@ -41,8 +41,7 @@ public class SecurityConfig {
     http
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/"
-                , "/approval/**",
+            .requestMatchers("/",
                 "/company/signup",
                 "/employee/login"
 //                "/employee/find",

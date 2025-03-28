@@ -33,19 +33,11 @@ const MyPage = () => {
   });
 
 
-  /*
-  *
-package com.playdata.AttendanceSalary.atdSalEntity.atd;
-
-public enum LeaveApprovalStatus {
-  PENDING, APPROVED, REJECTED
-}
-*/
   //calendar 출력
   useEffect(() => {
     if (employeeId) {
       const fetchData = async () => {
-        const data = await CalendarAction(employeeId); // "APPROVED" 고정
+        const data = await CalendarAction(employeeId, "APPROVED"); // "APPROVED" 고정
         if (data) {
           setCalendarData(data);
         } else {

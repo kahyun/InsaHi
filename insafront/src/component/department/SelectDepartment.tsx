@@ -32,7 +32,10 @@ export default function SelectDepartment({departments, selected, onChange}: Prop
       <div>
         <select
             value={selected}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              // console.log("🟡 선택한 부서 ID:", e.target.value); // ✅ 로그 찍기
+              onChange(e.target.value);
+            }}
             className={styles.input}
         >
           {renderOptions(departments)}
