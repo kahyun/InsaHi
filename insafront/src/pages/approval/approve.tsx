@@ -22,7 +22,7 @@ const ApprovePage = () => {
     e.preventDefault();
     const {lineId, approveOrNot, reason} = approvalData;
 
-    const response = await fetch(`http://127.0.0.1:1005/approval/permit?lineId=${lineId}&approveOrNot=${approveOrNot}&reason=${reason}`, {
+    const response = await fetch(`http://127.0.0.1:1006/approval/permit?lineId=${lineId}&approveOrNot=${approveOrNot}&reason=${reason}`, {
       method: 'GET'
     });
 

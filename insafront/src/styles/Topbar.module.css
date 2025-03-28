@@ -93,10 +93,15 @@
 
 .notificationDot {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 10px;
+  right: -4px;
   width: 10px;
   height: 10px;
-  background-color: royalblue;
+  background-color: greenyellow;
   border-radius: 50%;
+}
+
+.topmenuapproval {
+  position: relative;
+
 }

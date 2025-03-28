@@ -1,4 +1,4 @@
-// hooks/useSSE.ts
+// component/approval/useSSE.tsx
 import {useEffect} from 'react';
 
 const useSSE = (employeeId: string | null, onMessage: (msg: string) => void) => {
@@ -7,19 +7,14 @@ const useSSE = (employeeId: string | null, onMessage: (msg: string) => void) => 
 
     const eventSource = new EventSource(`http://127.0.0.1:1006/approval/sse/subscribe/${employeeId}`);
 
-    eventSource.onmessage = (event) => {
-      console.log('기본 메세지: ', event.data);
+    // 공통 핸들러 등록
+    const handleEvent = (event: MessageEvent) => {
+      console.log('수신된 이벤트:', event.data);
+      onMessage(event.data);
     };
 
-    eventSource.addEventListener('approval-update', (event) => {
-      console.log('결재 알림 수신:', event.data);
-      onMessage(event.data);
-    });
-
-    eventSource.addEventListener('broadcast', (event) => {
-      console.log('브로드캐스트 알림:', event.data);
-      onMessage(event.data);
-    });
+    eventSource.addEventListener("approval-update", handleEvent);
+    eventSource.addEventListener("broadcast", handleEvent);
 
     eventSource.onerror = (error) => {
       console.error('SSE 연결 오류:', error);
@@ -29,7 +24,7 @@ const useSSE = (employeeId: string | null, onMessage: (msg: string) => void) => 
     return () => {
       eventSource.close();
     };
-  }, [employeeId]);
+  }, [employeeId, onMessage]);
 };
 
 export default useSSE;

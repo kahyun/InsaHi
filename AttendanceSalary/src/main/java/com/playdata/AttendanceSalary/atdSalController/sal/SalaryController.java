@@ -36,13 +36,11 @@ public class SalaryController {
     return salaryService.findAllPayStub(employeeId);
   }
 
-  @PostMapping("/payStub")
-  public PayStubResponseDTO payStub(@RequestParam("employeeId") String employeeId) {
-    System.out.println("employeeId = " + employeeId);
-    return salaryService.calculateAndSaveEmployeePayStub(employeeId);
-
-  }
-
+  //    @PostMapping("/payStub")
+//    public PayStubResponseDTO payStub(@RequestParam("employeeId") String employeeId) {
+//        System.out.println("employeeId = " + employeeId);
+//        return salaryService.calculateAndSaveEmployeePayStub(employeeId);
+//    }
   @GetMapping("/salary-step-list")
   public List<PositionSalaryStepResponseDTO> positionSalaryStepList(
       @RequestParam("companyCode") String companyCode) {

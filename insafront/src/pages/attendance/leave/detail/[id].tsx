@@ -105,10 +105,8 @@ export default function LeaveDetailPage() {
           <button onClick={() => router.back()} className={styles.leaveBackButton}>뒤로 가기</button>
         </div>
 
-        {/* 오른쪽: 캘린더 */}
-        <div className={styles.leaveDetailRight}>
-          <Calendar employeeId={leave.employeeId}/>
-        </div>
+        {/* 오른쪽 해당 직원 연차 정보*/}
+
       </div>
   );
 }

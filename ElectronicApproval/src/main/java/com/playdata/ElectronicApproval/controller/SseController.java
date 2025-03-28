@@ -20,13 +20,20 @@ public class SseController {
 
   // 클라이언트가 연결을 요청하면 Emitter를 반환
   @GetMapping(value = "/subscribe/{employeeId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public SseEmitter subscribe(@PathVariable String employeeId) {
+  public SseEmitter subscribe(@PathVariable("employeeId") String employeeId) {
     SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
 
     emitters.computeIfAbsent(employeeId, id -> new CopyOnWriteArrayList<>()).add(emitter);
 
-    emitter.onCompletion(() -> removeEmitter(employeeId, emitter));
-    emitter.onTimeout(() -> removeEmitter(employeeId, emitter));
+    emitter.onCompletion(() -> {
+      log.info("SSE 연결 완료됨(정상 종료): {}", employeeId);
+      removeEmitter(employeeId, emitter);
+    });
+
+    emitter.onTimeout(() -> {
+      log.warn("SSE 연결 타임아웃 발생: {}", employeeId);
+      removeEmitter(employeeId, emitter);
+    });
     System.out.println("Employee " + employeeId + " subscribed!");
     log.info("Employee {} subscribed!", employeeId);
     return emitter;
@@ -50,6 +57,8 @@ public class SseController {
         try {
           emitter.send(SseEmitter.event().name("approval-update").data(message));
         } catch (IOException e) {
+          log.error("SSE 전송 중 IOException 발생 - 연결 종료로 추정, employeeId={}, message={}, error={}",
+              employeeId, message, e.getMessage());
           removeEmitter(employeeId, emitter);
         }
       });
@@ -60,7 +69,7 @@ public class SseController {
     emitters.forEach((employeeId, userEmitters) -> {
       userEmitters.forEach(emitter -> {
         try {
-          emitter.send(SseEmitter.event().name("broadcast").data(message));
+          emitter.send(SseEmitter.event().name("approval-update").data(message));
         } catch (IOException e) {
           removeEmitter(employeeId, emitter);
         }

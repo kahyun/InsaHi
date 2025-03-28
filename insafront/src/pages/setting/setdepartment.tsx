@@ -20,6 +20,11 @@ export default function CreateDepartmentPage() {
   const [loading, setLoading] = useState(false);
 
   const companyCode = useLocalStorage("companyCode", "");
+  useEffect(() => {
+    if (parentDepartments.length > 0 && selectedParentId === "") {
+      setSelectedParentId(parentDepartments[0].departmentId); // 첫 번째 부서 자동 선택
+    }
+  }, [parentDepartments, selectedParentId]);
 
   useEffect(() => {
     if (companyCode) {

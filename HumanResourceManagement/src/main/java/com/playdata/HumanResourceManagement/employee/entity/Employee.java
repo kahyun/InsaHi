@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,8 +54,8 @@ public class Employee {
   private String teamId;
   private String state; // 상태 (Active, Inactive 등)
   private Long positionSalaryId; //직급호봉
-  private LocalTime hireDate;
-  private LocalTime retireDate;
+  private LocalDate hireDate;
+  private LocalDate retireDate;
 
 //    private LocalDate hireDate;
 //    private LocalDate retireDate;

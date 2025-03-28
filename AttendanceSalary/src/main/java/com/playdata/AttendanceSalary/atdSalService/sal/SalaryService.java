@@ -16,7 +16,7 @@ public interface SalaryService {
   List<PayStubResponseDTO> findAllPayStubAndYearAndMonth(String employeeId, int year, int month);
 
   /// 급여계산 로직
-  public PayStubResponseDTO calculateAndSaveEmployeePayStub(String employeeId);
+  public void calculateAndSaveEmployeePayStub();
 
   List<PositionSalaryStepResponseDTO> findPositionSalaryStepByCompanyCode(String CompanyCode);
 
