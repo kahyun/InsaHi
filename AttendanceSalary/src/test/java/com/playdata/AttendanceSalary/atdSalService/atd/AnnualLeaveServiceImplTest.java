@@ -31,13 +31,13 @@ class AnnualLeaveServiceImplTest {
   @DisplayName("직원에게 연차 지급 데이터 생성 테스트")
   void createAnnualLeaveData() {
     // given
-    String employeeId = "2025b2c9"; //
+    String employeeId = "2025ec06"; //
     String employeeId1 = "123"; //
     String employeeId2 = "111"; //
     String employeeId3 = "1234"; //
     String employeeId4 = "1235"; //
     String employeeId5 = "1236"; //
-    String companyCode = "Comb013";
+    String companyCode = "Com235e";
 
     AnnualLeaveEntity annualLeave = AnnualLeaveEntity.builder()
         .employeeId(employeeId)
