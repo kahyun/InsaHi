@@ -2,7 +2,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  width: 70%;
+  margin: 0 auto; /* 가운데 정렬 */
+  padding: 2rem 0; /* 상하 여백 */
+}
+
+.spacedRow td {
+  padding-top: 15px;
 }
 
 /* 상단 두 개 섹션(직급, 수당)을 가로로 배치 */
@@ -11,6 +17,20 @@
   width: 100%;
   justify-content: space-between;
   margin-bottom: 40px;
+}
+
+
+.row {
+  display: flex;
+  gap: 2rem; /* 그룹 사이 간격 */
+  flex-wrap: wrap; /* 줄바꿈 허용 */
+  margin-bottom: 1rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px; /* 균등한 너비 */
 }
 
 /* 각각의 개별 섹션 스타일 */
