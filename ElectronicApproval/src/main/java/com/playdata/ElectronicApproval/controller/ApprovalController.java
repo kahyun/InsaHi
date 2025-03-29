@@ -13,6 +13,7 @@ import com.playdata.ElectronicApproval.service.ApprovalService;
 import com.playdata.ElectronicApproval.service.FileDownloadService;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -112,6 +113,12 @@ public class ApprovalController {
           .body("결재 처리 중 오류가 발생했습니다.");
     }
 
+  }
+
+  @GetMapping("/has-pending/{employeeId}")
+  public Map<String, Boolean> hasFirstPendingDocument(@PathVariable String employeeId) {
+    boolean hasPending = approvalService.hasFirstPending(employeeId);
+    return Map.of("hasPending", hasPending);
   }
 
 //  @GetMapping("/list/{employeeId}/{menu}") // 결재 문서 조회

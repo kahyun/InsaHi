@@ -43,7 +43,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/",
                 "/company/signup",
-                "/employee/login"
+                "/employee/login",
+                "/employee/getallemployeeids"
 //                "/employee/find",
 //                "/approavl/submit",
 //                "/atdsal/**",

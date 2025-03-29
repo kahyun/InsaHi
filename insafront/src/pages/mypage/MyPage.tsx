@@ -13,7 +13,7 @@ import CalendarAction, {CalendarDTO} from "@/api/mypage/calendaraction";
 const MyPage = () => {
 
   const [userData, setUserData] = useState<profileCardDTO | null>(null);
-  const [calendarData, setCalendarData] = useState<CalendarDTO | null>(null)
+  const [calendarData, setCalendarData] = useState<CalendarDTO[]>([]);
   const [employeeId, setEmployeeId] = useState<string>("defaultId"); // 로그인한 사용자의 ID 가져오기
   useEffect(() => {
     // 클라이언트에서만 실행되도록 보장
@@ -40,8 +40,11 @@ const MyPage = () => {
         const data = await CalendarAction(employeeId, "APPROVED"); // "APPROVED" 고정
         if (data) {
           setCalendarData(data);
+          console.log("setCalendarData(data);")
         } else {
-          console.warn("No data found.");
+          console.log("setCalendarData([]);")
+          setCalendarData([]);
+          // console.warn("No data found.");
         }
       };
       fetchData();
@@ -71,7 +74,11 @@ const MyPage = () => {
 
           {/* Calendar Section */}
           <div className={styles.calendarCard}>
-            {calendarData ? <Calendar{...calendarData}/> : <p>Calendar Loading ~~</p>}
+            {calendarData.length >= 0 ? (
+                <Calendar leaveList={calendarData}/>
+            ) : (
+                <p>Calendar Loading ~~</p>
+            )}
           </div>
         </div>
 
