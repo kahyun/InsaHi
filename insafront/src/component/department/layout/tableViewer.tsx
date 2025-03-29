@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ContactList from "@/component/department/contact-list";
 import { Toolbar } from "@/component/department/toolbar";
+import  {MemberContent,TableViewerContainer} from './styled'
 
 type Contact = {
     id: number;
@@ -64,17 +65,18 @@ const TableViewer: React.FC<TableViewerProps> = ({ selectedDepartment }) => {
     };
 
     return (
-        <div>
+        <TableViewerContainer className={"TableViewer"}>
             <Toolbar /> {/* 툴바 컴포넌트 */}
-            <div>
+            <MemberContent className={"right"}>
                 {/* 에러가 있으면 에러 메시지 출력, 그렇지 않으면 사용자 목록 출력 */}
                 {error ? (
                     <p style={{ color: "red" }}>{error}</p>
                 ) : (
                     <ContactList contactsData={contacts} onSelectContact={handleSelectContact} />
                 )}
-            </div>
-        </div>
+                <div>member view area</div>
+            </MemberContent>
+        </TableViewerContainer>
     );
 };
 

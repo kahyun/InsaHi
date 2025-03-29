@@ -1,4 +1,5 @@
 import { Checkbox } from "@/component/department/ui/checkbox";
+import { TableContainer } from './styled'
 
 type Contact = {
   id: number;
@@ -21,8 +22,7 @@ const ContactList = ({ contactsData, onSelectContact }: ContactListProps) => {
   console.log("ContactList에 전달된 데이터:", contactsData);  // 데이터 확인
 
   return (
-    <div className="border-t pt-4">
-      <h3>소속된 사용자 목록</h3>
+    <TableContainer className="TableContainer">
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-gray-200">
@@ -66,7 +66,7 @@ const ContactList = ({ contactsData, onSelectContact }: ContactListProps) => {
           )}
         </tbody>
       </table>
-    </div>
+    </TableContainer>
   );
 };
 

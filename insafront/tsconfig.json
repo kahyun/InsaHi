@@ -9,10 +9,12 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+//    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
+    "moduleResolution": "node",
     "incremental": true,
     "paths": {
       "@/*": ["./src/*"]

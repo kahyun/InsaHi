@@ -39,7 +39,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
+        <div>
             <div className="modal-content">
                 <h2>사용자 추가</h2>
                 <form onSubmit={handleSubmit}>

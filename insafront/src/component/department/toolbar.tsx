@@ -34,7 +34,7 @@ export function Toolbar() {
         }
     };
 
-    // 사용자 추가하기 기능 (모달 열기)
+    // 사용자 추가하기 기능
     const handleAddUser = () => {
         setIsModalOpen(true);  // 모달을 열기
     };
@@ -46,25 +46,24 @@ export function Toolbar() {
 
     return (
         <div>
-            <button onClick={handleMoveDepartment}>
-                <FolderInput size={16} />
-                부서 이동하기
-            </button>
-            <button onClick={handleDeleteUser}>
-                <UserMinus size={16} />
-                사용자 삭제하기
-            </button>
-            <button onClick={handleMoveUser}>
-                <UsersRound size={16} />
-                사용자 이동하기
-            </button>
-            <button onClick={handleAddUser}>
-                <UserPlus size={16} />
-                사용자 추가하기
-            </button>
+            <h3>소속된 사용자 목록</h3>
+            <div>
+                <button onClick={handleDeleteUser}>
+                    <UserMinus size={16}/>
+                    사용자 삭제하기
+                </button>
+                <button onClick={handleMoveUser}>
+                    <UsersRound size={16}/>
+                    사용자 이동하기
+                </button>
+                <button onClick={handleAddUser}>
+                    <UserPlus size={16}/>
+                    사용자 추가하기
+                </button>
 
-            {/* 사용자 추가 모달 */}
-            <AddUserModal isOpen={isModalOpen} onClose={closeModal} />
+                {/* 사용자 추가 모달 */}
+                <AddUserModal isOpen={isModalOpen} onClose={closeModal}/>
+            </div>
         </div>
     );
 }
