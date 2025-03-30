@@ -19,4 +19,11 @@ public class Authority {
 
     @Column(length = 50, nullable = false)
     private String authorityName;
+
+    public Authority(String role) {
+    }
+
+    public Object getRole() {
+        return this.authorityName;
+    }
 }

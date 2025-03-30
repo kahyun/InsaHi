@@ -1,3 +1,5 @@
+// 김민지 작성 - 테이블에서 부서 테이블
+
 export interface Department {
     departmentId: string,
     departmentName: string,
@@ -16,8 +18,14 @@ export interface Employees {
     email: string;
     phoneNumber: string;
     address: string;
-    gender: "여성" | '남성';
+    gender: "여성" | '남성' | "미정";
     departmentId: string;
     state: string;
-    positionName:string;
+    position: Position[]
+}
+
+export interface Position {
+    salaryStepId : String;
+    positionName : String;
+    positionSalaryId : String;
 }

@@ -68,12 +68,8 @@ public class CreateDeptService {
         DepartmentEntity department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new EntityNotFoundException("부서 ID가 없습니다. ID = " + departmentId));
 
-        // 부모 부서를 기준으로 하위 부서들을 찾기 위해 departmentId를 사용하여 DepartmentEntity 객체를 가져옴
-        DepartmentEntity parentDepartment = departmentRepository.findById(department.getParentDepartmentId().getDepartmentId())
-                .orElseThrow(() -> new EntityNotFoundException("부모 부서가 없습니다. ID = " + department.getParentDepartmentId()));
-
-        // 하위 부서들이 parentDepartment를 기준으로 조회되도록 수정
-        List<DepartmentEntity> subDepartments = departmentRepository.findByParentDepartmentId(parentDepartment);
+        // 하위 부서들을 찾고, 부모 부서를 null로 설정
+        List<DepartmentEntity> subDepartments = departmentRepository.findByParentDepartmentId(department);
 
         for (DepartmentEntity subDept : subDepartments) {
             subDept.setParentDepartmentId(null); // 하위 부서의 부모 부서 설정을 null로 변경

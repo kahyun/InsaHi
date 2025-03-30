@@ -7,9 +7,8 @@ import lombok.Getter;
 @Builder
 public class PositionSendDTO {
 
-    private Long positionId;    // 직급 ID
-    private String positionName; // 직급 이름
-    private String companyCode;  // 회사 코드
-    private String employeeId;   // 직원 코드
+    private String positionName;    // 직급명
+    private Long positionSalaryId;  // 직급 호봉 아이디
+    private int salaryStepId;       // 직급 호봉 단계 ID
 
 }

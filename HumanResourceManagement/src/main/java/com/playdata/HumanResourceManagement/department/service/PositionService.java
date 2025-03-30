@@ -4,7 +4,6 @@ import com.playdata.AttendanceSalary.atdClient.hrmDTO.PositionSendDTO;
 import com.playdata.HumanResourceManagement.department.dto.OrganizationDTO;
 import com.playdata.HumanResourceManagement.department.dto.PositionDownloadDTO;
 import com.playdata.HumanResourceManagement.department.dto.UserDataDTO;
-import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.department.feign.AttFeignClient;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
@@ -40,7 +39,6 @@ public class PositionService {
 
         UserDataDTO userDataDTO = mapToUserDataDTO(employee);
 
-        // 반환 시 'DepartmentEntity'를 null로 주는 대신 적절히 처리할 수 있는 로직 추가
         return OrganizationDTO.fromEntityAndUserData(null, List.of(userDataDTO), positions);
     }
 
@@ -63,23 +61,24 @@ public class PositionService {
                 employee.getDepartmentId(),  // 부서 ID 추가
                 employee.getStatus(),        // 상태 추가
                 employee.getHireDate() != null ? employee.getHireDate() : LocalDate.parse("2000-01-01"),  // 입사일 (기본값 설정)
-                employee.getRetireDate() != null ? employee.getRetireDate() : LocalDate.parse("2000-01-01")  // 퇴사일 (기본값 설정)
+                employee.getRetireDate() != null ? employee.getRetireDate() : LocalDate.parse("-")  // 퇴사일 (기본값 설정)
         );
-
     }
 
     /**
      * 외부 API 호출을 통해 직원의 직급 정보를 가져오는 메서드
      *
      * @param employee 직원 엔티티
-     * @return 직급 목록
+     * @return 직급 목록 (하나만 반환)
      */
     private List<PositionDownloadDTO> getPositionsFromAttFeignClient(Employee employee) {
+        // 직급이 하나만 반환되도록 필터링
         return Optional.ofNullable(attFeignClient.getPositionDownloadDTO(employee.getCompanyCode()))
                 .map(PositionDownloadDTO::getPositions)
                 .orElse(List.of())
                 .stream()
                 .filter(position -> position.getEmployeeId().equals(employee.getEmployeeId()))
+                .limit(1)  // 직원당 하나의 직급만 반환
                 .collect(Collectors.toList());
     }
 
@@ -105,15 +104,17 @@ public class PositionService {
      * 직원 ID 기준으로 직급 정보 조회
      *
      * @param employeeId 직원 ID
-     * @return 직급 목록
+     * @return 직급 목록 (하나만 반환)
      */
     public List<PositionSendDTO> getPositionsByEmployeeId(String employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("직원 정보가 존재하지 않습니다."));
 
-        return getPositionsByCompany(employee.getCompanyCode()).stream()
-                .filter(position -> position.getEmployeeId().equals(employeeId))
-                .collect(Collectors.toList());
+        // 직급은 하나만 가져오도록 수정
+        List<PositionDownloadDTO> positions = getPositionsFromAttFeignClient(employee);
+
+        // 직급이 존재하면 하나만 반환
+        return positions.isEmpty() ? List.of() : List.of(convertToPositionSendDTO(positions.get(0)));
     }
 
     /**
@@ -146,10 +147,9 @@ public class PositionService {
      */
     private PositionSendDTO convertToPositionSendDTO(PositionDownloadDTO positionDownloadDTO) {
         return PositionSendDTO.builder()
-                .positionId(positionDownloadDTO.getPositionId())
+                .positionSalaryId(positionDownloadDTO.getPositionSalaryId())
                 .positionName(positionDownloadDTO.getPositionName())
-                .companyCode(positionDownloadDTO.getCompanyCode())
-                .employeeId(positionDownloadDTO.getEmployeeId())
+                .salaryStepId(positionDownloadDTO.getSalaryStepId())
                 .build();
     }
 }

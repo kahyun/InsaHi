@@ -1,23 +1,15 @@
 package com.playdata.HumanResourceManagement.department.service;
 
-import com.playdata.AttendanceSalary.atdClient.hrmDTO.PositionSendDTO;
-import com.playdata.HumanResourceManagement.company.entity.Company;
-import com.playdata.HumanResourceManagement.company.repository.CompanyRepository;
-import com.playdata.HumanResourceManagement.department.dto.OrganizationDTO;
-import com.playdata.HumanResourceManagement.department.dto.PositionDownloadDTO;
 import com.playdata.HumanResourceManagement.department.dto.UserDataDTO;
-import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
-import com.playdata.HumanResourceManagement.department.repository.DepartmentRepository;
-import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
-import com.playdata.HumanResourceManagement.department.feign.AttFeignClient;
+import com.playdata.HumanResourceManagement.department.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,137 +17,123 @@ import java.util.stream.Collectors;
 public class EmployeeDataService {
 
     private final EmployeeRepository employeeRepository;
-    private final AttFeignClient attFeignClient;
-    private final CompanyRepository companyRepository;
     private final DepartmentRepository departmentRepository;
 
     /**
-     * 직원 엔티티를 UserDataDTO로 변환하는 메서드
-     *
-     * @param employee 직원 엔티티
-     * @return 변환된 UserDataDTO
-     */
-    private UserDataDTO convertToUserDataDTO(Employee employee) {
-        return new UserDataDTO(
-                employee.getEmployeeId(),
-                employee.getName(),
-                employee.getPositionName(),
-                employee.getEmail(),
-                employee.getPhoneNumber(),
-                employee.getAddress(),
-                employee.getGender(),
-                employee.getBirthday(),
-                employee.getDepartmentId(),
-                employee.getStatus(),
-                employee.getHireDate(),
-                employee.getRetireDate()
-        );
-    }
-
-    /**
-     * 회사 코드로 직원 목록 조회 (DB에서 불러오기)
+     * 회사의 모든 직원 목록 조회
      *
      * @param companyCode 회사 코드
-     * @return 직원 목록
+     * @return 회사의 모든 직원 리스트
      */
     public List<UserDataDTO> getAllEmployees(String companyCode) {
-        // 회사 코드로 모든 직원을 조회
-        List<Employee> employees = employeeRepository.findByCompany_CompanyCode(companyCode);
-
-        // Employee 목록을 UserDataDTO로 변환 후 반환
+        List<Employee> employees = employeeRepository.findByCompanyCode(companyCode);
         return employees.stream()
-                .map(this::convertToUserDataDTO)
+                .map(UserDataDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
     /**
-     * 부서 ID와 회사 코드로 직원 목록 조회
+     * 부서별 직원 목록 조회
      *
-     * @param companyCode 회사 코드
-     * @param departmentId 부서 코드
-     * @return 직원 목록
+     * @param companyCode  회사 코드
+     * @param departmentId 부서 ID
+     * @return 부서에 속한 직원 목록
      */
     public List<UserDataDTO> getEmployeesByDepartment(String companyCode, String departmentId) {
-        // 회사 코드로 모든 직원을 조회한 후, 부서 ID로 필터링
-        List<Employee> employees = employeeRepository.findByCompany_CompanyCode(companyCode);
-
-        // 부서 ID가 일치하는 직원들만 필터링
-        List<Employee> filteredEmployees = employees.stream()
-                .filter(emp -> emp.getDepartment() != null && emp.getDepartment().getDepartmentId().equals(departmentId))
-                .collect(Collectors.toList());
-
-        // 필터링된 직원 목록을 UserDataDTO로 변환 후 반환
-        return filteredEmployees.stream()
-                .map(this::convertToUserDataDTO)
+        List<Employee> employees = employeeRepository.findByCompanyCodeAndDepartmentId(companyCode, departmentId);
+        return employees.stream()
+                .map(UserDataDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
     /**
-     * 사용자 정보 추가
+     * 회사 코드와 직원 ID로 직원 조회
      *
-     * @param userDTO 사용자 정보
-     * @return 추가된 사용자 정보
+     * @param companyCode  회사 코드
+     * @param employeeId   직원 ID
+     * @return 직원 정보
      */
-    public UserDataDTO create(UserDataDTO userDTO) {
-        // UserDataDTO를 Employee 엔티티로 변환
-        Employee employee = new Employee();
-        employee.setEmployeeId(userDTO.getEmployeeId());
+    public UserDataDTO getEmployeeByCompanyCodeAndId(String companyCode, String employeeId) {
+        Employee employee = employeeRepository.findByCompanyCodeAndEmployeeId(companyCode, employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("직원을 찾을 수 없습니다."));
+
+        return UserDataDTO.fromEntity(employee);
+    }
+
+    /**
+     * 직원 삭제
+     *
+     * @param companyCode  회사 코드
+     * @param employeeId   직원 ID
+     * @return 삭제된 직원
+     */
+    public UserDataDTO deleteUser(String companyCode, String employeeId) {
+        Employee employee = employeeRepository.findByCompanyCodeAndEmployeeId(companyCode, employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("직원을 찾을 수 없습니다."));
+
+        employeeRepository.delete(employee);
+
+        return UserDataDTO.fromEntity(employee); // 삭제된 직원을 UserDataDTO로 반환
+    }
+
+    /**
+     * 직원 정보 수정
+     *
+     * @param companyCode  회사 코드
+     * @param employeeId   직원 ID
+     * @param userDTO      수정된 직원 정보
+     * @return 수정된 직원
+     */
+    public UserDataDTO updateUser(String companyCode, String employeeId, UserDataDTO userDTO) {
+        Employee employee = employeeRepository.findByCompanyCodeAndEmployeeId(companyCode, employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("직원을 찾을 수 없습니다."));
+
+        // 부서 정보 가져오기
+        var department = departmentRepository.findById(userDTO.getDepartmentId())
+                .orElseThrow(() -> new IllegalArgumentException("부서를 찾을 수 없습니다."));
+
+        // 수정할 직원 정보를 적용
         employee.setName(userDTO.getName());
+        employee.setPosition(userDTO.getPositionName());
+        employee.setDepartment(department); // 부서 객체 할당
 
-        // 권한 설정
-        Authority authority = new Authority();
-        authority.setAuthorityName(userDTO.getRole());
-        employee.setAuthorityList(new HashSet<>(Set.of(authority)));
+        employeeRepository.save(employee); // 수정된 직원 저장
 
-        // 회사 코드
-        Company company = companyRepository.findByCompanyCode1(userDTO.getCompanyCode());
-        employee.setCompany(company);
+        return UserDataDTO.fromEntity(employee); // 수정된 직원 반환
+    }
 
-        // 부서 코드
-        DepartmentEntity department = departmentRepository.findByDepartmentId(userDTO.getDepartmentId());
-        employee.setDepartment(department);
+    public UserDataDTO createUser(UserDataDTO userDTO) {
+        // 부서 정보 가져오기
+        var department = departmentRepository.findById(userDTO.getDepartmentId())
+                .orElseThrow(() -> new IllegalArgumentException("부서를 찾을 수 없습니다."));
 
-        // 나머지 사용자 정보 설정
+        // 새로운 직원 객체 생성
+        Employee employee = new Employee();
+        employee.setEmployeeId(UUID.randomUUID().toString());
+        employee.setName(userDTO.getName());
         employee.setEmail(userDTO.getEmail());
         employee.setPhoneNumber(userDTO.getPhoneNumber());
         employee.setAddress(userDTO.getAddress());
         employee.setGender(userDTO.getGender());
-        employee.setBirthday(userDTO.getBirthday());
         employee.setState(userDTO.getState());
+        employee.setPositionName(userDTO.getPositionName());
+        employee.setPositionSalaryId(userDTO.getPositionSalaryId());
+        employee.setSalaryStepId(userDTO.getSalaryStepId());
         employee.setHireDate(userDTO.getHireDate());
         employee.setRetireDate(userDTO.getRetireDate());
-        employee.setPositionName(userDTO.getPositionName());
+        employee.setBirthday(userDTO.getBirthday());
+        employee.setCompany(department.getCompany()); // 회사는 부서에 속해 있으므로 부서에서 가져옴
+        employee.setDepartment(department); // 부서 정보 설정
+        employee.setAuthorityList(new HashSet<>()); // 권한 목록 초기화 (추후 설정 필요)
 
-        // 저장
-        Employee savedEmployee = employeeRepository.save(employee);
+        // 기본 비밀번호 설정
+        employee.setPassword("defaultPassword");
 
-        // 저장된 Employee 엔티티를 UserDataDTO로 변환하여 반환
-        return new UserDataDTO(
-                savedEmployee.getEmployeeId(),
-                savedEmployee.getName(),
-                savedEmployee.getPositionName(),
-                savedEmployee.getEmail(),
-                savedEmployee.getPhoneNumber(),
-                savedEmployee.getAddress(),
-                savedEmployee.getGender(),
-                savedEmployee.getBirthday(),
-                savedEmployee.getDepartmentId(),
-                savedEmployee.getStatus(),
-                savedEmployee.getHireDate(),
-                savedEmployee.getRetireDate()
-        );
+        // 직원 저장
+        employeeRepository.save(employee);
+
+        // 저장된 직원을 UserDataDTO로 반환
+        return UserDataDTO.fromEntity(employee);
     }
 
-    /**
-     * 사용자 삭제
-     *
-     * @param employeeId 삭제할 사용자 ID
-     * @return 삭제된 사용자 정보
-     */
-    public UserDataDTO deleteUser(String employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        employeeRepository.delete(employee);
-        return convertToUserDataDTO(employee);
-    }
 }

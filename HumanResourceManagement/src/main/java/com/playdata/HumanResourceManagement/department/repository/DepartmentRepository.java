@@ -29,4 +29,7 @@ public interface DepartmentRepository extends JpaRepository<DepartmentEntity, St
 
   // 5. 부서 ID로 부서 조회
   DepartmentEntity findByDepartmentId(String departmentId);
+
+  // 6. 회사 코드와 부서 이름으로 부서 조회
+  DepartmentEntity findByCompanyCodeAndDepartmentName(String companyCode, String departmentName);
 }

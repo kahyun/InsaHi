@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-// 엔티티 대신 각 레이어로 전달될 데이터 클래스
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

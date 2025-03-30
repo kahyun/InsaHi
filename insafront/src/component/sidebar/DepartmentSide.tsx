@@ -1,8 +1,8 @@
 import React from 'react';
-import { Department } from '@/type/Department';
+import { EmployeeDTO } from '@/type/EmployeeTableDTO';
 
 interface DepartmentSideProps {
-    departments: Department[]; // 부서 리스트
+    departments: EmployeeDTO[]; // 부서 리스트
     companyCode: string; // 회사 코드
 }
 

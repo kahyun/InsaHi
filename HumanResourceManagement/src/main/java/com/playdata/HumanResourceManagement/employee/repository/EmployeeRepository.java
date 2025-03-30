@@ -30,7 +30,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
      */
     List<Employee> findAll();
 
-  // 부서 ID로 직원 조회
     /**
      * 특정 부서에 속한 직원 목록 조회
      */
@@ -53,15 +52,49 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     @Query("SELECT e.company.startTime FROM Employee e WHERE e.employeeId = :employeeId")
     LocalTime findCompanyStartTimeByEmployeeId(@Param("employeeId") String employeeId);
 
-  List<Employee> findByAuthorityList_AuthorityName(String authorityName);
+    /**
+     * 권한 이름으로 직원 목록 조회
+     */
+    List<Employee> findByAuthorityList_AuthorityName(String authorityName);
 
-  // 회사의 권한 조회
-  @Query("SELECT DISTINCT a FROM Employee e JOIN e.authorityList a WHERE e.company.companyCode = :companyCode")
-  List<Authority> findAuthoritiesByCompanyCode(@Param("companyCode") String companyCode);
+    /**
+     * 회사의 권한 조회
+     */
+    @Query("SELECT DISTINCT a FROM Employee e JOIN e.authorityList a WHERE e.company.companyCode = :companyCode")
+    List<Authority> findAuthoritiesByCompanyCode(@Param("companyCode") String companyCode);
 
     /**
      * 부서 ID를 이용하여 직원 목록을 조회
      */
     @Query("SELECT e FROM Employee e WHERE e.department.departmentId = :departmentId")
     List<Employee> findByDepartmentId(@Param("departmentId") String departmentId);
+
+    /**
+     * 회사 코드와 직원 ID로 직원 조회
+     */
+    @Query("SELECT e FROM Employee e WHERE e.company.companyCode = :companyCode AND e.employeeId = :employeeId")
+    Optional<Employee> findByCompanyCodeAndEmployeeId(@Param("companyCode") String companyCode, @Param("employeeId") String employeeId);
+
+    /**
+     * 회사 코드로 직원 목록 조회
+     */
+    @Query("SELECT e FROM Employee e WHERE e.company.companyCode = :companyCode")
+    List<Employee> findByCompanyCode(@Param("companyCode") String companyCode);
+
+    /**
+     * 회사 코드와 부서 ID로 직원 목록 조회
+     */
+    @Query("SELECT e FROM Employee e WHERE e.company.companyCode = :companyCode AND e.department.departmentId = :departmentId")
+    List<Employee> findByCompanyCodeAndDepartmentId(@Param("companyCode") String companyCode, @Param("departmentId") String departmentId);
+
+    /**
+     * 직원 ID가 존재하는지 여부 확인
+     */
+    boolean existsByEmployeeId(String employeeId);
+
+    /**
+     * 직원 삭제 (기본 제공되는 deleteById 메서드 사용)
+     */
+    void deleteById(String employeeId);  // deleteById 메서드를 JpaRepository에서 제공
+
 }

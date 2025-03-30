@@ -47,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   public void updateEmployee(String employeeId, Long positionSalaryId) {
     //인원을 찾고
     Employee employee = employeeDAO.findByEmployeeId(employeeId);
-    employee.setPositionSalaryId(positionSalaryId);
+    employee.setPositionSalaryId(String.valueOf(positionSalaryId));
     employeeDAO.insert(employee);
   }
 

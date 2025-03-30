@@ -26,23 +26,36 @@ public class MappingDeptService {
      * @return 회사의 모든 부서와 해당 부서에 속한 직원 목록
      */
     public List<OrganizationDTO> getOrganizationChart(String companyCode) {
+        // 부서 조회
         List<DepartmentEntity> departments = departmentRepository.findByCompanyCode1(companyCode);
+        System.out.println("Found " + departments.size() + " departments for company code: " + companyCode);
 
+        // 부서에 대해 매핑
         return departments.stream()
                 .map(department -> {
-                    // 부서 ID와 이름을 매핑한 DTO 생성
-                    OrganizationDTO orgDTO = OrganizationDTO.builder()
+                    // 부서 이름과 ID 출력
+                    System.out.println("Processing Department: " + department.getDepartmentName());
+
+                    // 하위 부서 목록 처리
+                    List<OrganizationDTO> subDepartments = department.getSubDepartments().stream()
+                            .map(subDept -> OrganizationDTO.fromEntity(subDept, companyCode)) // companyCode 추가
+                            .collect(Collectors.toList());
+
+                    System.out.println("Found " + subDepartments.size() + " sub-departments for " + department.getDepartmentName());
+
+                    // 부서의 직원 목록 처리
+                    List<UserDataDTO> employees = getEmployeesInDepartment(department);
+                    System.out.println("Found " + employees.size() + " employees in department: " + department.getDepartmentName());
+
+                    // OrganizationDTO 반환
+                    return OrganizationDTO.builder()
                             .departmentId(department.getDepartmentId())
                             .departmentName(department.getDepartmentName())
                             .companyCode(department.getCompanyCode())
+                            .parentDepartmentId(department.getParentDepartmentId() != null ? department.getParentDepartmentId().getDepartmentId() : null)
+                            .subDepartments(subDepartments)  // 하위 부서 처리
+                            .employees(employees)  // 직원 데이터 추가
                             .build();
-
-                    // 해당 부서에 속한 직원 목록 조회
-                    List<UserDataDTO> employees = getEmployeesInDepartment(department);
-
-                    // 직원 목록을 포함한 조직도 DTO 반환
-                    orgDTO.setEmployees(employees);
-                    return orgDTO;
                 })
                 .collect(Collectors.toList());
     }
@@ -54,38 +67,10 @@ public class MappingDeptService {
      * @return 부서에 속한 직원 목록
      */
     private List<UserDataDTO> getEmployeesInDepartment(DepartmentEntity department) {
+        // 부서에 속한 직원들 조회
         List<Employee> employees = employeeRepository.findByDepartmentId(department.getDepartmentId());
-
-        // 직원 데이터를 UserDataDTO로 변환하여 반환
         return employees.stream()
-                .map(this::convertToUserDataDTO)
+                .map(employee -> UserDataDTO.fromEntity(employee))
                 .collect(Collectors.toList());
     }
-
-    /**
-     * 직원 엔티티를 UserDataDTO로 변환하는 메서드
-     *
-     * @param employee 직원 엔티티
-     * @return 변환된 UserDataDTO
-     */
-    private UserDataDTO convertToUserDataDTO(Employee employee) {
-        return new UserDataDTO(
-                employee.getEmployeeId(),
-                employee.getPassword(),
-                employee.getName(),
-                employee.getRole(),
-                employee.getCompanyCode(),
-                employee.getEmail(),
-                employee.getPhoneNumber(),
-                employee.getAddress(),  // 주소
-                employee.getGender(),   // 성별
-                employee.getBirthday(), // 생일
-                employee.getDepartmentId(),
-                employee.getStatus(),   // 상태 (Active, Inactive 등)
-                employee.getHireDate(),
-                employee.getRetireDate(),
-                employee.getPositionName()  // 직급명 추가
-        );
-    }
-
 }

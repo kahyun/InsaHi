@@ -23,11 +23,14 @@ public class DepartmentController {
     /**
      * 부서 생성
      *
-     * @param request 부서 생성에 필요한 데이터
+     * @param companyCode 회사 코드
+     * @param request     부서 생성에 필요한 데이터
      * @return 생성된 부서 정보
      */
     @PostMapping
-    public ResponseEntity<OrganizationDTO> createDepartment(@PathVariable String companyCode, @RequestBody OrganizationDTO request) {
+    public ResponseEntity<OrganizationDTO> createDepartment(
+            @PathVariable String companyCode,
+            @RequestBody OrganizationDTO request) {
         OrganizationDTO response = createDeptService.createDepartment(companyCode, request);
         return ResponseEntity.ok(response);
     }
@@ -35,12 +38,14 @@ public class DepartmentController {
     /**
      * 부서 삭제
      *
-     * @param companyCode 회사 코드
+     * @param companyCode  회사 코드
      * @param departmentId 삭제할 부서 ID
      * @return 삭제된 부서 정보
      */
     @DeleteMapping("/{departmentId}")
-    public ResponseEntity<OrganizationDTO> deleteDepartment(@PathVariable String companyCode, @PathVariable String departmentId) {
+    public ResponseEntity<OrganizationDTO> deleteDepartment(
+            @PathVariable String companyCode,
+            @PathVariable String departmentId) {
         OrganizationDTO response = createDeptService.deleteDepartment(companyCode, departmentId);
         return ResponseEntity.ok(response);
     }
@@ -54,29 +59,36 @@ public class DepartmentController {
     @GetMapping("/list")
     public ResponseEntity<List<OrganizationDTO>> getOrganizationChart(@PathVariable String companyCode) {
         List<OrganizationDTO> organizationChart = mappingDeptService.getOrganizationChart(companyCode);
+
+        // 조직도에 부서별 직원 목록 추가
+        organizationChart.forEach(department -> {
+            List<UserDataDTO> employees = employeeDataService.getEmployeesByDepartment(companyCode, department.getDepartmentId());
+            department.setEmployees(employees);  // 부서에 직원 목록 설정
+        });
+
         return ResponseEntity.ok(organizationChart);
     }
 
     /**
-     * 회사 코드+부서 정보 따른 직원 목록 조회
+     * 부서별 직원 목록 조회
      *
-     * @param companyCode 회사 코드
-     * @param departmentId 부서 코드
-     * @return 직원 리스트
+     * @param companyCode  회사 코드
+     * @param departmentId 부서 ID
+     * @return 해당 부서의 직원 리스트
      */
     @GetMapping("/{departmentId}/list")
-    public List<UserDataDTO> getEmployee(
+    public ResponseEntity<List<UserDataDTO>> getEmployeesByDepartment(
             @PathVariable String companyCode,
-            @PathVariable String departmentId
-    ) {
-        return employeeDataService.getEmployeesByDepartment(companyCode, departmentId);
+            @PathVariable String departmentId) {
+        List<UserDataDTO> employees = employeeDataService.getEmployeesByDepartment(companyCode, departmentId);
+        return ResponseEntity.ok(employees);
     }
 
     /**
      * 전체 직원 목록 조회
      *
      * @param companyCode 회사 코드
-     * @return 전체 직원 리스트
+     * @return 회사의 모든 직원 리스트
      */
     @GetMapping("/employees")
     public ResponseEntity<List<UserDataDTO>> getAllEmployees(@PathVariable String companyCode) {
