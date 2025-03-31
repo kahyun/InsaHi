@@ -1,10 +1,16 @@
 package com.playdata.Chat.service;
 
+import com.playdata.Chat.dto.ChatRoomResponse;
+import com.playdata.Chat.entity.ChatMessage;
 import com.playdata.Chat.entity.ChatRoom;
+import com.playdata.Chat.repository.ChatMessageRepository;
 import com.playdata.Chat.repository.ChatRoomRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class ChatRoomService {
 
   private final ChatRoomRepository chatRoomRepository;
+  private final ChatMessageRepository chatMessageRepository;
 
   //채팅방 생성 ( 원본 내용은 보존 )
   public ChatRoom createRoom(String roomName, List<String> name, String creatorName) {
@@ -25,8 +32,28 @@ public class ChatRoomService {
     return savedRoom;
   }
 
-  public List<ChatRoom> getRoomsForMember(String name) {
-    return chatRoomRepository.findByNameContaining(name);
+  public List<ChatRoomResponse> getRoomsForMember(String name) {
+    List<ChatRoom> chatrooms = chatRoomRepository.findByNameContaining(name);
+    List<ChatRoomResponse> responses = new ArrayList<>();
+
+    for (ChatRoom room : chatrooms) {
+      List<ChatMessage> messages = chatMessageRepository.findByRoomId(room.getRoomId());
+
+      Integer count = chatMessageRepository.findByRoomIdAndReadByNotContaining(room.getRoomId(), name);
+      int unreadCount = count != null ? count : 0;
+
+
+      ChatRoomResponse response = new ChatRoomResponse(
+              room.getRoomId(),
+              room.getRoomName(),
+              room.getCreatedAt(),
+              messages.stream().map(ChatMessage::getRoomId).collect(Collectors.toList()),
+              unreadCount
+      );
+
+      responses.add(response);
+    }
+    return responses;
   }
 
   public ChatRoom addMember(String roomId, String newMemberName) {

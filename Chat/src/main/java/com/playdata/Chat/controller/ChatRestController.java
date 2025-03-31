@@ -5,6 +5,7 @@ import com.playdata.Chat.entity.ChatMessage;
 import com.playdata.Chat.service.ChatService;
 import com.playdata.Chat.service.FileStorageService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,7 @@ public class ChatRestController {
     }
 //        // 2) DB 저장 (chatId는 MongoDB가 자동생성)
     ChatMessage chatMessage = chatService.saveMessage(
-        new ChatMessage(null, name, roomId, content, imageUrl, LocalDateTime.now(), false, false));
+        new ChatMessage(null, name, roomId, content, imageUrl, LocalDateTime.now(), false, new ArrayList<>(), false));
 
     // 3) DB에 저장된 진짜 chatId를 가진 메시지를 WebSocket으로 broadcast
     simpMessagingTemplate.convertAndSend("/topic/messages/" + roomId, chatMessage);

@@ -29,9 +29,9 @@ public class ChatService {
 
   public List<String> findDistinctRoomNames() {
     return mongoTemplate.query(ChatMessage.class)
-        .distinct("roomName")
-        .as(String.class)
-        .all();
+            .distinct("roomName")
+            .as(String.class)
+            .all();
   }
 
   public ChatMessage deleteMessage(String chatId) {
@@ -45,4 +45,14 @@ public class ChatService {
     }
   }
 
+  public void markMessageAsRead(String roomId, String name) {
+    List<ChatMessage> messages = chatMessageRepository.findByRoomId(roomId);
+    for (ChatMessage message : messages) {
+      if (!message.getReadBy().contains(name)) {
+        message.getReadBy().add(name);
+        chatMessageRepository.save(message);
+      }
+    }
+  }
 }
+
