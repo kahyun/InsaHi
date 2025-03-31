@@ -15,4 +15,5 @@ public class ChatRoomResponse {
     private String roomName;
     private LocalDateTime createdAt;
     private List<String> chatId;
+    private int unreadCount;
 }

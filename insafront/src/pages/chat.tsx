@@ -24,12 +24,18 @@ export default function Chat() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const router = useRouter();
   const [reloadRooms, setReloadRooms] = useState(false);
+  const [participantCount, setParticipantCount] = useState(0);
+  const handleSelectRoom = (roomId: string, name: string[]) => {
+    setSelectedRoomId(roomId);
+    setParticipantCount(name.length);
+  };
+
   const [roomInfoModalVisible, setRoomInfoModalVisible] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [selectedRoomInfo, setSelectedRoomInfo] = useState<{
     roomId: string;
     roomName: string;
-    members: string[];
+    name: string[];
     createdAt: string;
     creatorName: string;
   } | null>(null);
@@ -37,7 +43,7 @@ export default function Chat() {
   const handleViewRoomInfo = (room: {
     roomId: string;
     roomName: string;
-    members: string[];
+    name: string[];
     createdAt: string;
     creatorName: string;
   }) => {
@@ -136,6 +142,7 @@ export default function Chat() {
             }}
             selectedRoomId={selectedRoomId}
         />
+
         <RoomInfoModal
             visible={roomInfoModalVisible}
             onClose={() => setRoomInfoModalVisible(false)}
@@ -143,7 +150,8 @@ export default function Chat() {
         />
 
         <ChatArea currentUserName={currentUserName} currentRoomId={currentRoomId}
-                  stompClient={stompClientRef.current}/>
+                  stompClient={stompClientRef.current}
+                  participantCount={selectedRoomInfo?.name?.length || 1}/>
         <RoomCreateModal
             visible={showCreateModal}
             onClose={() => setShowCreateModal(false)}
