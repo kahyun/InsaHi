@@ -6,4 +6,5 @@ interface employeeInfoDTO {
   phoneNumber: string;
   departmentId: string;
   teamId: string;
+  profileImage?: string;
 }

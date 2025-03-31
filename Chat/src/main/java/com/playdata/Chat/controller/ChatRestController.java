@@ -36,12 +36,12 @@ public class ChatRestController {
 
   //  특정 채팅방의 메시지 조회 (REST API)
   @GetMapping("/messages/{roomId}")
-  public List<ChatMessage> getMessages(@PathVariable String roomId) {
+  public List<ChatMessage> getMessages(@PathVariable("roomId") String roomId) {
     return chatService.getMessagesByRoom(roomId);
   }
 
   @DeleteMapping("/messages/{chatId}")
-  public ResponseEntity<?> deleteMessage(@PathVariable String chatId) {
+  public ResponseEntity<?> deleteMessage(@PathVariable("chatId") String chatId) {
     try {
       ChatMessage updatedMessage = chatService.deleteMessage(chatId);
 

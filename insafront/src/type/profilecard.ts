@@ -3,6 +3,7 @@ export interface profileCardDTO {
   name: string;
   phoneNumber: string;
   departmentId: string;
-  positionSalaryId: string;
+  positionSalaryId: number;
+  profileImage: string | null;
 
 }

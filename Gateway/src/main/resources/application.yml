@@ -42,6 +42,10 @@ spring:
           filters:
             #            - JwtAuthorizationFilter
             name: JwtAuthorizationFilter
+        - id: static-files
+          uri: file:///C:/fullstack7/work/final-project/InsaHi/HumanResourceManagement/uploads/profile/
+          predicates:
+            - Path=/uploads/profile/**
 
 
         - id: HumanResourceManagement

@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +33,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
@@ -143,6 +146,12 @@ public class EmployeeController {
       @PathVariable("employeeId") String employeeId) {
     ProfileCardDTO response = employeeService.getProfileCard(employeeId);
     System.out.println("result result result : " + response);
+    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
+    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
+    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
+    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
+    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
+
     return ResponseEntity.ok(response);
 
   }
@@ -152,18 +161,37 @@ public class EmployeeController {
   public ResponseEntity<EmployeeResponseDTO> getEmployeeInfo(
       @PathVariable("employeeId") String employeeId) {
     EmployeeResponseDTO response = employeeService.getEmployeeInfo(employeeId);
+    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
+    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
+    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
+    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
 
     return ResponseEntity.ok(response);
   }
 
   //개인정보 수정페이지 업데이트
-  @PutMapping("/{employeeId}/update")
+  @PutMapping(value = "/{employeeId}/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<EmployeeResponseDTO> updateEmployeeInfo(
       @PathVariable("employeeId") String employeeId,
-      @RequestBody EmployeeUpdateDTO employeeUpdateDTO) {
+      @RequestPart("email") String email,
+      @RequestPart("phoneNumber") String phoneNumber,
+      @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
 
-    EmployeeResponseDTO response = employeeService.updateEmployeeInfo(employeeId,
-        employeeUpdateDTO);
+    System.out.println("🔥🔥🔥 요청 들어옴 @PutMapping /employee/{employeeId}/update");
+    System.out.println("email: " + email);
+    System.out.println("phone: " + phoneNumber);
+    System.out.println("image null?: " + (profileImage == null));
+
+    EmployeeUpdateDTO updateDTO = new EmployeeUpdateDTO(email, phoneNumber);
+    EmployeeResponseDTO response = employeeService.updateEmployeeInfo(employeeId, updateDTO,
+        profileImage);
+    System.out.println("fffffffuuuuuucccccckkkkkk update update hihihihihi" + response);
+
+    System.out.println("개인정보 수정페이지 수정 수정 수정 수정" + response);
+    System.out.println("개인정보 수정페이지 수정 수정 수정 수정" + response);
+    System.out.println("개인정보 수정페이지 수정 수정 수정 수정" + response);
+    System.out.println("개인정보 수정페이지 수정 수정 수정 수정" + response);
+
     return ResponseEntity.ok(response);
   }
 
@@ -174,8 +202,6 @@ public class EmployeeController {
     EmployeeResponseDTO response =
         employeeService.updatePassword(
             employeeId, updatePasswordDTO);
-    System.out.println("currentPassword: " + updatePasswordDTO.getCurrentPassword());
-    System.out.println("newPassword: " + updatePasswordDTO.getNewPassword());
 
     return ResponseEntity.ok(response);
   }
@@ -206,7 +232,10 @@ public class EmployeeController {
     Employee employee = employeeService.employeeInsert(employeeRequestDTO);
     employeeService.addUserRoles(employee);
 
-    return ResponseEntity.ok(Map.of("message", "직원등록 성공!"));
+    System.out.println(
+        "employeeDTO controller controller controller !~~~@!~@~" + employeeRequestDTO);
+
+    return ResponseEntity.ok(Map.of("message", "직원등록 성공! spring ~ controller ~"));
   }
 
   @PostMapping("/grant-admin")

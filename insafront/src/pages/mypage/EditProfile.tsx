@@ -12,6 +12,8 @@ function EditProfile() {
 
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -44,8 +46,19 @@ function EditProfile() {
     e.preventDefault();
     if (!employee) return;
 
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("phoneNumber", phoneNumber);
+    if (profileImage) {
+      formData.append("profileImage", profileImage); // 파일도 함께 전송
+    }
+    for (let [key, value] of formData.entries()) {
+      console.log("🧪 formData key/value:", key, value);
+    }
+
+
     try {
-      const result = await EmployeeInfoUpdateAction(employee.employeeId, email, phoneNumber);
+      const result = await EmployeeInfoUpdateAction(employee.employeeId, formData);
       if (result) {
         alert("정보가 업데이트되었습니다.");
       } else {
@@ -57,11 +70,32 @@ function EditProfile() {
       alert("업데이트 중 오류가 발생했습니다.");
     }
   };
+  //image 변경
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfileImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
 
   return (
       <div className={styles.container}>
         <h2 className={styles.title}>개인정보 수정</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
+
+          {/* 프로필 사진 업로드 */}
+          <div className={styles.formGroup}>
+            <label>프로필 사진</label>
+            {previewImage ? (
+                <img src={previewImage} alt="미리보기" className={styles.profileImage}/>
+            ) : employee?.profileImage ? (
+                <img src={employee.profileImage} alt="현재 이미지" className={styles.profileImage}/>
+            ) : (
+                <div>사진 없음</div>
+            )}
+            <input type="file" accept="image/*" onChange={handleImageChange}/>
+          </div>
 
           {/* 이름 */}
           <div className={styles.formGroup}>

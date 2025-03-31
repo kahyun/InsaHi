@@ -114,13 +114,13 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
 
             <ul className={styles.topmenu}>
               <li>
-                <Link href="#" className={styles.topmenulink}
+                <Link href="/attendance/attendancelog" className={styles.topmenulink}
                       onClick={() => setActiveSidebar(activeSidebar === "sidebar1" ? null : "sidebar1")}>
                   근태/급여
                 </Link>
               </li>
               <li className={styles.topmenuapproval}>
-                <Link href="#" className={styles.topmenulink}
+                <Link href="/approval/submit" className={styles.topmenulink}
                       onClick={() => setActiveSidebar(activeSidebar === "sidebar2" ? null : "sidebar2")}>
                   전자결재
                 </Link>
