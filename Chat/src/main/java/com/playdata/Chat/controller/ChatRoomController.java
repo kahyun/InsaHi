@@ -37,7 +37,7 @@ public class ChatRoomController {
 
   @GetMapping("/member/{name}")
 //  public List<ChatRoomResponse> getRoomsForMember(@PathVariable String name) {
-  public List<ChatRoom> getRoomsForMember(@PathVariable("name") String name) {
+  public List<ChatRoomResponse> getRoomsForMember(@PathVariable("name") String name) {
     return chatRoomService.getRoomsForMember(name);
   }
 
