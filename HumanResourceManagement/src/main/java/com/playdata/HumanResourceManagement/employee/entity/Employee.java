@@ -10,14 +10,21 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 @Entity
 @Data
 @Table(name = "employee")
+@ToString(onlyExplicitlyIncluded = true)
 public class Employee {
 
     @Id
@@ -40,8 +47,19 @@ public class Employee {
     @Column(nullable = true)
     private String password;
 
-    @Column(name = "hire_date")
-    private LocalDate hireDate;
+  private String name; //2 이름
+  private String email; //3 이메일
+  private String phoneNumber; //4 전화번호
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = true)
+  @JoinColumn(name = "department_id", nullable = true)  // 외래키 컬럼만 지정
+  @JsonBackReference  // 순환 참조 방지
+  private DepartmentEntity department; // 부서
+  private String state; // 상태 (Active, Inactive 등)
+  private Long positionSalaryId; //직급호봉
+  private Date hireDate;
+  private LocalDate retireDate;
+
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "department_id", nullable = true)
@@ -58,8 +76,9 @@ public class Employee {
     @JsonBackReference
     private Company company;
 
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private FileEntity profileImage;
+  @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//  @JoinColumn(name = "profile_image", referencedColumnName = "profile_image", nullable = true)
+  private FileEntity profileImage;  // 프로필 이미지
 
     @ManyToMany
     @JoinTable(

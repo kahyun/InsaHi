@@ -41,11 +41,18 @@ const DocumentsPage = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const employeeId = useLocalStorage('employeeId', 'defaultId');
 
-  // SSE 알림 수신
-  useSSE(employeeId, (msg) => {
-    setToastMessage(msg);
-    refetch();
-  });
+  // SSE 알림 수신 - useSSE() 제거
+  useEffect(() => {
+    const handleSseNotify = () => {
+      refetch(); // 문서 리스트 다시 가져오기
+    };
+
+    window.addEventListener('sse-notify', handleSseNotify);
+
+    return () => {
+      window.removeEventListener('sse-notify', handleSseNotify);
+    };
+  }, []);
 
   const {
     data,

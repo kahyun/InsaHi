@@ -5,6 +5,7 @@ import com.playdata.Chat.entity.ChatMessage;
 import com.playdata.Chat.service.ChatService;
 import com.playdata.Chat.service.FileStorageService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +37,12 @@ public class ChatRestController {
 
   //  특정 채팅방의 메시지 조회 (REST API)
   @GetMapping("/messages/{roomId}")
-  public List<ChatMessage> getMessages(@PathVariable String roomId) {
+  public List<ChatMessage> getMessages(@PathVariable("roomId") String roomId) {
     return chatService.getMessagesByRoom(roomId);
   }
 
   @DeleteMapping("/messages/{chatId}")
-  public ResponseEntity<?> deleteMessage(@PathVariable String chatId) {
+  public ResponseEntity<?> deleteMessage(@PathVariable("chatId") String chatId) {
     try {
       ChatMessage updatedMessage = chatService.deleteMessage(chatId);
 
@@ -74,7 +75,7 @@ public class ChatRestController {
     }
 //        // 2) DB 저장 (chatId는 MongoDB가 자동생성)
     ChatMessage chatMessage = chatService.saveMessage(
-        new ChatMessage(null, name, roomId, content, imageUrl, LocalDateTime.now(), false, false));
+        new ChatMessage(null, name, roomId, content, imageUrl, LocalDateTime.now(), false, new ArrayList<>(), false));
 
     // 3) DB에 저장된 진짜 chatId를 가진 메시지를 WebSocket으로 broadcast
     simpMessagingTemplate.convertAndSend("/topic/messages/" + roomId, chatMessage);

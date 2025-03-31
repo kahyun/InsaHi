@@ -13,6 +13,7 @@ import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import java.time.LocalTime;
 import java.util.List;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface EmployeeService {
 
@@ -45,7 +46,8 @@ public interface EmployeeService {
 
   EmployeeResponseDTO getEmployeeInfo(String employeeId);
 
-  EmployeeResponseDTO updateEmployeeInfo(String employeeId, EmployeeUpdateDTO employeeUpdateDTO);
+  EmployeeResponseDTO updateEmployeeInfo(String employeeId,
+      EmployeeUpdateDTO updateDTO, MultipartFile profileImage);
 
   void addUserRoles(Employee employee);
 

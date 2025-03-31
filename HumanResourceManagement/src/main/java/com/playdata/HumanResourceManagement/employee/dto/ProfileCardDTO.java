@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileCardDTO {
-    private String employeeId;
-    private String name;
-    private String phoneNumber;
-    private String departmentId;
-    private String positionSalaryId;
+
+  private String employeeId;
+  private String name;
+  private String phoneNumber;
+  private String departmentId;
+  private String positionSalaryId;
+  private String profileImage;
 
 
 }

@@ -7,21 +7,22 @@ import RoomInfoModal from "./RoomInfoModal";
 interface ChatRoom {
   roomId: string;
   roomName: string;
-  members: string[];
+  name: string[];
   createdAt: string;
   creatorName: string;
+  unreadCount?:number ; //안읽은 메시지 수
 }
 
 interface ChatRoomListProps {
   currentUserName: string | null;
   stompClient: any;
-  onSelectRoom: (roomId: string) => void;
+  onSelectRoom: (roomId: string, name: string[]) => void;
   onCreateRoom: () => void;
   reloadRooms: boolean;
   onViewRoomInfo: (room: {
     roomId: string;
     roomName: string;
-    members: string[];
+    name: string[];
     createdAt: string;
     creatorName: string;
   }) => void;
@@ -59,6 +60,16 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
     fetchRooms();
   }, [currentUserName, reloadRooms]);
 
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (contextMenu.visible) {
+        setContextMenu({ ...contextMenu, visible: false });
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [contextMenu]);
+
   function fetchRooms() {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -83,8 +94,8 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
     .catch((err) => console.error("방 목록 오류", err));
   }
 
-  function handleRoomClick(roomId: string) {
-    onSelectRoom(roomId);
+  function handleRoomClick(roomId: string, name: string[]) {
+    onSelectRoom(roomId,name);
   }
 
   function handleContextMenu(e: React.MouseEvent, room: ChatRoom) {
@@ -102,7 +113,10 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
     })
     .then((res) => res.json())
     .then((data) => {
-      setSelectedRoomInfo(data); // 모달에 보여줄 데이터 저장
+      setSelectedRoomInfo({
+        ...data,
+        name: data.name ?? [], // ✅ members가 없으면 빈 배열로 대체
+      });
       setRoomInfoModalVisible(true); // 모달 열기
     })
     .catch((err) => {
@@ -134,7 +148,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
     left: "0",
     bottom: "0",
     overflowY: "scroll",
-    color: "white", // 🔥 글자 색상을 흰색으로 변경
+    color: "black", // 🔥 글자 색상을 흰색으로 변경
   } as const;
 
   const headerStyle = {
@@ -176,29 +190,70 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
             {rooms.map((room) => (
                 <div
                     key={room.roomId}
-                    onClick={() => handleRoomClick(room.roomId)}
+                    onClick={() => handleRoomClick(room.roomId,room.name)}
                     onContextMenu={(e) => {
                       e.preventDefault(); // 기본 우클릭 메뉴 막기
                       handleContextMenu(e, room);
                     }}
                     style={{
                       padding: "12px",
-                      backgroundColor: room.roomId === selectedRoomId ? "#d6e0f0" : "white",
+                      backgroundColor: room.roomId === selectedRoomId ? "white" : "#d6e0f0",
                       borderBottom: "1px solid #eee",
                       cursor: "pointer",
+                      position: "relative"
                     }}
                 >
-                  {room.roomName}
+                  <span>{room.roomName}</span>
+                  {(room.unreadCount ?? 0)> 0 && (
+                      <span style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        fontSize: "10px",
+                        borderRadius: "50%",
+                        padding: "2px 6px",
+                        marginLeft: "8px"
+                      }}>
+                             New
+                        </span>
+                  )}
                 </div>
             ))}
           </div>
         </div>
-        {roomInfoModalVisible && selectedRoomInfo && (
-            <RoomInfoModal
-                visible={roomInfoModalVisible}
-                onClose={() => setRoomInfoModalVisible(false)}
-                room={selectedRoomInfo}
-            />
+        {contextMenu.visible && contextMenu.room && (
+            <div
+                style={{
+                  position: "absolute",
+                  top: contextMenu.y,
+                  left: contextMenu.x,
+                  backgroundColor: "white",
+                  border: "1px solid #ccc",
+                  zIndex: 1000,
+                  padding: "8px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                }}
+            >
+              <div
+                  style={{ padding: "6px", cursor: "pointer" }}
+                  onClick={() => {
+                    const room = contextMenu.room!;
+                    // 1. 방 정보 보기 처리
+                    onViewRoomInfo(room);
+                    setContextMenu({ ...contextMenu, visible: false });
+                  }}
+              >
+                방 정보 보기
+              </div>
+              <div
+                  style={{ padding: "6px", cursor: "pointer", color: "red" }}
+                  onClick={() => {
+                    handleLeaveRoom(); // 2. 방 나가기 처리
+                    setContextMenu({ ...contextMenu, visible: false });
+                  }}
+              >
+                방 나가기
+              </div>
+            </div>
         )}
 
       </>

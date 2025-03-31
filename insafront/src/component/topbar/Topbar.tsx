@@ -6,7 +6,6 @@ import styles from "@/styles/Topbar.module.css";
 import EmployeeInfoAction from "@/api/mypage/employeeinfoaction";
 import useSSE from "@/component/approval/useSSE";
 import Toast from "@/component/approval/Toast";
-import {flushSync} from "react-dom";
 
 type TopBarProps = {
   activeSidebar: string | null;
@@ -44,13 +43,18 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
       typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
 
   // SSE 알림 수신
-  useSSE(employeeId, (message) => {
-    flushSync(() => {
-      setHasNotification(true);
-    });
+  useSSE(employeeId, async (message) => {
+    console.log("📩 메시지 수신:", message);
     setToastMessage(message);
-  });
 
+    // 결재할 문서 존재 여부 API 호출
+    const res = await fetch(`http://127.0.0.1:1006/approval/has-pending/${employeeId}`);
+    const {hasPending} = await res.json();
+
+    setHasNotification(hasPending); // 🔴 또는 ❌ 상태 갱신
+    // 모든 페이지에서 이 이벤트로 반응할 수 있음
+    window.dispatchEvent(new Event("sse-notify"));
+  });
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("employeeId");
@@ -89,6 +93,18 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
       fetchData();
     }
   }, [employeeIdToken]);
+  useEffect(() => {
+    const checkNotification = async () => {
+      if (!employeeId) return;
+
+      const res = await fetch(`http://127.0.0.1:1006/approval/has-pending/${employeeId}`);
+      const {hasPending} = await res.json();
+
+      setHasNotification(hasPending);
+    };
+
+    checkNotification();
+  }, [employeeId]);
 
   return (
       <div className={styles.topcontainer}>
@@ -98,13 +114,13 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
 
             <ul className={styles.topmenu}>
               <li>
-                <Link href="#" className={styles.topmenulink}
+                <Link href="/attendance/attendancelog" className={styles.topmenulink}
                       onClick={() => setActiveSidebar(activeSidebar === "sidebar1" ? null : "sidebar1")}>
                   근태/급여
                 </Link>
               </li>
               <li className={styles.topmenuapproval}>
-                <Link href="#" className={styles.topmenulink}
+                <Link href="/approval/submit" className={styles.topmenulink}
                       onClick={() => setActiveSidebar(activeSidebar === "sidebar2" ? null : "sidebar2")}>
                   전자결재
                 </Link>
