@@ -1,5 +1,5 @@
 //개인정보수정페이지
-export default async function EmployeeInfoUpdateAction(employeeId: string, email: string, phoneNumber: string): Promise<employeeInfoDTO | null> {
+export default async function EmployeeInfoUpdateAction(employeeId: string, formData: FormData): Promise<employeeInfoDTO | null> {
   const url = `http://127.0.0.1:1006/employee/${employeeId}/update`;
   try {
 
@@ -12,13 +12,14 @@ export default async function EmployeeInfoUpdateAction(employeeId: string, email
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           },
-          body: JSON.stringify({
-            email,
-            phoneNumber,
-          }),
+          body: formData,
+          // body: JSON.stringify({
+          //   email,
+          //   phoneNumber,
+          // }),
         });
 
     if (!response.ok) {

@@ -15,18 +15,26 @@ import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
+import com.playdata.HumanResourceManagement.employee.repository.FileEntityRepository;
+import com.playdata.HumanResourceManagement.publicEntity.FileEntity;
+import jakarta.persistence.EntityNotFoundException;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Slf4j
@@ -34,12 +42,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
+  @Value("${file.upload-dir}")
+  private String uploadDir;
+
   private final EmployeeDAO employeeDAO;
   private final AuthorityDAO authorityDAO;
   private final ModelMapper modelMapper;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
   private final PasswordEncoder passwordEncoder;
   private final EmployeeRepository employeeRepository;
+  private final FileEntityRepository fileEntityRepository;
 
 
   @Override
@@ -147,9 +159,33 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public ProfileCardDTO getProfileCard(String employeeId) {
     Employee employee = employeeDAO.findByEmployeeId(employeeId);
-    ProfileCardDTO ProfileCardDTO = modelMapper.map(employee, ProfileCardDTO.class);
+    if (employee == null) {
+      throw new EntityNotFoundException("해당 직원이 존재하지 않습니다: " + employeeId);
+    }
 
-    return ProfileCardDTO;
+    ProfileCardDTO dto = new ProfileCardDTO();
+
+    dto.setEmployeeId(employee.getEmployeeId());
+    dto.setName(employee.getName());
+    dto.setPhoneNumber(employee.getPhoneNumber());
+    dto.setDepartmentId(employee.getDepartmentId()); // 메서드에서 departmentId 반환
+    dto.setPositionSalaryId(employee.getPositionSalaryId() != null
+        ? String.valueOf(employee.getPositionSalaryId())
+        : null);
+
+    if (employee.getProfileImage() != null) {
+      String imageUrl =
+          "http://127.0.0.1:1010/uploads/profile/" + employee.getProfileImage().getStoreFilename();
+      dto.setProfileImage(imageUrl);
+    }
+
+    System.out.println("ser ser ser ser service" + employee.getProfileImage());
+    System.out.println("ser ser ser ser service" + employee.getProfileImage());
+    System.out.println("ser ser ser ser service" + employee.getProfileImage());
+    System.out.println("ser ser ser ser service" + employee.getProfileImage());
+    System.out.println("ser ser ser ser service" + employee.getProfileImage());
+
+    return dto;
   }
 
   //개인정보수정페이지
@@ -163,9 +199,42 @@ public class EmployeeServiceImpl implements EmployeeService {
   //개인정보 변경
   @Override
   public EmployeeResponseDTO updateEmployeeInfo(String employeeId,
-      EmployeeUpdateDTO employeeUpdateDTO) {
-    Employee employee = employeeDAO.findById(employeeId);
-    modelMapper.map(employeeUpdateDTO, employee);
+      EmployeeUpdateDTO updateDTO, MultipartFile profileImage) {
+    Employee employee = employeeDAO.findByEmployeeId(employeeId);
+    modelMapper.map(updateDTO, employee);
+
+    // 이미지 있을 경우 저장 처리
+    if (profileImage != null && !profileImage.isEmpty()) {
+      String storedFilename = UUID.randomUUID() + "_" + profileImage.getOriginalFilename();
+      String fullPath = uploadDir + storedFilename;
+
+      try {
+        File targetFile = new File(fullPath);
+        if (!targetFile.getParentFile().exists()) {
+          targetFile.getParentFile().mkdirs();
+        }
+
+        profileImage.transferTo(targetFile);
+
+        FileEntity fileEntity = employee.getProfileImage();
+
+        if (fileEntity == null) {
+          fileEntity = new FileEntity();
+          fileEntity.setEmployee(employee);
+        }
+
+        fileEntity.setOriginalFileName(profileImage.getOriginalFilename());
+        fileEntity.setStoreFilename(storedFilename);
+        fileEntity.setFilePath("/uploads/profile/");
+        fileEntity.setCategory("employee");
+
+        employee.setProfileImage(fileEntity); // 새로 할당 or 갱신된 상태
+
+      } catch (IOException e) {
+        throw new RuntimeException("파일 저장 실패", e);
+      }
+    }
+
     employeeDAO.update(employee);
     EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
 

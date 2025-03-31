@@ -300,61 +300,80 @@ const Setting: React.FC = () => {
         {/* 하단 영역 */}
         <div className={styles.bottomSection}>
           <h2 className={styles.title}>직급별 호봉 추가</h2>
+          <div className={styles.bottomSection}>
+            <h2 className={styles.title}>직급별 호봉 추가</h2>
 
-          <div className={styles.inlineForm}>
-            <label>직급명</label>
-            <select
-                name="positionId"
-                value={newPositionSalaryStep.positionId}
-                onChange={handlePositionSalaryStepChange}
-            >
-              <option value="">직급 선택</option>
-              {positions.map((position) => (
-                  <option key={position.positionId} value={position.positionId}>
-                    {position.positionName}
-                  </option>
-              ))}
-            </select>
+            {/* 첫 번째 줄 */}
+            <div className={styles.row}>
+              <div className={styles.inputGroup}>
+                <label>직급명</label>
+                <select
+                    name="positionId"
+                    value={newPositionSalaryStep.positionId}
+                    onChange={handlePositionSalaryStepChange}
+                >
+                  <option value="">직급 선택</option>
+                  {positions.map((position) => (
+                      <option key={position.positionId} value={position.positionId}>
+                        {position.positionName}
+                      </option>
+                  ))}
+                </select>
+              </div>
 
-            <label>호봉 단계</label>
-            <input
-                type="number"
-                name="salaryStepId"
-                value={newPositionSalaryStep.salaryStepId}
-                onChange={handlePositionSalaryStepChange}
-            />
+              <div className={styles.inputGroup}>
+                <label>호봉 단계</label>
+                <input
+                    type="number"
+                    name="salaryStepId"
+                    value={newPositionSalaryStep.salaryStepId}
+                    onChange={handlePositionSalaryStepChange}
+                />
+              </div>
 
-            <label>호봉별 기본급</label>
-            <input
-                type="number"
-                name="baseSalary"
-                value={newPositionSalaryStep.baseSalary}
-                onChange={handlePositionSalaryStepChange}
-            />
+              <div className={styles.inputGroup}>
+                <label>호봉별 기본급</label>
+                <input
+                    type="number"
+                    name="baseSalary"
+                    value={newPositionSalaryStep.baseSalary}
+                    onChange={handlePositionSalaryStepChange}
+                />
+              </div>
+            </div>
 
-            <label>직급 수당</label>
-            <input
-                type="number"
-                name="positionAllowance"
-                value={newPositionSalaryStep.positionAllowance}
-                onChange={handlePositionSalaryStepChange}
-            />
+            {/* 두 번째 줄 */}
+            <div className={styles.row}>
+              <div className={styles.inputGroup}>
+                <label>직급 수당</label>
+                <input
+                    type="number"
+                    name="positionAllowance"
+                    value={newPositionSalaryStep.positionAllowance}
+                    onChange={handlePositionSalaryStepChange}
+                />
+              </div>
 
-            <label>연장 수당</label>
-            <input
-                type="number"
-                name="overtimeAllowance"
-                value={newPositionSalaryStep.overtimeAllowance}
-                onChange={handlePositionSalaryStepChange}
-            />
+              <div className={styles.inputGroup}>
+                <label>연장 수당</label>
+                <input
+                    type="number"
+                    name="overtimeAllowance"
+                    value={newPositionSalaryStep.overtimeAllowance}
+                    onChange={handlePositionSalaryStepChange}
+                />
+              </div>
 
-            <label>기본 연차</label>
-            <input
-                type="number"
-                name="baseAnnualLeave"
-                value={newPositionSalaryStep.baseAnnualLeave}
-                onChange={handlePositionSalaryStepChange}
-            />
+              <div className={styles.inputGroup}>
+                <label>기본 연차</label>
+                <input
+                    type="number"
+                    name="baseAnnualLeave"
+                    value={newPositionSalaryStep.baseAnnualLeave}
+                    onChange={handlePositionSalaryStepChange}
+                />
+              </div>
+            </div>
 
             <button onClick={handleSubmitPositionSalaryStep} className={styles.buttonInline}>
               호봉 추가

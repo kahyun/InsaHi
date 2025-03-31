@@ -56,9 +56,13 @@ public class AnnualLeaveController {
   @GetMapping("/getemployeeleavel/{employeeId}/{status}")
   public ResponseEntity<List<AnnualLeaveRequestDTO>> getLeaveUsageByEmployeeId(
       @PathVariable("employeeId") String employeeId, @PathVariable("status") String status) {
+    log.info("employeeId::{}", employeeId);
+    log.info("status::{}", status);
     try {
       List<AnnualLeaveRequestDTO> usageList = annualLeaveService.findAllByEmployeeIdAndLeaveApprovalStatus(
           employeeId, status);
+      log.info("usageList:size:{}//usageList:get(0).getAnnualLeaveUsageId:{}", usageList.size(),
+          usageList.get(0).getAnnualLeaveUsageId());
       return ResponseEntity.ok(usageList);
     } catch (Exception e) {
       return ResponseEntity.status(500).body(null);

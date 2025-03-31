@@ -8,12 +8,20 @@ const ProfileCard = ({
                        name,
                        phoneNumber,
                        departmentId,
-                       positionSalaryId
+                       positionSalaryId,
+                       profileImage
                      }: profileCardDTO) => {
+  console.log("pro pro pro img img img img img", profileImage)
   return (
       <div className={styles.profileWrapper}>
         <div className={styles.profileCard}>
-          <div className={styles.avatar}>사진 없음</div>
+          <div className={styles.avatar}>
+            {profileImage ? (
+                <img src={profileImage} alt="프로필 사진" className={styles.avatarImage}/>
+            ) : (
+                "사진 없음"
+            )}
+          </div>
           <div className={styles.profileTextBlock}>
             <h2 className={styles.profileName}>{name}</h2>
             <p><strong>사번</strong> : {employeeId}</p>

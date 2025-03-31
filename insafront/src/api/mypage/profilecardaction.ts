@@ -20,6 +20,7 @@ export default async function ProfileCard(employeeId: string): Promise<profileCa
           },
         });
 
+    console.log()
     if (!response.ok) {
       console.log("if response" + response)
       throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);

@@ -49,12 +49,20 @@ public class SseController {
     }
   }
 
+  @GetMapping("/test")
+  public void testNotify() {
+    notifyUser("2025ec06", "테스트 알림입니다!");
+  }
+
   public void notifyUser(String employeeId, String message) {
+    log.info("✅ 알림 전송 시도 - 대상: {}, 메시지: {}", employeeId, message);
+
     List<SseEmitter> userEmitters = emitters.get(employeeId);
 
     if (userEmitters != null) {
       userEmitters.forEach(emitter -> {
         try {
+          log.info("SSE 전송 중... to approval-update::message{}", message);
           emitter.send(SseEmitter.event().name("approval-update").data(message));
         } catch (IOException e) {
           log.error("SSE 전송 중 IOException 발생 - 연결 종료로 추정, employeeId={}, message={}, error={}",
@@ -62,6 +70,8 @@ public class SseController {
           removeEmitter(employeeId, emitter);
         }
       });
+    } else {
+      log.warn("⚠️ 해당 employeeId에 대한 emitter가 없습니다: {}", employeeId);
     }
   }
 
@@ -69,7 +79,7 @@ public class SseController {
     emitters.forEach((employeeId, userEmitters) -> {
       userEmitters.forEach(emitter -> {
         try {
-          emitter.send(SseEmitter.event().name("approval-update").data(message));
+          emitter.send(SseEmitter.event().name("broadcast").data(message));
         } catch (IOException e) {
           removeEmitter(employeeId, emitter);
         }
