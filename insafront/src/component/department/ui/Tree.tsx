@@ -36,17 +36,23 @@ export default function ({ departments, handleDepartmentClick }: TreeProps) {
     // 새 트리 데이터 생성
     const newData: NodeModel<Department>[] = useMemo(
         () =>
-            (departments || []).map<NodeModel<Department>>((o) => {
-                const { numbers } = convertNumber(o.departmentId);
+            (departments || [])
+                .map<NodeModel<Department>>((o) => {
+                    const { numbers } = convertNumber(o.departmentId);
 
-                return {
-                    id: numbers,
-                    parent: Number(o.parentDepartmentId) || 0, // 루트 노드는 parent가 0이어야 함
-                    text: `${o.departmentName}`,
-                    droppable: false,
-                    data: o,
-                };
-            }),
+                    return {
+                        id: numbers,
+                        parent: o.parentDepartmentId === null ? 0 : Number(o.parentDepartmentId), // NULL인 경우 루트(0) 처리
+                        text: `${o.departmentName}`,
+                        droppable: true,
+                        data: o,
+                    };
+                })
+                .filter((node, index, self) => // 중복 제거
+                        index === self.findIndex((t) => (
+                            t.id === node.id && t.parent === node.parent
+                        ))
+                ),
         [departments]
     );
 
@@ -63,10 +69,9 @@ export default function ({ departments, handleDepartmentClick }: TreeProps) {
             <DndProvider backend={MultiBackend} options={getBackendOptions()}>
                 <Tree
                     tree={treeData}
-                    rootId={0} // 루트 노드는 id가 0인 항목을 기준으로 렌더링
+                    rootId={0}
                     render={(node, { depth, isOpen, onToggle }) => (
                         <div
-                            style={{ marginInlineStart: depth * 10, cursor: "pointer" }}
                             onClick={() => handleDepartmentClick(node?.data?.departmentId || "D001")}
                         >
                             {node.droppable && (
