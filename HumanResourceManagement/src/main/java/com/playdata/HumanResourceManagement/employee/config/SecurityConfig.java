@@ -44,7 +44,8 @@ public class SecurityConfig {
             .requestMatchers("/",
                 "/company/signup",
                 "/employee/login",
-                "/employee/getallemployeeids"
+                "/employee/getallemployeeids",
+                "/uploads/**"
 //                "/employee/find",
 //                "/approavl/submit",
 //                "/atdsal/**",

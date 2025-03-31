@@ -49,6 +49,9 @@ spring:
             enable: true
             required: true
 
+file:
+  upload-dir: C:/fullstack7/work/final-project/InsaHi/HumanResourceManagement/uploads/profile/
+
 #eureka:
 #  client:
 #    register-with-eureka: true

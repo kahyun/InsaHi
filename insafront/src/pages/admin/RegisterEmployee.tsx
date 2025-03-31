@@ -7,6 +7,7 @@ import {DepartmentListForCreate} from "@/type/DepartmentListForCreate";
 import {getParentDepartments} from "@/services/createDepartmentAction";
 import SelectDepartment from "@/component/department/SelectDepartment";
 import {usePositionActions} from "@/services/salaryAction";
+import {usePositionSalaryStepActions} from "@/services/positionSalaryStepAction";
 
 
 export default function RegisterEmployee() {
@@ -24,6 +25,10 @@ export default function RegisterEmployee() {
     const formData = new FormData(event.currentTarget);
     console.log("최초 요청 데이터:", formData);
 
+    // departmentId와 positionSalaryId를 수동으로 추가
+    formData.append("departmentId", selectedDepartment);
+    formData.append("positionSalaryId", String(selectedPositionSalaryId));
+
     // 서버 액션 호출
     const response = await RegisterEmployeeAction(formData);
     console.log("서버 응답:", response);
@@ -36,6 +41,7 @@ export default function RegisterEmployee() {
 
   const [departments, setDepartments] = useState<DepartmentListForCreate[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [selectedPositionSalaryId, setSelectedPositionSalaryId] = useState('');
 
   useEffect(() => {
     const companyCode = localStorage.getItem("companyCode");
@@ -55,6 +61,13 @@ export default function RegisterEmployee() {
     handlePositionChange,
     handleSubmitPosition
   } = usePositionActions(companyCodeFromToken);
+
+  const {
+    positionSalarySteps,
+    newPositionSalaryStep,
+    handlePositionSalaryStepChange,
+    handleSubmitPositionSalaryStep
+  } = usePositionSalaryStepActions(companyCodeFromToken);
 
   useEffect(() => {
     const storedCompanyCode = localStorage.getItem('companyCode');
@@ -100,7 +113,7 @@ export default function RegisterEmployee() {
                 <label className={styles.label}>이메일</label>
                 <input
                     {...register("email", {required: "이메일을 입력하세요"})}
-                    placeholder="회사명 입력"
+                    placeholder="이메일 입력"
                     className={styles.input}
                 />
                 {errors.email &&
@@ -115,30 +128,34 @@ export default function RegisterEmployee() {
                     selected={selectedDepartment}
                     onChange={(value) => {
                       setSelectedDepartment(value);
-                      setValue("department", value); // react-hook-form에 선택 값 저장
+                      setValue("departmentId", value); // react-hook-form에 선택 값 저장
                     }}
                 />
-                {errors.department && (
-                    <p className={styles.error}>{errors.department.message}</p>
+                {errors.departmentId && (
+                    <p className={styles.error}>{errors.departmentId.message}</p>
                 )}
               </div>
               {/*직급명 입력*/}
               <div className={styles.field}>
                 <label className={styles.label}>직급</label>
                 <select
-                    {...register("positionId", {required: "직급을 선택하세요"})}
+                    value={selectedPositionSalaryId}
+                    onChange={(e) => {
+                      setSelectedPositionSalaryId(e.target.value);
+                      // @ts-ignore
+                      setValue("positionSalaryId", e.target.value); // FormData에 값 저장
+                    }}
                     className={styles.input}
                 >
-                  <option value="">직급을 선택하세요</option>
-                  {positions.map((position) => (
-                      <option key={position.positionId} value={position.positionId}>
-                        {position.positionName}
+                  <option value="">호봉 선택</option>
+                  {positionSalarySteps.map((item) => (
+                      <option key={item.positionSalaryId} value={item.positionSalaryId}>
+                        {positions.find(pos => pos.positionId === item.positionId)?.positionName || item.positionId} - {item.salaryStepId}호봉
                       </option>
                   ))}
-                  {/* 여기에 직급 데이터를 받아서 map으로 옵션을 추가할 예정 */}
                 </select>
-                {errors.positionId && (
-                    <p className={styles.error}>{errors.positionId.message}</p>
+                {errors.positionSalaryId && (
+                    <p className={styles.error}>{errors.positionSalaryId.message}</p>
                 )}
               </div>
 
@@ -146,7 +163,7 @@ export default function RegisterEmployee() {
                 <label className={styles.label}>연락처</label>
                 <input
                     {...register("phoneNumber", {required: "연락처을 입력하세요"})}
-                    placeholder="회사명 입력"
+                    placeholder="전화번호 입력"
                     className={styles.input}
                 />
                 {errors.phoneNumber &&
