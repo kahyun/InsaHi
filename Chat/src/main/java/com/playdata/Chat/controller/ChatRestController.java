@@ -75,7 +75,7 @@ public class ChatRestController {
     }
 //        // 2) DB 저장 (chatId는 MongoDB가 자동생성)
     ChatMessage chatMessage = chatService.saveMessage(
-        new ChatMessage(null, name, roomId, content, imageUrl, LocalDateTime.now(), false, new ArrayList<>(), false));
+        new ChatMessage(null, name, roomId, content, imageUrl, LocalDateTime.now(), new ArrayList<>(), false));
 
     // 3) DB에 저장된 진짜 chatId를 가진 메시지를 WebSocket으로 broadcast
     simpMessagingTemplate.convertAndSend("/topic/messages/" + roomId, chatMessage);
@@ -87,7 +87,8 @@ public class ChatRestController {
         chatMessage.getContent(),
         chatMessage.getImageUrl(),
         chatMessage.getCreatedAt(),
-        chatMessage.getDeleted()
+        chatMessage.getDeleted(),
+            chatMessage.getReadBy()
     ));
   }
 //    @GetMapping("/files/{storedFileName:.+}")
