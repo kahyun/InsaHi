@@ -16,7 +16,6 @@ interface Message {
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
   const stompClientRef = useRef<Client | null>(null);
   const [currentUserId, setCurrentUserId] = useState("");
   const [currentUserName, setCurrentUserName] = useState("");
@@ -25,6 +24,8 @@ export default function Chat() {
   const router = useRouter();
   const [reloadRooms, setReloadRooms] = useState(false);
   const [participantCount, setParticipantCount] = useState(0);
+  // 내가 방 들어갈 때 or 새 메시지 받을 때 방 목록을 다시 불러오기 위해
+  const handleReloadRooms = () => setReloadRooms((prev) => !prev);
   const handleSelectRoom = (roomId: string, name: string[]) => {
     setSelectedRoomId(roomId);
     setParticipantCount(name.length);
@@ -39,17 +40,6 @@ export default function Chat() {
     createdAt: string;
     creatorName: string;
   } | null>(null);
-
-  const handleViewRoomInfo = (room: {
-    roomId: string;
-    roomName: string;
-    name: string[];
-    createdAt: string;
-    creatorName: string;
-  }) => {
-    setSelectedRoomInfo(room);
-    setRoomInfoModalVisible(true);
-  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -151,7 +141,10 @@ export default function Chat() {
 
         <ChatArea currentUserName={currentUserName} currentRoomId={currentRoomId}
                   stompClient={stompClientRef.current}
-                  participantCount={selectedRoomInfo?.name?.length || 1}/>
+                  participantCount={selectedRoomInfo?.name?.length || 1}
+                  onNewMessageArrived={handleReloadRooms} // 새 메시지 도착 => reloadRooms
+                  onMessagesRead={handleReloadRooms}      // 메시지 읽음 => reloadRooms
+        />
         <RoomCreateModal
             visible={showCreateModal}
             onClose={() => setShowCreateModal(false)}

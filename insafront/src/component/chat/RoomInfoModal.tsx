@@ -71,7 +71,7 @@ const RoomInfoModal = ({
                     <strong>방 이름:</strong> {room.roomName}
                 </div>
                 <div style={{ marginBottom: "10px" }}>
-                    <strong>참여자 수:</strong> {room.name.length}명
+                    <strong>참여자 수:</strong> {room.name?.length ?? 0}명
                 </div>
                 <div style={{ marginBottom: "10px" }}>
                     <strong>참여자:</strong>{" "}

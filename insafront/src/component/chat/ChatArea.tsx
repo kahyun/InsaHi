@@ -17,9 +17,13 @@ interface ChatAreaProps {
   currentRoomId: string | null;
   stompClient: any | null;
   participantCount: number;
+  onNewMessageArrived?: () => void;
+  onMessagesRead?: () => void;
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stompClient, participantCount}) => {
+const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stompClient,onNewMessageArrived, // 추가
+                                             onMessagesRead}) => {
+  const [participantCount, setParticipantCount] = useState<number>(1);
   const [messages, setMessages] = useState<Message[]>([]);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
@@ -72,6 +76,12 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
   useEffect(() => {
     if (!stompClient || !currentRoomId) return;
 
+    // stompClient.connected === true 인지 먼저 확인
+    if (!stompClient.connected) {
+      console.warn("아직 WebSocket 연결되지 않음");
+      return;
+    }
+
     const subscription = stompClient.subscribe(`/topic/messages/${currentRoomId}`, (message: any) => {
       const newMessage = JSON.parse(message.body);
       console.log("📨 실시간 메시지 도착:", newMessage);
@@ -88,6 +98,10 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
         );
         return [...filtered, newMessage];
       });
+      // 새 메시지 들어온 사실을 부모에게 알림
+      if (onNewMessageArrived) {
+        onNewMessageArrived();
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -99,14 +113,15 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
     const message = messageRef.current.value.trim();
     if (!message) return;
 
-    const tempMessage = {
+    const tempMessage: Message = {
       chatId: undefined,
       name: currentUserName!,
       content: message,
       roomId: currentRoomId,
       createdAt: new Date().toISOString(),
       read: false,
-      deleted: false
+      readBy: [currentUserName!],
+      deleted: false,
     };
 
     // 먼저 뷰에 보여줌 (메시지 삭제 실시간 때문에)
@@ -137,6 +152,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
+
   //우클릭 메뉴처리
   const handleContextMenu = (event: React.MouseEvent, chatId: string) => {
     event.preventDefault();
@@ -189,7 +205,12 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ reader: currentUserName }),
+
         });
+          // 읽음 처리 끝났다고 부모에 알림
+        if (onMessagesRead) {
+          onMessagesRead();
+        }
       } catch (err) {
         console.error("읽음 처리 실패", err);
       }
@@ -197,6 +218,29 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
 
     markAsRead();
   }, [messages, currentUserName, currentRoomId]);
+
+  //participantCount를 사용해서 안읽음 표시 패치
+  useEffect(() => {
+    if (!currentRoomId) return;
+
+    fetch(`http://127.0.0.1:1006/chat/rooms/${currentRoomId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json"
+      }
+    })
+        .then((res) => {
+          if (!res.ok) throw new Error("방 정보 불러오기 실패");
+          return res.json();
+        })
+        .then((data) => {
+          console.log("👤 참여자 수 가져온 data:", data);
+          setParticipantCount(data.name?.length || 1);
+        })
+        .catch((err) => {
+          console.error("방 참여자 수 로드 실패", err);
+        });
+  }, [currentRoomId]);
 
 
      return (
@@ -254,24 +298,38 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
                          }}
                      >
                        <strong>{msg.name}</strong>: {msg.deleted ? <i>삭제된 메시지입니다.</i> : msg.content}
-                       <div style={{fontSize: "10px", color: "#999", marginTop: "2px", textAlign: "left"}}>
-                         {(() => {
-                           const total = participantCount || 0;
-                           const readBy = msg.readBy?.length || 0;
-                           const unreadCount = msg.name === currentUserName
-                               ? total - readBy - 1 // 내가 보낸 메시지일 때
-                               : total - readBy;
-
-                           return unreadCount > 0 ? `${unreadCount}명 안읽음` : "";
-                         })()}
+                       {/*// 말풍선 시간 표시*/}
+                       <div style={{fontSize: "10px", color: "#888", marginTop: "4px", textAlign: "right"}}>
+                         {formatTime(msg.createdAt)}
                        </div>
+
+                       {/*//안읽은 사람 수 표시 */}
+                       {(() => {
+                         const total = participantCount || 0;
+                         const readBy = msg.readBy ?? [];
+                         const unreadCount = total - readBy.length;
+
+                         // 참여자가 1 이하이거나, 모든 사람이 읽은 상태면 표시 안함
+                         if (total <= 1 || unreadCount <= 0) return null;
+
+                         return (
+                             <div
+                                 style={{
+                                   fontSize: "10px",
+                                   color: "red",
+                                   marginTop: "4px",
+                                   textAlign: "left",
+                                 }}
+                             >
+                               {unreadCount}명 안읽음
+                             </div>
+                         );
+                       })()}
                      </div>
                    </div>
                  </React.Fragment>
              );
-
            })}
-
            <div ref={bottomRef}/>
 
            {/* 메시지 입력창 */}
