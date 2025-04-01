@@ -12,6 +12,15 @@
 <img width="1100" alt="스크린샷 2025-04-01 오후 5 18 08" src="https://github.com/user-attachments/assets/5914a2a1-cbf6-4338-8138-42e6d45c8cf7" />
 
 ## 🚀 5. 화면 정의서 
+- 관리자 설정 페이지
+![004](https://github.com/user-attachments/assets/13e9d16e-b32b-4ac1-b220-a2a5eaf251ee)
+- 급여 페이지
+![003](https://github.com/user-attachments/assets/5cb9a755-4573-42a0-b959-0d214ec60f8d)
+- 근태 페이지
+![002](https://github.com/user-attachments/assets/156d6456-9e93-44f3-a56e-ec0f5b52538b)
+- 설정 페이지
+![001](https://github.com/user-attachments/assets/2a3d02b9-29ea-4940-9d6c-4194589e2f93)
+
 
 ## 🚀 6. 테스트 결과서 - GoogleSheets
 
