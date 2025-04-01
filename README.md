@@ -1,10 +1,20 @@
 
-## 📝 개요
-## 🚀 1. ERD (Entity Relationship Diagram, 객체관계도) 
+## 📝 개요. 서비스 기획서
+
+## 🚀 1. 요구사항 명세서 - GoogleSheets
+
+## 🚀 2. 테스트 계획서  - GoogleSheets
+
+## 🚀 3. ERD (Entity Relationship Diagram, 객체관계도) - DBdiagram.io
 <img width="1100" alt="erd" src="https://github.com/user-attachments/assets/e8e9d0db-d87a-43ec-8934-78b6ea66e8c0" />
 
+## 🚀 4. WBS(Work Breakdown Structure) - Jira
 
-## 🚀 빌드 및 배포 개요(시스템 아키텍쳐)
+## 🚀 5. 화면 정의서 
+
+## 🚀 6. 테스트 결과서 - GoogleSheets
+
+## 🚀 7. 빌드 및 배포 개요(시스템 아키텍쳐)
 <img width="1100" alt="system" src="https://github.com/user-attachments/assets/2a8a488d-c5a4-4346-9ac7-79a64b9e8d92" />
 
 ### 📌 사용 기술 및 도구
