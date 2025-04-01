@@ -19,14 +19,14 @@
 - 근태 페이지
 ![002](https://github.com/user-attachments/assets/156d6456-9e93-44f3-a56e-ec0f5b52538b)
 - 휴가 페이지
-1) ![006](https://github.com/user-attachments/assets/265f8754-eb45-4320-b379-c13a621917ba)
-2) ![007](https://github.com/user-attachments/assets/115b5178-7c98-4f90-9e6c-884d2ffe8add)
-3) ![008](https://github.com/user-attachments/assets/dc015dc2-d5aa-43e8-beba-068b660de0fb)
+1) 휴가 신청  ![006](https://github.com/user-attachments/assets/265f8754-eb45-4320-b379-c13a621917ba)
+2) 휴가 신청 내역관리 ![007](https://github.com/user-attachments/assets/115b5178-7c98-4f90-9e6c-884d2ffe8add)
+3) 휴가 신청 상세보기 ![008](https://github.com/user-attachments/assets/dc015dc2-d5aa-43e8-beba-068b660de0fb)
 
 - 결재 페이지
-1) ![009](https://github.com/user-attachments/assets/a6440241-6dab-413d-a19e-0443fc21426d)
-2) ![010](https://github.com/user-attachments/assets/db206275-0342-4d5e-ad45-2e674ac94c72)
-3) ![011](https://github.com/user-attachments/assets/d11a6920-be13-4d5d-a8db-c8ae8ce2b706)
+1) 결재 문서 상신  ![009](https://github.com/user-attachments/assets/a6440241-6dab-413d-a19e-0443fc21426d)
+2) 기안서  ![010](https://github.com/user-attachments/assets/db206275-0342-4d5e-ad45-2e674ac94c72)
+3) 결재 문서 목록 ![011](https://github.com/user-attachments/assets/d11a6920-be13-4d5d-a8db-c8ae8ce2b706)
 
 - 설정 페이지
 ![001](https://github.com/user-attachments/assets/2a3d02b9-29ea-4940-9d6c-4194589e2f93)
