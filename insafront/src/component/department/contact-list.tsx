@@ -8,99 +8,87 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { useState } from "react";
+import { Contact, ContactListProps } from '@/type/EmployeeTable';
 
-type Contact = {
-  id: string;
-  employeeId: string;  // employeeId 추가
-  name: string;
-  department: string;
-  position: string;
-  email: string;
-  phone: string;
-  status?: string;
-  selected?: boolean;
-};
-
-type ContactListProps = {
-  contactsData: Contact[];
-  onSelectContact: (contactId: string) => void;
-};
-
-const ContactList = ({ contactsData, onSelectContact }: ContactListProps) => {
+const ContactList: React.FC<ContactListProps> = ({ contactsData, onSelectContact }) => {
   const [selectAll, setSelectAll] = useState(false);
+  const [selectedContacts, setSelectedContacts] = useState<{ [key: string]: boolean }>({});
 
   const handleSelectAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setSelectAll(checked);
-    contactsData.forEach((contact) => {
-      contact.selected = checked;
-    });
-    const selectedContactIds = contactsData.filter(contact => contact.selected).map(contact => contact.id);
-    alert(selectedContactIds.join(', '));
+
+    const updatedSelections = contactsData.reduce((acc, contact) => {
+      acc[contact.employeeId] = checked;
+      return acc;
+    }, {} as { [key: string]: boolean });
+
+    setSelectedContacts(updatedSelections);
+    const selectedEmployeeIds = Object.keys(updatedSelections).filter(id => updatedSelections[id]);
+    alert(`선택된 직원 IDs: ${selectedEmployeeIds.join(', ')}`);
   };
 
-  const handleCheckboxChange = (contactId: string, employeeId: string) => {
-    onSelectContact(contactId);
-    alert(`선택된 직원 ID: ${employeeId}`);
+  const handleCheckboxChange = (employeeId: string, name: string) => {
+    setSelectedContacts(prev => ({
+      ...prev,
+      [employeeId]: !prev[employeeId],
+    }));
+    alert(`선택된 직원 ID: ${employeeId}, 이름: ${name}`);
   };
 
-  const handleRowClick = (contactId: string, employeeId: string) => {
-    onSelectContact(contactId);
-    alert(`선택된 직원 ID: ${employeeId}`);
+  const handleRowClick = (contact: Contact) => {
+    onSelectContact(contact.employeeId);
+
   };
 
   return (
       <TableContainer2 className="TableContainer">
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 800 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>
                   <Checkbox checked={selectAll} onChange={handleSelectAllChange} />
                 </TableCell>
                 <TableCell>이름</TableCell>
-                <TableCell>부서</TableCell>
-                <TableCell>직급</TableCell>
                 <TableCell>이메일</TableCell>
                 <TableCell>전화번호</TableCell>
-                <TableCell>근무 상태</TableCell>
+                <TableCell>소속 부서</TableCell>
+                <TableCell>직급</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {contactsData.length > 0 ? (
                   contactsData.map((contact) => (
                       <TableRow
-                          key={contact.id}
+                          key={contact.employeeId}
                           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                          onClick={() => handleRowClick(contact.id, contact.employeeId)}  // employeeId 전달
                           style={{
                             cursor: 'pointer',
-                            backgroundColor: contact.selected ? '#f0f0f0' : 'transparent',
+                            backgroundColor: selectedContacts[contact.employeeId] ? '#f0f0f0' : 'transparent',
                           }}
+                          onClick={() => handleRowClick(contact)} // 행 클릭 이벤트 추가
                       >
-                        <TableCell component="th" scope="row">
+                        <TableCell>
                           <Checkbox
-                              checked={contact.selected || false}
-                              onChange={() => handleCheckboxChange(contact.id, contact.employeeId)}  // employeeId 전달
+                              checked={!!selectedContacts[contact.employeeId]}
+                              onChange={(e) => {
+                                e.stopPropagation(); // 행 클릭과 체크박스 클릭 이벤트 분리
+                                handleCheckboxChange(contact.employeeId, contact.name);
+                              }}
+                              onClick={(e) => e.stopPropagation()} // 체크박스 클릭 시 이벤트 전파 방지
                           />
                         </TableCell>
                         <TableCell>{contact.name}</TableCell>
-                        <TableCell>{contact.department}</TableCell>
-                        <TableCell>{contact.position}</TableCell>
-                        <TableCell>{contact.email}</TableCell>
-                        <TableCell>{contact.phone}</TableCell>
-                        <TableCell>
-                          {contact.status === "근무중" ? (
-                              <span className="text-green-600">근무중</span>
-                          ) : (
-                              contact.status || "상태 없음"
-                          )}
-                        </TableCell>
+                        <TableCell>{contact.email || "이메일 없음"}</TableCell>
+                        <TableCell>{contact.phoneNumber || "없음"}</TableCell>
+                        <TableCell>{contact.departmentName || "부서 없음"}</TableCell>
+                        <TableCell>{contact.positionName || "미지정"}</TableCell>
                       </TableRow>
                   ))
               ) : (
                   <TableRow>
-                    <TableCell colSpan={7}>연락처가 없습니다.</TableCell>
+                    <TableCell colSpan={7}>직원 데이터가 없습니다.</TableCell>
                   </TableRow>
               )}
             </TableBody>

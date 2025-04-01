@@ -1,5 +1,6 @@
 package com.playdata.HumanResourceManagement.department.service;
 
+import com.playdata.HumanResourceManagement.department.dto.DepartmentNameDTO;
 import com.playdata.HumanResourceManagement.department.dto.OrganizationDTO;
 import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.department.repository.DepartmentRepository;
@@ -15,6 +16,20 @@ import java.util.List;
 public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+
+
+    /**
+     * 부서 이름을 조회하는 메서드
+     * @param companyCode 회사 코드
+     * @param departmentId 부서 ID
+     * @return 부서 이름 DTO
+     */
+    public DepartmentNameDTO getDepartmentName(String companyCode, String departmentId) {
+        DepartmentEntity department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new EntityNotFoundException("부서 정보를 찾을 수 없습니다. ID = " + departmentId));
+        return new DepartmentNameDTO(department.getDepartmentName(), department.getDepartmentId());
+    }
+
 
     /**
      * 새로운 부서를 생성하고 부모 부서를 설정합니다.

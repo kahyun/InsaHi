@@ -66,7 +66,7 @@ const DepartmentSidebar: React.FC<NavigationProps> = ({ setViewType, setSelected
     }, []);
 
     const handleDepartmentClick = (departmentId: string) => {
-        console.log(`클릭한 부서 ID: ${departmentId}`); // 부서 ID 확인
+        console.log(`클릭한 부서 ID: ${departmentId}`);
         setSelectedDepartment(departmentId); // 부서 ID를 부모에게 전달
         if (companyCode) {
             fetch(`/api/${companyCode}/department/${departmentId}/list`)
@@ -96,18 +96,18 @@ const DepartmentSidebar: React.FC<NavigationProps> = ({ setViewType, setSelected
 
     return (
         <div>
-            <div>
-                <button onClick={() => setViewType("table")}>TableViewer</button>
-                <button onClick={() => setViewType("node")}>NodeViewer</button>
-            </div>
+            {/*<div>*/}
+            {/*    <button onClick={() => setViewType("table")}>TableViewer</button>*/}
+            {/*    <button onClick={() => setViewType("node")}>NodeViewer</button>*/}
+            {/*</div>*/}
 
-            <div>
-                <ul>
-                    <li>사용자 아이디: {employeeId ?? "정보 없음"}</li>
-                    <li>회사 코드: {companyCode ?? "정보 없음"}</li>
-                    <li>권한: {auth ?? "정보 없음"}</li> {/* auth 상태를 직접 표시 */}
-                </ul>
-            </div>
+                {/*<div>*/}
+                {/*    <ul>*/}
+                {/*        <li>사용자 아이디: {employeeId ?? "정보 없음"}</li>*/}
+                {/*        <li>회사 코드: {companyCode ?? "정보 없음"}</li>*/}
+                {/*        <li>권한: {auth ?? "정보 없음"}</li> /!* auth 상태를 직접 표시 *!/*/}
+                {/*    </ul>*/}
+                {/*</div>*/}
 
             <div>
                 <Tree departments={departments} handleDepartmentClick={handleDepartmentClick}/>

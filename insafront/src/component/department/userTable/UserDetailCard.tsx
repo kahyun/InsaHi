@@ -1,57 +1,62 @@
-import React, { useEffect, useState } from "react";
-
-interface Position {
-    positionName: string;
-    department: string;
-}
+import React from "react";
+import MiniCalendar from "@/component/department/ui/miniCalendar";
+import {CalendarDTO} from "@/api/mypage/calendaraction"; // Calendar 컴포넌트 분리
 
 interface UserDetailCardProps {
     employeeId: string;
     companyCode: string | null;
+    departmentName: string;
+    userDetails: any;
+    error: string | null;
+    checkInTime?: string | null;
+    leaveData?: CalendarDTO[]; // leaveData의 타입을 CalendarDTO[]로 지정
+    onClose?: () => void;
 }
 
-const UserDetailCard: React.FC<UserDetailCardProps> = ({ employeeId, companyCode }) => {
-    const [userDetails, setUserDetails] = useState<any>(null); // 사용자 세부 정보 상태
-    const [error, setError] = useState<string | null>(null); // 에러 메시지 상태
 
-    useEffect(() => {
-        if (!employeeId || !companyCode) return; // employeeId와 companyCode가 있어야 API 호출
-
-        // 사용자 상세 정보를 가져오는 API 호출
-        fetch(`/api/${companyCode}/employee/${employeeId}`)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data) {
-                    setUserDetails(data); // 유효한 데이터면 사용자 정보 설정
-                    setError(null); // 에러 초기화
-                } else {
-                    setError("사용자 정보를 불러오지 못했습니다.");
-                }
-            })
-            .catch((error) => {
-                setError("사용자 정보를 불러오는데 실패했습니다.");
-            });
-    }, [employeeId, companyCode]); // employeeId나 companyCode가 변경될 때마다 실행
-
+const UserDetailCard: React.FC<UserDetailCardProps> = ({
+                                                           employeeId,
+                                                           companyCode,
+                                                           departmentName,
+                                                           userDetails,
+                                                           error,
+                                                           checkInTime,
+                                                           leaveData = [], // leaveData가 없으면 기본값으로 빈 배열 설정
+                                                           onClose
+                                                       }) => {
     if (error) {
-        return <p style={{ color: "red" }}>{error}</p>;
+        return <p className="text-red-500">{error}</p>;
     }
 
     if (!userDetails) {
-        return <p>로딩 중...</p>;
+        return <p className="text-gray-500">로딩 중...</p>;
     }
 
+    const formatDate = (date: string) => new Date(date).toLocaleDateString("ko-KR");
+
     return (
-        <div className={"UserDetail"}>
-            <h5>사용자 상세 정보</h5>
+        <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md">
+            <div>
+                <h2>사용자 상세 정보</h2>
+                <button
+                    type="button"
+                    onClick={() => console.log("닫기 버튼 클릭")} // 예시로 버튼 클릭 시 동작 추가
+                >
+                    닫기
+                </button>
+            </div>
             <p><strong>이름:</strong> {userDetails.name}</p>
-            <p><strong>직급:</strong> {userDetails.position?.join(", ")}</p>
-            <p><strong>부서:</strong> {userDetails.department}</p>
+            <p>
+                <strong>직급:</strong> {Array.isArray(userDetails.positionName) ? userDetails.positionName.join(", ") : userDetails.positionName}
+            </p>
+            <p><strong>부서:</strong> {userDetails.departmentName}</p>
             <p><strong>사번:</strong> {userDetails.employeeId}</p>
             <p><strong>이메일:</strong> {userDetails.email}</p>
             <p><strong>전화번호:</strong> {userDetails.phoneNumber}</p>
-            <div style={{ marginTop: "16px", fontSize: "0.875rem", color: "#757575" }}>
-                마지막 수정: {new Date().toLocaleString()}
+
+            {/* 연차 캘린더 */}
+            <div className="mt-4">
+                <MiniCalendar leaveList={leaveData || []} /> {/* leaveData가 null일 경우 빈 배열로 처리 */}
             </div>
         </div>
     );

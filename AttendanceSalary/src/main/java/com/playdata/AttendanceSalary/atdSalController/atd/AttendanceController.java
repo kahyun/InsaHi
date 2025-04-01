@@ -26,7 +26,7 @@ public class AttendanceController {
 
   private final AttendanceService attendanceService;
 
-  @GetMapping("/checkin/{employeeId}")
+      @GetMapping("/checkin/{employeeId}")
   public List<AttendanceDTO> getAttendanceByEmployeeId(
       @PathVariable("employeeId") String employeeId) {
     List<AttendanceDTO> attendanceDTOList = attendanceService.getAttendanceByEmployeeId(employeeId);

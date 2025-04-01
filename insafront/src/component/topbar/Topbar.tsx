@@ -127,8 +127,7 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
                 {hasNotification && <span className={styles.notificationDot}/>}
               </li>
               <li>
-                <Link href="#" className={styles.topmenulink}
-                      onClick={() => setActiveSidebar(activeSidebar === "sidebar3" ? null : "sidebar3")}>
+                <Link href="/department/list" className={styles.topmenulink}>
                   주소록
                 </Link>
               </li>

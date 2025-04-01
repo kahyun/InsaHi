@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "attendance-salary-service")
+@FeignClient(name = "att-Feign", url = "${url.service.att}")
 public interface AttFeignClient {
 
     /**
