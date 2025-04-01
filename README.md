@@ -25,5 +25,5 @@
 
 
 ## 🎯 프로젝트 정보
-📌 **InsaHi 레포지토리:** [GitHub - 미미팀](https://github.com/05Daul/insahi)
+📌 **InsaHi 레포지토리:** [GitHub - PlayData Final](https://github.com/05Daul/insahi)
 
