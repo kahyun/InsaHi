@@ -9,6 +9,7 @@
 <img width="1100" alt="erd" src="https://github.com/user-attachments/assets/e8e9d0db-d87a-43ec-8934-78b6ea66e8c0" />
 
 ## 🚀 4. WBS(Work Breakdown Structure) - Jira
+<img width="1100" alt="스크린샷 2025-04-01 오후 5 18 08" src="https://github.com/user-attachments/assets/5914a2a1-cbf6-4338-8138-42e6d45c8cf7" />
 
 ## 🚀 5. 화면 정의서 
 
