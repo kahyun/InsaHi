@@ -33,8 +33,16 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({
       console.error("❌ 토큰이 없습니다. 회원 목록 요청을 중단합니다.");
       return; // ❌ 토큰이 없으면 요청을 보내지 않음
     }
-
-    fetch("http://127.0.0.1:1006/employee/all", {
+      let companyCode = "";
+      try {
+          const rawPayload = token.split(" ")[1].split(".")[1]; // 'Bearer abc.xyz.qwe' → 'xyz'
+          const payload = JSON.parse(atob(rawPayload));
+          companyCode = payload.companyCode;
+      } catch (err) {
+          console.error("❌ JWT 파싱 오류:", err);
+          return;
+      }
+    fetch(`http://127.0.0.1:1006/chat/rooms/employees?companyCode=${companyCode}`, {
       method: "GET",
       headers: {
         Authorization: token,  // ✅ 토큰이 있을 때만 요청
@@ -47,7 +55,7 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({
       }
       return res.json();
     })
-    .then((data: { employeeId: string; name: string }[]) => {
+    .then((data: { employeeId: string; name: string; }[]) => {
       const filteredUsers = data.filter(user => user.employeeId !== currentUserId);
       setAllUsers(filteredUsers); // 👈 전체 사용자 정보 보관
     })
@@ -95,7 +103,7 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({
 
   if (!visible) return null;
 
-  return (
+    return (
       <div style={{
         position: "fixed",
         top: "50%",

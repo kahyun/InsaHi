@@ -13,6 +13,7 @@ const ContextMenu: React.FC<ContextMenuProps> = ({x, y, visible, onClose, onDele
 
   return (
       <div
+          id="context-menu"
           style={{
             position: "absolute",
             top: y,
