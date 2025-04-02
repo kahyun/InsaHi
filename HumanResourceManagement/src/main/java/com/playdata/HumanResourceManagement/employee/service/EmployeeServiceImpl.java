@@ -45,6 +45,10 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Value("${file.upload-dir}")
   private String uploadDir;
 
+  @Value("${file.access-url}")
+  private String accessUrl;
+
+
   private final EmployeeDAO employeeDAO;
   private final AuthorityDAO authorityDAO;
   private final ModelMapper modelMapper;
@@ -174,7 +178,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     if (employee.getProfileImage() != null) {
       String imageUrl =
-          "http://127.0.0.1:1010/uploads/profile/" + employee.getProfileImage().getStoreFilename();
+          uploadDir + employee.getProfileImage().getStoreFilename();
       dto.setProfileImage(imageUrl);
     }
 
@@ -195,7 +199,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     if (employee.getProfileImage() != null) {
       String imageUrl =
-          "http://127.0.0.1:1010/uploads/profile/" + employee.getProfileImage().getStoreFilename();
+          uploadDir + employee.getProfileImage().getStoreFilename();
       responseDTO.setProfileImage(imageUrl);
     }
 

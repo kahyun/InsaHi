@@ -5,6 +5,7 @@ hrm:
 
 server:
   port: 1000
+
 spring:
   profiles:
     active: dev   # default 환경: dev

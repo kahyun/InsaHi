@@ -7,8 +7,6 @@ server:
   port: 1010
 
 spring:
-  profiles:
-    active: dev   # default 환경: dev
   security:
     user:
       name: admin

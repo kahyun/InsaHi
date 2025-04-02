@@ -20,10 +20,16 @@ FROM openjdk:17-alpine
 WORKDIR /myapp
 
 # 빌드 결과 JAR 파일 복사
-COPY --from=build /myapp/build/libs/*.jar /myapp/mimigateway.jar
+COPY --from=build /myapp/build/libs/*.jar /myapp/gateway-service.jar
 
 # 포트
 EXPOSE 1006
 
+# Timezone 설정 (optional)
+ENV TZ=Asia/Seoul
+
+# 환경변수 (실제 값은 외부에서 주입)
+ENV SPRING_PROFILES_ACTIVE=prod
+
 # 실행 명령
-ENTRYPOINT ["java", "-jar", "/myapp/mimigateway.jar"]
+ENTRYPOINT ["java", "-jar", "/myapp/gateway-service.jar"]

@@ -7,21 +7,18 @@ server:
   port: 1010
 
 spring:
-  profiles:
-    active: dev   # default 환경: dev
   security:
     user:
       name: admin
       password: 1234
   application:
-    name: employee
-
+    name: hrm
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/insahi?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://insahi.cremqog6y49m.ap-northeast-2.rds.amazonaws.com:3306/insahi
     username: mytest
-    password: 1234
+    password: playdata
 
   sql:
     init:
@@ -31,7 +28,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     defer-datasource-initialization: true
     properties:
       hibernate:
@@ -52,8 +49,8 @@ spring:
             required: true
 
 file:
-  upload-dir: C:/fullstack7/work/final-project/InsaHi/HumanResourceManagement/uploads/profile/
-
+  upload-dir: /uploads/insahi/profile/
+  access-url: http://127.0.0.1:1010/uploads/profile/
 #eureka:
 #  client:
 #    register-with-eureka: true
@@ -77,7 +74,7 @@ file:
 jwt:
   header: Authorization
   secret: 4Hirx6BNM+kTbhOxA4cHCUz/BF0B0tokIgTRs2d5ORn3zF8fPAESoo/jXcUiBnWYoZWrxgunF3l3gvGCUi6JGQ==
-  token-validity-in-second: 86400000 #60*60*24*1000
+  token-validity-in-second: 86400000
   #token-validity-in-second: 86400 #60*60*24*1000
 
 
