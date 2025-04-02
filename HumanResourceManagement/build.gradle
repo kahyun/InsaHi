@@ -66,11 +66,6 @@ dependencies {
     // Jakarta Mail API (이메일 처리)
     implementation 'jakarta.mail:jakarta.mail-api:2.1.0'
 
-    // 외부 프로젝트 의존성 (ElectronicApproval)
-//    implementation project(':ElectronicApproval')
-
-    // AttendanceSalary 의존성 (내부 프로젝트)
-    implementation project(':AttendanceSalary')
 }
 
 dependencyManagement {

@@ -221,6 +221,7 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
 // //    leave.setRemainingLeave(leave.getRemainingLeave() - day);
 //    leave.setUsedLeave(leave.getUsedLeave() + day);
     leave.setAdditionalLeave(leave.getAdditionalLeave() + day);
+    leave.setTotalGrantedLeave(leave.getTotalGrantedLeave() + day);
 
     annualLeaveUsageDAO.save(usage);
     annualLeaveDAO.save(leave);

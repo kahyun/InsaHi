@@ -42,7 +42,6 @@ public class SecurityConfig {
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/",
-                "/**",
                 "/company/signup",
                 "/employee/login",
                 "/employee/getallemployeeids",

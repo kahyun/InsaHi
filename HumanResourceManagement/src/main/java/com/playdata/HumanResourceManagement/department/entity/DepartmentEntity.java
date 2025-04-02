@@ -8,14 +8,15 @@ import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.publicEntity.DateEntity;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "departments")
@@ -54,5 +55,20 @@ public class DepartmentEntity extends DateEntity {
   // 하위 부서들
   @OneToMany(mappedBy = "parentDepartmentId", cascade = CascadeType.ALL, orphanRemoval = false)
   @JsonManagedReference
-  private List<DepartmentEntity> subDepartments = new ArrayList<>();
+  private List<DepartmentEntity> subDepartments = new ArrayList<>(); // 기본값 빈 리스트로 초기화
+
+  @PrePersist
+  public void setDefaultDepartmentId() {
+    if (this.departmentId == null) {
+      this.departmentId = "Dept" + UUID.randomUUID().toString().substring(0, 2); // 임시 부서 ID
+    }
+  }
+
+  // Getter에서 null 처리하여 빈 리스트로 초기화
+  public List<DepartmentEntity> getSubDepartments() {
+    if (subDepartments == null) {
+      subDepartments = new ArrayList<>();
+    }
+    return subDepartments;
+  }
 }

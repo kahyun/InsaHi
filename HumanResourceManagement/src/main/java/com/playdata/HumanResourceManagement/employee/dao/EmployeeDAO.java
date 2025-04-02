@@ -4,7 +4,6 @@ import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeDAO {
 

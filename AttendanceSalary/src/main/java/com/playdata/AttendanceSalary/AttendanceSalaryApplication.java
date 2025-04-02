@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @SpringBootApplication
-@EnableFeignClients
+@EnableFeignClients  // Feign Client 활성화
 @EnableScheduling
 public class AttendanceSalaryApplication {
 

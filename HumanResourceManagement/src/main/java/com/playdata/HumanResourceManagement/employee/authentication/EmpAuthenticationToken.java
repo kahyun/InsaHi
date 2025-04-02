@@ -24,3 +24,4 @@ public class EmpAuthenticationToken extends UsernamePasswordAuthenticationToken 
         return companyCode;
     }
 }
+

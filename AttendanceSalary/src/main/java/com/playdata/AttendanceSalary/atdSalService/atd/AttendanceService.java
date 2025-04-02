@@ -2,8 +2,6 @@ package com.playdata.AttendanceSalary.atdSalService.atd;
 
 import com.playdata.AttendanceSalary.atdSalDto.atd.AttendanceDTO;
 import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
-import com.playdata.AttendanceSalary.atdSalDto.atd.AttendanceDTO;
-
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;

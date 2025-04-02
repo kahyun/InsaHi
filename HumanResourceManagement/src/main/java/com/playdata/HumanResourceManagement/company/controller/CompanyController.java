@@ -44,7 +44,7 @@ public class CompanyController {
     //회사 정보 주입
     Company savedCompany = companyService.insert(signupRequestDTO.companySignupRequestDTO());
 
-    OrganizationStructureDTO deptDTO = new OrganizationStructureDTO(null, "root", null, 0, null);
+    OrganizationStructureDTO deptDTO = new OrganizationStructureDTO(null, "root", null, null);
     ActionBasedOrganizationChartDTO dept = createDeptService.createDepartment(
         savedCompany.getCompanyCode(), deptDTO);
 

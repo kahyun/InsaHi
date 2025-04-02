@@ -63,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
   public void updateEmployee(String employeeId, Long positionSalaryId) {
     //인원을 찾고
     Employee employee = employeeDAO.findByEmployeeId(employeeId);
-    employee.setPositionSalaryId(String.valueOf(positionSalaryId));
+    employee.setPositionSalaryId(positionSalaryId);
     employeeDAO.insert(employee);
   }
 
@@ -84,12 +84,6 @@ public class EmployeeServiceImpl implements EmployeeService {
   public void removeAdminRoleFromEmployee(String employeeId) {
     employeeDAO.removeAdminRoleFromEmployee(employeeId);
   }
-
-  @Override
-  public LocalTime findCxompanyStartTimeByEmployeeId(String employeeId) {
-    return null;
-  }
-
 
   @Override
   public List<AuthorityResponseDTO> findAuthoritiesByCompanyCode(String companyCode) {

@@ -60,6 +60,4 @@ public interface EmployeeService {
   void addAdminRoleToEmployee(String employeeId);
 
   void removeAdminRoleFromEmployee(String employeeId);
-
-  LocalTime findCxompanyStartTimeByEmployeeId(String employeeId);
 }

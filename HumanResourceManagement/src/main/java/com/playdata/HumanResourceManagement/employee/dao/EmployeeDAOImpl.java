@@ -9,7 +9,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import java.time.LocalTime;
 
 
 @Slf4j
@@ -85,7 +84,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     log.info("dao단 getCompanyStartTime: {}", companyStartTime);
     return companyStartTime;
   }
-
 
   @Override
   public void update(Employee employee) {

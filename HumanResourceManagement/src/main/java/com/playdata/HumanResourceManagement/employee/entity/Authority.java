@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "authority")
+@Table(name="authority")
 public class Authority {
 
     @Id
@@ -17,7 +17,7 @@ public class Authority {
     @Column(name = "authority_id", unique = true)
     private Long authorityId;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50)
     private String authorityName;
 
     public Authority(String role) {
