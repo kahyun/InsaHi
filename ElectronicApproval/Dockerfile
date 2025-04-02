@@ -11,7 +11,7 @@ COPY . /myapp
 RUN chmod +x gradlew
 
 # 테스트 생략하고 빌드 (더 빠르게)
-RUN ./gradlew clean build --no-daemon -x test
+RUN ./gradlew :ElectronicApproval:clean :ElectronicApproval:bootJar --no-daemon -x test
 
 # 실행 환경 (경량 Alpine)
 FROM openjdk:17-alpine
@@ -20,10 +20,11 @@ FROM openjdk:17-alpine
 WORKDIR /myapp
 
 # 빌드 결과 JAR 파일 복사
-COPY --from=build /myapp/build/libs/*.jar /myapp/mimigateway.jar
+COPY --from=build /myapp/ElectronicApproval/build/libs/*.jar /myapp/electronicapproval.jar
 
 # 포트
-EXPOSE 1006
+EXPOSE 1005
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # 실행 명령
-ENTRYPOINT ["java", "-jar", "/myapp/mimigateway.jar"]
+ENTRYPOINT ["java", "-jar", "/myapp/electronicapproval.jar"]
