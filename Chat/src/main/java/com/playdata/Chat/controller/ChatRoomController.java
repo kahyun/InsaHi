@@ -36,7 +36,6 @@ public class ChatRoomController {
   }
 
   @GetMapping("/member/{name}")
-//  public List<ChatRoomResponse> getRoomsForMember(@PathVariable String name) {
   public List<ChatRoomResponse> getRoomsForMember(@PathVariable("name") String name) {
     return chatRoomService.getRoomsForMember(name);
   }
@@ -59,7 +58,7 @@ public class ChatRoomController {
         .orElse(ResponseEntity.notFound().build());
   }
   @PostMapping("/{roomId}/read")
-  public ResponseEntity<?> markAsRead(@PathVariable String roomId, @RequestParam String name) {
+  public ResponseEntity<?> markAsRead(@PathVariable("roomId") String roomId, @RequestParam String name) {
     chatService.markMessageAsRead(roomId, name);
     return ResponseEntity.ok().build();
   }

@@ -34,7 +34,6 @@ export const submitDepartment = async (
     payload: {
       departmentName: string;
       parentDepartmentId: string;
-      departmentLevel: number;
     }
 ): Promise<ActionBasedOrganizationChartForCreateDTO> => {
   const res = await accessToken.post<ActionBasedOrganizationChartForCreateDTO>(

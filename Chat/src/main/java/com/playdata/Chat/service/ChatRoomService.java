@@ -39,16 +39,25 @@ public class ChatRoomService {
     for (ChatRoom room : chatrooms) {
       List<ChatMessage> messages = chatMessageRepository.findByRoomId(room.getRoomId());
 
-      Integer count = chatMessageRepository.findByRoomIdAndReadByNotContaining(room.getRoomId(), name);
+      Integer count = chatMessageRepository.countByRoomIdAndReadByNotContaining(room.getRoomId(), name);
       int unreadCount = count != null ? count : 0;
 
+      // 마지막 메시지 내용
+      String lastMessageContent = "";
+      ChatMessage lastMessage = chatMessageRepository.findTopByRoomIdOrderByCreatedAtDesc(room.getRoomId());
+      if (lastMessage != null) {
+        lastMessageContent = lastMessage.getContent();
+      }
 
       ChatRoomResponse response = new ChatRoomResponse(
               room.getRoomId(),
               room.getRoomName(),
               room.getCreatedAt(),
               messages.stream().map(ChatMessage::getRoomId).collect(Collectors.toList()),
-              unreadCount
+              unreadCount,
+              room.getCreatorName(),
+              room.getName(),
+              lastMessageContent
       );
 
       responses.add(response);

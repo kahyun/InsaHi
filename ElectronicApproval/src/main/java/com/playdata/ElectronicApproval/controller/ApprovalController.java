@@ -129,8 +129,8 @@ public class ApprovalController {
 //  }
 
   @GetMapping("/list/{employeeId}/{menu}")
-  public Page<ApprovalFileDTO> getDocuments(@PathVariable String employeeId,
-      @PathVariable int menu,
+  public Page<ApprovalFileDTO> getDocuments(@PathVariable("employeeId") String employeeId,
+      @PathVariable("menu") int menu,
       Pageable pageable) {
     return approvalService.getApprovalFiles(employeeId, menu, pageable);
   }

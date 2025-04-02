@@ -19,5 +19,6 @@ public class EmployeeRequestDTO {
   private Long positionSalaryId;
   private String departmentId;
   private Date hireDate;
+  private String companyName;
 
 }

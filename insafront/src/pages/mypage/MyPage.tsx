@@ -4,9 +4,6 @@ import {profileCardDTO} from "@/type/profilecard";
 import ProfileCard from "@/component/mypage/ProfileCard";
 import Calendar from "@/component/mypage/Calendar";
 import profileCardAction from "@/api/mypage/profilecardaction";
-import {fetchAttendanceRecords} from "@/services/attendanceService";
-import {useQuery} from "@tanstack/react-query";
-import AttendanceAction from "@/services/attendanceAction";
 import CalendarAction, {CalendarDTO} from "@/api/mypage/calendaraction";
 
 
@@ -22,15 +19,6 @@ const MyPage = () => {
       setEmployeeId(storedEmployeeId);
     }
   }, [employeeId]);
-
-
-  const {
-    data: attendanceRecords = [],
-  } = useQuery({
-    queryKey: ['attendanceRecords', employeeId],
-    queryFn: () => fetchAttendanceRecords(employeeId!),
-    enabled: !!employeeId, // employeeId가 있을 때만 실행
-  });
 
 
   //calendar 출력
@@ -73,6 +61,7 @@ const MyPage = () => {
           {userData ? <ProfileCard{...userData}/> : <p>ProfileCard Loading~~~~~~~~~~~~~~~~</p>}
 
           {/* Calendar Section */}
+
           <div className={styles.calendarCard}>
             {calendarData.length >= 0 ? (
                 <Calendar leaveList={calendarData}/>
@@ -83,10 +72,6 @@ const MyPage = () => {
         </div>
 
         <div className={styles.attendanceWrapper}>
-          {/* Attendance Section */}
-          {/*<AttendanceCard/>*/}
-          <AttendanceAction employeeId={employeeId!} attendanceRecords={attendanceRecords}/>
-
         </div>
 
       </div>

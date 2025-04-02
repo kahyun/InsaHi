@@ -45,6 +45,10 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Value("${file.upload-dir}")
   private String uploadDir;
 
+  @Value("${file.access-url}")
+  private String accessUrl;
+
+
   private final EmployeeDAO employeeDAO;
   private final AuthorityDAO authorityDAO;
   private final ModelMapper modelMapper;
@@ -174,22 +178,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     dto.setEmployeeId(employee.getEmployeeId());
     dto.setName(employee.getName());
     dto.setPhoneNumber(employee.getPhoneNumber());
-    dto.setDepartmentId(employee.getDepartmentId()); // 메서드에서 departmentId 반환
-    dto.setPositionSalaryId(employee.getPositionSalaryId() != null
-        ? String.valueOf(employee.getPositionSalaryId())
-        : null);
+    dto.setDepartmentName(employee.getDepartment().getDepartmentName());
+    dto.setEmail(employee.getEmail());
+    dto.setHireDate(employee.getHireDate());
 
     if (employee.getProfileImage() != null) {
       String imageUrl =
-          "http://127.0.0.1:1010/uploads/profile/" + employee.getProfileImage().getStoreFilename();
+          uploadDir + employee.getProfileImage().getStoreFilename();
       dto.setProfileImage(imageUrl);
     }
-
-    System.out.println("ser ser ser ser service" + employee.getProfileImage());
-    System.out.println("ser ser ser ser service" + employee.getProfileImage());
-    System.out.println("ser ser ser ser service" + employee.getProfileImage());
-    System.out.println("ser ser ser ser service" + employee.getProfileImage());
-    System.out.println("ser ser ser ser service" + employee.getProfileImage());
 
     return dto;
   }
@@ -198,8 +195,21 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public EmployeeResponseDTO getEmployeeInfo(String employeeId) {
     Employee employee = employeeDAO.findByEmployeeId(employeeId);
-    EmployeeResponseDTO employeeResponseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
-    return employeeResponseDTO;
+    EmployeeResponseDTO responseDTO = new EmployeeResponseDTO();
+    responseDTO.setEmployeeId(employee.getEmployeeId());
+    responseDTO.setName(employee.getName());
+    responseDTO.setPhoneNumber(employee.getPhoneNumber());
+    responseDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
+    responseDTO.setEmail(employee.getEmail());
+    responseDTO.setHireDate(employee.getHireDate());
+
+    if (employee.getProfileImage() != null) {
+      String imageUrl =
+          uploadDir + employee.getProfileImage().getStoreFilename();
+      responseDTO.setProfileImage(imageUrl);
+    }
+
+    return responseDTO;
   }
 
   //개인정보 변경

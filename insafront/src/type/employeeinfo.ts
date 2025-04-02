@@ -4,7 +4,7 @@
   name: string;
   email: string;
   phoneNumber: string;
-  departmentId: string;
-  teamId: string;
+  departmentName: string;
   profileImage?: string;
+  hireDate: string;
 }

@@ -1,8 +1,4 @@
 import React, {useEffect, useState} from "react";
-// import RoomCreateModal from "./RoomCreateModal";
-import RoomInfoModal from "./RoomInfoModal";
-
-// import ContextMenu from "./ContextMenu";
 
 interface ChatRoom {
   roomId: string;
@@ -11,6 +7,7 @@ interface ChatRoom {
   createdAt: string;
   creatorName: string;
   unreadCount?:number ; //안읽은 메시지 수
+  lastMessage: string; //마지막 메시지 미리보기
 }
 
 interface ChatRoomListProps {
@@ -25,6 +22,7 @@ interface ChatRoomListProps {
     name: string[];
     createdAt: string;
     creatorName: string;
+    lastMessage: string;
   }) => void;
   selectedRoomId: string | null;
 }
@@ -39,8 +37,6 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
                                                      selectedRoomId
                                                    }) => {
   const [rooms, setRooms] = useState<ChatRoom[]>([]);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [roomInfo, setRoomInfo] = useState<ChatRoom | null>(null);
   const [roomInfoModalVisible, setRoomInfoModalVisible] = useState(false);
   const [selectedRoomInfo, setSelectedRoomInfo] = useState<any>(null);
   const [contextMenu, setContextMenu] = useState<{
@@ -115,7 +111,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
     .then((data) => {
       setSelectedRoomInfo({
         ...data,
-        name: data.name ?? [], // ✅ members가 없으면 빈 배열로 대체
+        name: data.name ?? [],
       });
       setRoomInfoModalVisible(true); // 모달 열기
     })
@@ -200,16 +196,29 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
                       backgroundColor: room.roomId === selectedRoomId ? "white" : "#d6e0f0",
                       borderBottom: "1px solid #eee",
                       cursor: "pointer",
-                      position: "relative"
                     }}
                 >
-                  <span>{room.roomName}</span>
+                  <div style={{fontWeight: "bold"}}>{room.roomName}</div>
+                  <div style={{
+                    fontSize: "12px",
+                    color: "#666",
+                    marginTop: "4px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
+                  }}>
+                    {room.lastMessage
+                        ? (room.lastMessage.length > 30
+                            ? room.lastMessage.slice(0, 30) + "..."
+                            : room.lastMessage)
+                        : "메시지가 없습니다"}
+                  </div>
                   {(room.unreadCount ?? 0)> 0 && (
                       <span style={{
                         backgroundColor: "red",
                         color: "white",
                         fontSize: "10px",
-                        borderRadius: "50%",
+                        borderRadius: "4px",
                         padding: "2px 6px",
                         marginLeft: "8px"
                       }}>

@@ -44,12 +44,8 @@ export default function Sidebar1() {
 
             <li className={styles.sidemenusection}>급여 내역 조회</li>
             <li>
-              <Link href="#">- 월별 급여 내역</Link>
+              <Link href="/paystub/pagepaystub">- 월별 급여 내역</Link>
             </li>
-            <li>
-              <Link href="#">- 급여 명세서 다운로드</Link>
-            </li>
-
             <li className={`${styles.sidemenusection} ${styles.sideflex}`}>
               서명관리 <FiSettings className={styles.sideicon}/>
             </li>

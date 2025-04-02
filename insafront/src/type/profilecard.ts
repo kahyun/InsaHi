@@ -2,8 +2,9 @@ export interface profileCardDTO {
   employeeId: string;
   name: string;
   phoneNumber: string;
-  departmentId: string;
-  positionSalaryId: number;
+  departmentName: string;
+  email: string;
   profileImage: string | null;
+  hireDate: string;
 
 }

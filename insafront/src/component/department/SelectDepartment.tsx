@@ -11,10 +11,10 @@ interface Props {
 
 const renderOptions = (
     departments: DepartmentListForCreate[],
-    level: number = 0
+    level: number = 0 // ← 내부에서만 쓰는 들여쓰기 용도
 ): React.ReactNode[] => {
   return departments.flatMap((dept) => {
-    const indent = " ".repeat(level);
+    const indent = "  ".repeat(level);// 
     const currentOption = (
         <option key={dept.departmentId} value={dept.departmentId}>
           {indent}📁 {dept.departmentName}

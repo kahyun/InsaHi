@@ -20,6 +20,10 @@ public class ChatService {
   private final MongoTemplate mongoTemplate;
 
   public ChatMessage saveMessage(ChatMessage message) {
+    // 메시지 보낸 사람 본인은 이미 읽었다고 처리
+    if (!message.getReadBy().contains(message.getName())) {
+      message.getReadBy().add(message.getName());
+    }
     return chatMessageRepository.save(message);
   }
 

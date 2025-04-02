@@ -4,6 +4,7 @@ import com.playdata.HumanResourceManagement.addressBook.repository.ResourceRepos
 import com.playdata.HumanResourceManagement.company.dto.CompanyResponseDTO;
 import com.playdata.HumanResourceManagement.company.dto.SignupRequestDTO;
 import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.service.CompanyEmailService;
 import com.playdata.HumanResourceManagement.company.service.CompanyService;
 import com.playdata.HumanResourceManagement.company.service.EmailService;
 
@@ -33,8 +34,8 @@ public class CompanyController {
 
   private final CompanyService companyService;
   private final EmployeeService employeeService;
-  private final EmailService emailService;
   private final NewCreateDeptService createDeptService;
+  private final CompanyEmailService emailService;
   private final ResourceRepository resourceRepository;
   private final ModelMapper modelMapper;
 
