@@ -1,16 +1,9 @@
-hrm:
-  service:
-    url: http://127.0.0.1:1010
-
-
 server:
-  port: 1000
+  port: 1002
 
 spring:
-#  profiles:
-#    active: prod   # default 환경: dev
   application:
-    name: AttendanceSalary
+    name: Cabinet
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,14 +14,13 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      #  ddl-auto: none
-      #ddl-auto: create
+      # ddl-auto: create
       ddl-auto: update
+
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
-
 logging:
   level:
     org:

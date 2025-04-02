@@ -1,46 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hrm
+  name: appr
   namespace: insahi
 spec:
   replicas: 1
   selector:
     matchLabels:
       project: insahi
-      app: hrm
   template:
     metadata:
       labels:
         project: insahi
-        app: hrm
     spec:
       containers:
-        - name: equipment
-          image: jahee24/hrm-service:1.2
+        - name: appr
+          image: daul0519/electronicepproval-service:1.2
           ports:
-            - containerPort: 1010
+            - containerPort: 1005
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: prod
-
-
+              value: "prod"
 
 ---
+
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: hrm-service
-  labels:
-    project: insahi
+  name: appr-service
   namespace: insahi
 
 spec:
   type: LoadBalancer
   selector:
-    app: hrm
+    project: insahi
 
   ports:
-    - port: 1010
-      targetPort: 1010
+    - port: 1005
+      targetPort: 1005

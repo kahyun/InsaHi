@@ -2,16 +2,14 @@ server:
   port: 1002
 
 spring:
-  profiles:
-    active: dev   # default 환경: dev
   application:
     name: Cabinet
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/insahi?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://insahi.cremqog6y49m.ap-northeast-2.rds.amazonaws.com:3306/insahi
     username: mytest
-    password: 1234
+    password: playdata
 
   jpa:
     show-sql: true
