@@ -2,27 +2,27 @@ hrm:
   service:
     url: http://127.0.0.1:1010
 
-
 server:
   port: 1000
+
 spring:
-  profiles:
-    active: dev   # default 환경: dev
   application:
     name: AttendanceSalary
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/insahi?serverTimezone=Asia/Seoul
+    #url: jdbc:mysql://127.0.0.1:3306/insahi?serverTimezone=Asia/Seoul
+    url: insahi.cremqog6y49m.ap-northeast-2.rds.amazonaws.com:3306
     username: mytest
-    password: 1234
+    #password: 1234
+    password: playdata
 
   jpa:
     show-sql: true
     hibernate:
-      #  ddl-auto: none
-      #ddl-auto: create
+      # ddl-auto: create
       ddl-auto: update
+
     properties:
       hibernate:
         format_sql: true
@@ -35,4 +35,3 @@ logging:
         type:
           descriptor:
             sql: trace
-
