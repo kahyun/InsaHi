@@ -45,8 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Value("${file.upload-dir}")
   private String uploadDir;
 
-  @Value("${file.access-url}")
-  private String accessUrl;
+//  @Value("${file.access-url}")
+//  private String accessUrl;
 
 
   private final EmployeeDAO employeeDAO;

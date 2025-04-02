@@ -27,29 +27,27 @@ public class EmployeeUserDetailService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-    Employee employee = employeeRepository.findByEmployeeId(username);
-    if (employee == null) {
-      throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
-    }
+
+    Employee employee = employeeRepository.findByEmployeeId(username)
+            .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
 
     return createUser(employee);
   }
-
 
   //Spring Security의 UserDetails 객체를 생성하는 메서드
   public User createUser(Employee employee) {
 
     List<GrantedAuthority> authorities =
-        employee.getAuthorityList().stream()
-            .map(authority ->
-                new SimpleGrantedAuthority(authority.getAuthorityName()))
-            .collect(Collectors.toList());
+            employee.getAuthorityList().stream()
+                    .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
+                    .collect(Collectors.toList());
 
     UserDTO userDTO = modelMapper.map(employee, UserDTO.class);
 
     if (employee.getCompany() != null) {
       userDTO.setCompanyCode(employee.getCompany().getCompanyCode());
     }
+
     return new MyUserDetail(userDTO, authorities);
   }
 }

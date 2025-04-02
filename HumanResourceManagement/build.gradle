@@ -27,10 +27,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-    // Spring Cloud OpenFeign (서비스 간 통신)
+    // Spring Cloud 의존성
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+
+    // Hibernate
+    implementation 'org.hibernate:hibernate-core:6.3.1.Final'
 
     // MySQL 커넥터
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -47,26 +50,22 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
-    // Spring Boot DevTools (개발 중 편리한 기능 제공)
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // 테스트 의존성
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    //javamailsender
+    // 이메일 관련 의존성
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // 외부 프로젝트 의존성 (ElectronicApproval)
-//    implementation project(':ElectronicApproval')
+    // MapStruct (DTO 매핑 및 변환)
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
-    // Kafka 의존성 (메시징)
-//    implementation 'org.springframework.kafka:spring-kafka'
-//    implementation 'org.apache.kafka:kafka-clients:3.4.0'
-//
-//    // Redis 의존성 (캐싱 지원)
-//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'  // Redis 지원 추가
+    // Jakarta Mail API (이메일 처리)
+    implementation 'jakarta.mail:jakarta.mail-api:2.1.0'
+
 }
 
 dependencyManagement {

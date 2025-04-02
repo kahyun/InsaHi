@@ -22,7 +22,7 @@ public class EmployeeResponseDTO {
   private String departmentName;
   private String state;
   private Long positionSalaryId;
-  private Date hireDate;
+  private LocalDate hireDate;
   private LocalDate retireDate;
   private String profileImage;
 

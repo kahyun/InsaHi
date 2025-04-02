@@ -1,6 +1,7 @@
 package com.playdata.AttendanceSalary.atdSalController.atd;
 
 import com.playdata.AttendanceSalary.atdSalDto.atd.AttendanceDTO;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
 import com.playdata.AttendanceSalary.atdSalService.atd.AttendanceService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class AttendanceController {
 
   private final AttendanceService attendanceService;
 
-  @GetMapping("/checkin/{employeeId}")
+      @GetMapping("/checkin/{employeeId}")
   public List<AttendanceDTO> getAttendanceByEmployeeId(
       @PathVariable("employeeId") String employeeId) {
     List<AttendanceDTO> attendanceDTOList = attendanceService.getAttendanceByEmployeeId(employeeId);
@@ -50,13 +51,13 @@ public class AttendanceController {
     }
   }
 
-  //  ResponseEntity<?> 으로 교체예정
-  @PutMapping("/check-out")
-  public void checkOut(@RequestParam("employeeId") String employeeId) {
-    // employId를 통해 attenanceId를 찾아서
-    AttendanceDTO attendanceDTO = attendanceService.findAttendanceByEmployeeId(employeeId);
-    log.info("Controller:" + attendanceDTO.toString());
-    System.out.println("attendanceDTO = " + attendanceDTO.getAttendanceId());
-    attendanceService.checkOut(attendanceDTO.getAttendanceId());
-  }
+    //  ResponseEntity<?> 으로 교체예정
+    @PutMapping("/check-out")
+    public void checkOut(@RequestParam("employeeId") String employeeId) {
+        // employId를 통해 attenanceId를 찾아서
+       AttendanceDTO attendanceDTO = attendanceService.findAttendanceByEmployeeId(employeeId);
+       log.info("Controller:" + attendanceDTO.toString());
+        System.out.println("attendanceDTO = " + attendanceDTO.getAttendanceId());
+       attendanceService.checkOut(attendanceDTO.getAttendanceId());
+    }
 }

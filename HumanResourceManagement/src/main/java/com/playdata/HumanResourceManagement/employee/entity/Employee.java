@@ -2,7 +2,7 @@ package com.playdata.HumanResourceManagement.employee.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.playdata.HumanResourceManagement.company.entity.Company;
-import com.playdata.HumanResourceManagement.department.business.entity.DepartmentEntity;
+import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.publicEntity.FileEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -56,7 +56,7 @@ public class Employee {
   private DepartmentEntity department; // 부서
   private String state; // 상태 (Active, Inactive 등)
   private Long positionSalaryId; //직급호봉
-  private Date hireDate;
+  private LocalDate hireDate;
   private LocalDate retireDate;
 
 

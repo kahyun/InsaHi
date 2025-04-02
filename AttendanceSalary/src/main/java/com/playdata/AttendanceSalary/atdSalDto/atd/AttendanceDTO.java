@@ -2,6 +2,9 @@ package com.playdata.AttendanceSalary.atdSalDto.atd;
 
 import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
 import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceStauts;
+import lombok.AllArgsConstructor;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceEntity;
+import com.playdata.AttendanceSalary.atdSalEntity.atd.AttendanceStauts;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

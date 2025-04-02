@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import com.playdata.HumanResourceManagement.department.business.entity.DepartmentEntity;
+import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 
 @Entity

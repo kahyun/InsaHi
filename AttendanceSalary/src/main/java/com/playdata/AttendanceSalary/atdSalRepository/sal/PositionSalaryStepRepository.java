@@ -2,6 +2,9 @@ package com.playdata.AttendanceSalary.atdSalRepository.sal;
 
 import com.playdata.AttendanceSalary.atdSalDto.sal.AddPersonPositionSalaryDTO;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

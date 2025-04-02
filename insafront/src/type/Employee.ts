@@ -5,17 +5,11 @@ export interface Employee {
     departmentId: string;     // 부서 ID
     status: 'ACTIVE' | 'INACTIVE'; // 직원 상태
     positionName: string;     // 직급
+    email?: string;           // 이메일 (optional)
+    phoneNumber?: string;     // 전화번호 (optional)
 }
 
-export interface Department {
-    departmentId: string;       // 부서 ID
-    departmentName: string;     // 부서명
-    employees?: Employee[];     // 직원 배열
-    subDepartments?: Department[];    // 하위 부서 배열
-    action?: string;            // 작업 정보
-}
-
-
-export interface Company {
-    CompanyName: string;       // 부서 ID
+export interface EmployeeDetail extends Employee {
+    hireDate?: string;           // 입사일 (optional)
+    departmentName?: string;     // 부서명 (optional)
 }

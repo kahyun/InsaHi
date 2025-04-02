@@ -1,4 +1,4 @@
-interface employeeInfoDTO {
+    interface employeeInfoDTO {
 
   employeeId: string;
   name: string;

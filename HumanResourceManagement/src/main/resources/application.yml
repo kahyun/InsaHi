@@ -3,7 +3,6 @@ url:
     att: 127.0.0.1:1000
 
 server:
-  #  port: 0
   port: 1010
 
 spring:
@@ -15,7 +14,6 @@ spring:
       password: 1234
   application:
     name: employee
-
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -54,26 +52,6 @@ spring:
 
 file:
   upload-dir: C:/fullstack7/work/final-project/InsaHi/HumanResourceManagement/uploads/profile/
-
-#eureka:
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#    service-url:
-#      defaultZone: http://127.0.0.1:8761/eureka
-
-
-#  redis:
-#    host: localhost            # Redis 서버 호스트
-#    port: 6379                 # Redis 서버 포트
-#    password:                  # 비밀번호 (필요한 경우)
-#    timeout: 10000             # 연결 타임아웃 (밀리초)
-#    lettuce:
-#      pool:
-#        max-active: 10         # 최대 연결 수
-#        max-idle: 5            # 최대 유휴 연결 수
-#        min-idle: 1            # 최소 유휴 연결 수
-#        max-wait: 10000        # 최대 대기 시간 (밀리초)
 
 jwt:
   header: Authorization
