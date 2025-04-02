@@ -8,10 +8,12 @@ spec:
   selector:
     matchLabels:
       project: insahi
+      app: hrm
   template:
     metadata:
       labels:
         project: insahi
+        app: hrm
     spec:
       containers:
         - name: equipment
@@ -30,12 +32,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hrm-service
+  labels:
+    project: insahi
   namespace: insahi
 
 spec:
   type: LoadBalancer
   selector:
-    project: insahi
+    app: hrm
 
   ports:
     - port: 1010
