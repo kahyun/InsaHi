@@ -3,15 +3,7 @@ package com.playdata.HumanResourceManagement.employee.service;
 import com.playdata.HumanResourceManagement.employee.authentication.EmpAuthenticationToken;
 import com.playdata.HumanResourceManagement.employee.dao.AuthorityDAO;
 import com.playdata.HumanResourceManagement.employee.dao.EmployeeDAO;
-import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
-import com.playdata.HumanResourceManagement.employee.dto.AuthorityResponseDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmpAuthResponseDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
-import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
-import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
-import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
+import com.playdata.HumanResourceManagement.employee.dto.*;
 import com.playdata.HumanResourceManagement.employee.entity.Authority;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
@@ -296,8 +288,10 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
-  public List<Employee> getMemberList() {
-    return employeeRepository.findAll();
+  public List<EmployeeDTO> getAllUsersForChat() {
+    return employeeRepository.findAll().stream()
+            .map(emp -> new EmployeeDTO(emp.getEmployeeId(), emp.getCompanyCode(), emp.getName()))
+            .collect(Collectors.toList());
   }
 
 }

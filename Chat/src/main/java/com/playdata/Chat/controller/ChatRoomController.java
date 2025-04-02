@@ -8,6 +8,7 @@ import com.playdata.Chat.service.ChatRoomService;
 import java.util.List;
 
 import com.playdata.Chat.service.ChatService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +33,6 @@ public class ChatRoomController {
   public ChatRoom createRoom(@RequestBody RoomCreateRequest roomCreateRequest) {
     return chatRoomService.createRoom(roomCreateRequest.getRoomName(),
         roomCreateRequest.getMembers(), roomCreateRequest.getCreatorName());
-
   }
 
   @GetMapping("/member/{name}")
@@ -63,5 +63,10 @@ public class ChatRoomController {
     return ResponseEntity.ok().build();
   }
 
+  @GetMapping("/employees")
+  public ResponseEntity<List<String>> getEmployeesByCompanyCode(@RequestParam String companyCode) {
+    List<String> name = chatRoomService.getNamesByCompanyCode(companyCode);
+    return ResponseEntity.ok(name);
+  }
 
 }

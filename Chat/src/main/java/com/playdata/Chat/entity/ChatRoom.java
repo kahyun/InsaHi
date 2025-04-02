@@ -16,7 +16,7 @@ import java.util.List;
 public class ChatRoom {
     @Id
     private String roomId;
-
+//    private String companyCode;
     private String roomName;
     private List<String> name;
     private String creatorName;

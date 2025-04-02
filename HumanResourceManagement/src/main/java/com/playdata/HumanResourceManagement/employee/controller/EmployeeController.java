@@ -3,15 +3,7 @@ package com.playdata.HumanResourceManagement.employee.controller;
 import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.HumanResourceManagement.company.repository.CompanyRepository;
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
-import com.playdata.HumanResourceManagement.employee.dto.AuthorityResponseDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmpAuthResponseDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
-import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
-import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
-import com.playdata.HumanResourceManagement.employee.dto.MyUserDetail;
-import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
-import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
+import com.playdata.HumanResourceManagement.employee.dto.*;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeEmailService;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
@@ -263,7 +255,8 @@ public class EmployeeController {
 
   //    채팅방 초대 멤버 조회
   @GetMapping("/all")
-  public List<Employee> getMemberList() {
-    return employeeService.getMemberList();
+  public List<EmployeeDTO> getAllUsersForChat() {
+    return employeeService.getAllUsersForChat();
   }
+
 }
