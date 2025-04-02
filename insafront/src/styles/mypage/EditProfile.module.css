@@ -21,6 +21,11 @@
   flex-direction: column;
 }
 
+.profileImage {
+  width: 150px;
+  height: 150px;
+}
+
 .formGroup label {
   font-weight: bold;
   margin-bottom: 5px;

@@ -1,19 +1,9 @@
-hrm:
-  service:
-    url: http://127.0.0.1:1010
-
-approval:
-  service:
-    url: http://127.0.0.1:1005
-
-
-
 server:
-  port: 1000
+  port: 1002
 
 spring:
   application:
-    name: AttendanceSalary
+    name: Cabinet
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,9 +14,9 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-    #  ddl-auto: none
-     #ddl-auto: create
-     ddl-auto: update
+      # ddl-auto: create
+      ddl-auto: update
+
     properties:
       hibernate:
         format_sql: true

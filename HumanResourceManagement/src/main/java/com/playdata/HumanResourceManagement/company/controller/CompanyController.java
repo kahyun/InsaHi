@@ -4,8 +4,8 @@ import com.playdata.HumanResourceManagement.addressBook.repository.ResourceRepos
 import com.playdata.HumanResourceManagement.company.dto.CompanyResponseDTO;
 import com.playdata.HumanResourceManagement.company.dto.SignupRequestDTO;
 import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.service.CompanyEmailService;
 import com.playdata.HumanResourceManagement.company.service.CompanyService;
-import com.playdata.HumanResourceManagement.company.service.EmailService;
 import com.playdata.HumanResourceManagement.department.business.dto.newDto.ActionBasedOrganizationChartDTO;
 import com.playdata.HumanResourceManagement.department.business.dto.newDto.OrganizationStructureDTO;
 import com.playdata.HumanResourceManagement.department.business.service.CreateDeptService;
@@ -32,7 +32,7 @@ public class CompanyController {
 
   private final CompanyService companyService;
   private final EmployeeService employeeService;
-  private final EmailService emailService;
+  private final CompanyEmailService emailService;
   private final CreateDeptService createDeptService;
   private final ResourceRepository resourceRepository;
   private final ModelMapper modelMapper;
@@ -44,7 +44,7 @@ public class CompanyController {
     //회사 정보 주입
     Company savedCompany = companyService.insert(signupRequestDTO.companySignupRequestDTO());
 
-    OrganizationStructureDTO deptDTO = new OrganizationStructureDTO(null, "root", null, 0, null);
+    OrganizationStructureDTO deptDTO = new OrganizationStructureDTO(null, "root", null, null);
     ActionBasedOrganizationChartDTO dept = createDeptService.createDepartment(
         savedCompany.getCompanyCode(), deptDTO);
 
@@ -60,7 +60,8 @@ public class CompanyController {
     // 회원가입 완료 후 이메일 전송
     try {
       emailService.sendRegistrationInfo(employee.getName(), employee.getEmail(),
-          savedCompany.getCompanyCode(), employee.getEmployeeId());
+          savedCompany.getCompanyCode(), employee.getEmployeeId(),
+          savedCompany.getCompanyName());
     } catch (MessagingException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
           .body("회원가입은 완료되었으나 이메일 전송 중 오류가 발생했습니다.");

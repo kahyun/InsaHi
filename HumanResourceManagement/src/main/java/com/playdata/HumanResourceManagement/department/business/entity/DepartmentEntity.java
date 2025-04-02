@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "departments")
@@ -32,6 +33,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "departmentId")
+@ToString(onlyExplicitlyIncluded = true)
 public class DepartmentEntity extends DateEntity {
 
   @Id
@@ -45,9 +47,6 @@ public class DepartmentEntity extends DateEntity {
   @JoinColumn(name = "parent_department_id", referencedColumnName = "department_id")
   @JsonBackReference
   private DepartmentEntity parentDepartmentId; // 부모 부서
-
-  @Column(name = "department_level", columnDefinition = "INT default 0")
-  private int departmentLevel = 0;
 
   @Column(name = "company_code", length = 100, nullable = false)
   private String companyCode;

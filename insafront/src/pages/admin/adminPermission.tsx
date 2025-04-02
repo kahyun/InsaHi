@@ -1,68 +1,220 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import UserCard from '@/component/admin/UserCard';
-import '@/styles/admin/adminPermission.module.css';
+import styles from '@/styles/admin/adminPermission.module.css';
 
-type User = {
-  id: string;
+// API 응답 타입
+type RawUser = {
+  employeeId: string;
   name: string;
   department: string;
+  authorityList: { authorityName: string }[];
 };
 
-const dummyUsers: User[] = [
-  {id: '1', name: '김지훈', department: '인사팀'},
-  {id: '2', name: '이수정', department: '개발팀'},
-  {id: '3', name: '박세영', department: '인사팀'},
-  {id: '4', name: '조민수', department: '개발팀'},
-  {id: '5', name: '정혜원', department: '인사팀'},
-  {id: '6', name: '한지훈', department: '개발팀'},
-];
+// 프론트에서 사용할 타입
+type User = {
+  employeeId: string;
+  name: string;
+  department: string;
+  authorityList: string[];
+};
 
 export default function AdminPermissionPage() {
-  const [admins, setAdmins] = useState<User[]>([
-    dummyUsers[0],
-    dummyUsers[1],
-  ]);
-  const [users, setUsers] = useState<User[]>(
-      dummyUsers.slice(2)
-  );
+  const [admins, setAdmins] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [companyCodeFromToken, setCompanyCodeFromToken] = useState<string>('');
+  const [adminPage, setAdminPage] = useState(1);
+  const [userPage, setUserPage] = useState(1);
+  const adminsPerPage = 5;
+  const usersPerPage = 10;
 
-  const grantAdmin = (user: User) => {
-    setUsers(users.filter((u) => u.id !== user.id));
-    setAdmins([...admins, user]);
-  };
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-  const revokeAdmin = (user: User) => {
-    setAdmins(admins.filter((a) => a.id !== user.id));
-    setUsers([...users, user]);
-  };
+    const companyCode = localStorage.getItem('companyCode') ?? '';
+    setCompanyCodeFromToken(companyCode);
+    const token = localStorage.getItem('accessToken') || '';
 
-  const groupedUsers = users.reduce<Record<string, User[]>>((acc, user) => {
-    if (!acc[user.department]) {
-      acc[user.department] = [];
+    // 관리자 목록 가져오기
+    const fetchAdmins = async () => {
+      try {
+        const res = await fetch(
+            `http://127.0.0.1:1006/employee/auth-list?companyCode=${companyCode}&authorityName=ROLE_ADMIN`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            }
+        );
+        const rawData: RawUser[] = await res.json();
+        const adminData: User[] = rawData.map((user) => ({
+          ...user,
+          authorityList: user.authorityList?.map((auth) => auth.authorityName) ?? [],
+        }));
+        setAdmins(adminData);
+      } catch (error) {
+        console.error('관리자 사용자 로딩 실패:', error);
+      }
+    };
+
+    // 일반 사용자 목록 가져오기
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(
+            `http://127.0.0.1:1006/employee/auth-list?companyCode=${companyCode}&authorityName=ROLE_USER`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            }
+        );
+        const rawData: RawUser[] = await res.json();
+        const userData: User[] = rawData
+        .map((user) => ({
+          ...user,
+          authorityList: user.authorityList?.map((auth) => auth.authorityName) ?? [],
+        }))
+        .filter((user) => !user.authorityList.includes('ROLE_ADMIN')); // ROLE_ADMIN 없는 사용자만
+        setUsers(userData);
+      } catch (error) {
+        console.error('일반 사용자 로딩 실패:', error);
+      }
+    };
+
+    fetchAdmins();
+    fetchUsers();
+  }, []);
+
+  const paginatedAdmins = admins.slice((adminPage - 1) * adminsPerPage, adminPage * adminsPerPage);
+  const paginatedUsers = users
+  .filter((user) => !admins.some((admin) => admin.employeeId === user.employeeId))
+  .slice((userPage - 1) * usersPerPage, userPage * usersPerPage);
+
+  const grantAdmin = async (user: User) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch(
+          `http://127.0.0.1:1006/employee/grant-admin?employeeId=${user.employeeId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? {Authorization: `Bearer ${token}`} : {}),
+            },
+          }
+      );
+      const message = await res.text();
+      alert(message);
+
+      // 상태 업데이트
+      const updatedUser = {...user, authorityList: [...user.authorityList, 'ROLE_ADMIN']};
+      setAdmins([...admins, updatedUser]);
+      setUsers(users.filter((u) => u.employeeId !== user.employeeId));
+    } catch (error) {
+      console.error('관리자 권한 부여 실패:', error);
+      alert('관리자 권한 부여 실패');
     }
-    acc[user.department].push(user);
-    return acc;
-  }, {});
+  };
+
+  const revokeAdmin = async (user: User) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch(
+          `http://127.0.0.1:1006/employee/delete-admin?employeeId=${user.employeeId}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? {Authorization: `Bearer ${token}`} : {}),
+            },
+          }
+      );
+      const message = await res.text();
+      alert(message);
+
+      // 상태 업데이트
+      const updatedUser = {
+        ...user,
+        authorityList: user.authorityList.filter((auth) => auth !== 'ROLE_ADMIN'),
+      };
+      setUsers([...users, updatedUser]);
+      setAdmins(admins.filter((a) => a.employeeId !== user.employeeId));
+    } catch (error) {
+      console.error('관리자 권한 제거 실패:', error);
+      alert('관리자 권한 제거 실패');
+    }
+  };
 
   return (
-      <div className="container">
-        <h2 className="section-title">👑 Admin 사용자</h2>
-        <div className="user-list admin-list">
-          {admins.map((admin) => (
-              <UserCard key={admin.id} user={admin} actionType="revoke" onAction={revokeAdmin}/>
-          ))}
+      <div className={styles.adminContainer}>
+        <div className={styles.card1}>
+          <div className={styles.cardTitleBar}>관리자 사용자</div>
+          <br/>
+          <div className={styles.adminList1}>
+            {paginatedAdmins.map((admin) => (
+                <div className={styles.userCardRow} key={admin.employeeId}>
+                  <UserCard
+                      user={admin}
+                      actionType="revoke"
+                      onAction={revokeAdmin}
+                  />
+                </div>
+            ))}
+          </div>
+          <div style={{display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '1rem'}}>
+            {Array.from({length: Math.ceil(admins.length / adminsPerPage)}).map((_, idx) => (
+                <button
+                    key={idx + 1}
+                    onClick={() => setAdminPage(idx + 1)}
+                    style={{
+                      padding: '5px 10px',
+                      backgroundColor: adminPage === idx + 1 ? '#ddd' : '#fff',
+                      border: '1px solid #ccc',
+                      cursor: 'pointer'
+                    }}
+                >
+                  {idx + 1}
+                </button>
+            ))}
+          </div>
         </div>
+        <br/>
+        <br/>
 
-        <h2 className="section-title">🧑‍💼 일반 사용자 (부서별)</h2>
-        <div className="user-list">
-          {Object.entries(groupedUsers).map(([dept, users]) => (
-              <div key={dept} className="department-section">
-                <h3 className="department-title">📁 {dept}</h3>
-                {users.map((user) => (
-                    <UserCard key={user.id} user={user} actionType="grant" onAction={grantAdmin}/>
-                ))}
-              </div>
-          ))}
+        {/* 일반 사용자 목록 */}
+        <div className={styles.card1}>
+          <div className={styles.cardTitleBar}>일반 사용자</div>
+          <br/>
+          <div className={styles.adminList1}>
+            {paginatedUsers.map((user) => (
+                <div className={styles.userCardRow} key={user.employeeId}>
+                  <UserCard
+                      user={user}
+                      actionType="grant"
+                      onAction={grantAdmin}
+                  />
+                </div>
+            ))}
+          </div>
+          <div style={{display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '1rem'}}>
+            {Array.from({length: Math.ceil(users.length / usersPerPage)}).map((_, idx) => (
+                <button
+                    key={idx + 1}
+                    onClick={() => setUserPage(idx + 1)}
+                    style={{
+                      padding: '5px 10px',
+                      backgroundColor: userPage === idx + 1 ? '#ddd' : '#fff',
+                      border: '1px solid #ccc',
+                      cursor: 'pointer'
+                    }}
+                >
+                  {idx + 1}
+                </button>
+            ))}
+          </div>
         </div>
       </div>
   );

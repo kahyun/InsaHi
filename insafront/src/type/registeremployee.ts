@@ -3,8 +3,9 @@ export interface RegisterEmployeeDTO {
   name: string;
   password: string;
   email: string;
-  department: string;
-  positionSalaryId: BigInteger;
+  departmentId: string;
+  positionSalaryId: number;
   phoneNumber: string;
+  hireDate: string;
 
 }

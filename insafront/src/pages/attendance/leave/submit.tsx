@@ -28,6 +28,7 @@ export default function LeaveSubmitPage() {
   const [form, setForm] = useState({startDate: '', stopDate: '', reason: ''});
   const [page, setPage] = useState(0);
   const size = 7;
+  const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
 
   const {
     data: remainingLeave,
@@ -118,15 +119,21 @@ export default function LeaveSubmitPage() {
           )}
 
           <div className={styles.leaveForm}>
-            <input type="date" value={form.startDate}
-                   onChange={(e) => setForm({...form, startDate: e.target.value})}
-                   className={styles.leaveInput}/>
-            <input type="date" value={form.stopDate}
-                   onChange={(e) => setForm({...form, stopDate: e.target.value})}
-                   className={styles.leaveInput}/>
-            <textarea placeholder="사유를 입력하세요" value={form.reason}
-                      onChange={(e) => setForm({...form, reason: e.target.value})}
-                      className={styles.leaveTextarea}/>
+            <input
+                type="date"
+                value={form.startDate}
+                min={today} // 오늘 이전 선택 불가
+                onChange={(e) => setForm({...form, startDate: e.target.value})}
+                className={styles.leaveInput}/>
+            <input
+                type="date"
+                value={form.stopDate}
+                min={form.startDate || today} // 시작일 이후부터 선택 가능하게 처리
+                onChange={(e) => setForm({...form, stopDate: e.target.value})}
+                className={styles.leaveInput}
+            /> <textarea placeholder="사유를 입력하세요" value={form.reason}
+                         onChange={(e) => setForm({...form, reason: e.target.value})}
+                         className={styles.leaveTextarea}/>
             <button onClick={handleSubmit} disabled={leaveMutation.isPending}
                     className={styles.leaveSubmitButton}>
               {leaveMutation.isPending ? '신청 중...' : '휴가 신청'}
@@ -159,7 +166,7 @@ export default function LeaveSubmitPage() {
             ) : (
                 <ul className="space-y-2">
                   {filteredUsageList.length === 0 ? (
-                      <li className="text-gray-500">휴가 신청 내역이 없습니다.</li>
+                      <li className={styles.leaveSubmitCard}>휴가 신청 내역이 없습니다.</li>
                   ) : (
                       filteredUsageList.map((usage) => (
                           <li key={usage.annualLeaveUsageId} className={styles.leaveSubmitCard}>

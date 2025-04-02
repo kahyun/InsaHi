@@ -9,6 +9,7 @@ import {useRouter} from "next/router";
 export default function SignupForm() {
   const {
     register,
+    reset,
     formState: {errors},
   } = useForm<CompanyFormtype & Adminformtype>();
   const [submittedData, setSubmittedData] = useState<CompanyFormtype & Adminformtype | null>(null);
@@ -20,6 +21,17 @@ export default function SignupForm() {
     // FormData 객체 생성 (HTML 폼에서 가져옴)
     const formData = new FormData(event.currentTarget);
     console.log("최초 요청 데이터:", formData);
+
+    // 빈 필드 찾기
+    const requiredFields = ["companyAddress", "headCount", "createdAt", "businessNumber", "name", "password", "email", "phoneNumber"];
+    const missingFields = requiredFields.filter(
+        (field) => !formData.get(field)
+    );
+
+    if (missingFields.length > 0) {
+      alert(`입력되지 않은 항목: ${missingFields.join(", ")}`);
+      return; // 중단
+    }
 
     // 서버 액션 호출
     const response = await signup(formData);
