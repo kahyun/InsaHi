@@ -196,12 +196,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     responseDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
     responseDTO.setEmail(employee.getEmail());
     responseDTO.setHireDate(employee.getHireDate());
+    responseDTO.setCompanyName(employee.getCompany().getCompanyName());
 
     if (employee.getProfileImage() != null) {
       String imageUrl =
           uploadDir + employee.getProfileImage().getStoreFilename();
       responseDTO.setProfileImage(imageUrl);
     }
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
 
     return responseDTO;
   }

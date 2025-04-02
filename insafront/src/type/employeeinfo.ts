@@ -7,4 +7,5 @@ interface employeeInfoDTO {
   departmentName: string;
   profileImage?: string;
   hireDate: string;
+  companyName: string;
 }

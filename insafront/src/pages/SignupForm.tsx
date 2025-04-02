@@ -23,7 +23,7 @@ export default function SignupForm() {
     console.log("최초 요청 데이터:", formData);
 
     // 빈 필드 찾기
-    const requiredFields = ["companyAddress", "headCount", "createdAt", "businessNumber", "name", "password", "email", "phoneNumber"];
+    const requiredFields = ["companyAddress", "headCount", "createdAt", "businessNumber", "name", "password", "email", "phoneNumber", "hireDate"];
     const missingFields = requiredFields.filter(
         (field) => !formData.get(field)
     );
@@ -136,6 +136,12 @@ export default function SignupForm() {
                   </div>
                   {errors.email && <p className={styles.error}>{errors.email.message}</p>}
 
+                </div>
+                <div className={styles.formGroup}>
+                  <label>입사일</label>
+                  <input {...register("hireDate", {required: "입사일을 입력하세요"})}
+                         placeholder="입사일 입력(년-월-일)"/>
+                  {errors.hireDate && <p className={styles.error}>{errors.hireDate.message}</p>}
                 </div>
 
 

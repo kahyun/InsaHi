@@ -25,6 +25,7 @@ public class SignupRequestDTO {
   private String email;
   private String phoneNumber;
   private String departmentId;
+  private Date hireDate;
 
   public CompanyRequestDTO companySignupRequestDTO() {
     return new CompanyRequestDTO(companyCode, companyName, companyAddress, headCount, createdAt,
@@ -33,6 +34,6 @@ public class SignupRequestDTO {
 
   public AdminRequestDTO AdminSignupRequestDTO() {
     return new AdminRequestDTO(employeeId, password, name, companyCode, departmentId, email,
-        phoneNumber);
+        phoneNumber, hireDate);
   }
 }
