@@ -1,6 +1,7 @@
 package com.playdata.HumanResourceManagement.employee.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,14 +18,11 @@ public class EmployeeResponseDTO {
   private String companyCode;
   private String email;
   private String phoneNumber;
-  private String address;
-  private String gender;
-  private String birthday;
   private String departmentId;
-  private String teamId;
+  private String departmentName;
   private String state;
   private Long positionSalaryId;
-  private LocalDate hireDate;
+  private Date hireDate;
   private LocalDate retireDate;
   private String profileImage;
 

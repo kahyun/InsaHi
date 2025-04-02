@@ -1,5 +1,7 @@
 package com.playdata.HumanResourceManagement.employee.controller;
 
+import com.playdata.HumanResourceManagement.company.entity.Company;
+import com.playdata.HumanResourceManagement.company.repository.CompanyRepository;
 import com.playdata.HumanResourceManagement.employee.authentication.TokenManager;
 import com.playdata.HumanResourceManagement.employee.dto.AuthorityResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmpAuthResponseDTO;
@@ -11,10 +13,13 @@ import com.playdata.HumanResourceManagement.employee.dto.MyUserDetail;
 import com.playdata.HumanResourceManagement.employee.dto.ProfileCardDTO;
 import com.playdata.HumanResourceManagement.employee.dto.UpdatePasswordDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.service.EmployeeEmailService;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
+import jakarta.mail.MessagingException;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +51,8 @@ public class EmployeeController {
 
   private final EmployeeService employeeService;
   private final TokenManager tokenManager;
+  private final EmployeeEmailService employeeEmailService;
+  private final CompanyRepository companyRepository;
 
   @PutMapping("/update-salary-step")
   public void updateSalaryStep(@RequestParam("employeeId") String employeeId,
@@ -146,11 +153,6 @@ public class EmployeeController {
       @PathVariable("employeeId") String employeeId) {
     ProfileCardDTO response = employeeService.getProfileCard(employeeId);
     System.out.println("result result result : " + response);
-    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
-    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
-    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
-    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
-    System.out.println("프로필 카드 출력 출력 출력 출력 출력 출력" + response);
 
     return ResponseEntity.ok(response);
 
@@ -161,10 +163,6 @@ public class EmployeeController {
   public ResponseEntity<EmployeeResponseDTO> getEmployeeInfo(
       @PathVariable("employeeId") String employeeId) {
     EmployeeResponseDTO response = employeeService.getEmployeeInfo(employeeId);
-    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
-    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
-    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
-    System.out.println("개인정보 수정페이지 출력 출력 출력" + response);
 
     return ResponseEntity.ok(response);
   }
@@ -207,7 +205,6 @@ public class EmployeeController {
   }
 
   //회원등록
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/insertemployee")
   public ResponseEntity<?> insertEmployee(
       @RequestBody EmployeeRequestDTO employeeRequestDTO) {
@@ -231,6 +228,20 @@ public class EmployeeController {
 
     Employee employee = employeeService.employeeInsert(employeeRequestDTO);
     employeeService.addUserRoles(employee);
+    Optional<Company> optionalCompany = companyRepository.findByCompanyCode(
+        employee.getCompanyCode());
+    Company company = optionalCompany.get();
+
+    // 회원가입 완료 후 이메일 전송
+    try {
+      employeeEmailService.sendRegistrationInfo(employee.getName(), employee.getEmail(),
+          employee.getCompanyCode(), employee.getEmployeeId(),
+          company.getCompanyName());
+
+    } catch (MessagingException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("직원등록은 완료되었으나 이메일 전송 중 오류가 발생했습니다.");
+    }
 
     System.out.println(
         "employeeDTO controller controller controller !~~~@!~@~" + employeeRequestDTO);
