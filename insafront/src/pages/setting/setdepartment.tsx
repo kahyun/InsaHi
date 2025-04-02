@@ -49,7 +49,6 @@ export default function CreateDepartmentPage() {
     const payload = {
       departmentName,
       parentDepartmentId: selectedParentId,
-      departmentLevel: 1,
     };
 
     try {
