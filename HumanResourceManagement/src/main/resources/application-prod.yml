@@ -50,7 +50,7 @@ spring:
 
 file:
   upload-dir: /uploads/insahi/profile/
-  access-url: http://127.0.0.1:1010/uploads/profile/
+  access-url: http:/127.0.0.1:1010/uploads/profile/
 #eureka:
 #  client:
 #    register-with-eureka: true

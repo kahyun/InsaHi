@@ -6,8 +6,6 @@ import com.playdata.HumanResourceManagement.company.dto.SignupRequestDTO;
 import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.HumanResourceManagement.company.service.CompanyEmailService;
 import com.playdata.HumanResourceManagement.company.service.CompanyService;
-import com.playdata.HumanResourceManagement.company.service.EmailService;
-
 import com.playdata.HumanResourceManagement.employee.NewDepartment.dto.ActionBasedOrganizationChartDTO;
 import com.playdata.HumanResourceManagement.employee.NewDepartment.dto.OrganizationStructureDTO;
 import com.playdata.HumanResourceManagement.employee.NewDepartment.service.NewCreateDeptService;
@@ -62,7 +60,7 @@ public class CompanyController {
     // 회원가입 완료 후 이메일 전송
     try {
       emailService.sendRegistrationInfo(employee.getName(), employee.getEmail(),
-          savedCompany.getCompanyCode(), employee.getEmployeeId());
+          savedCompany.getCompanyCode(), employee.getEmployeeId(),employee.getCompanyCode());
     } catch (MessagingException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
           .body("회원가입은 완료되었으나 이메일 전송 중 오류가 발생했습니다.");

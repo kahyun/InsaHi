@@ -7,8 +7,8 @@ server:
   port: 1000
 
 spring:
-  profiles:
-    active: dev   # default 환경: dev
+#  profiles:
+#    active: prod   # default 환경: dev
   application:
     name: AttendanceSalary
 

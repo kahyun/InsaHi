@@ -20,7 +20,10 @@ public class OrganizationStructureDTO {
   private String parentDepartmentId;                // 상위 부서 ID
   private List<OrganizationStructureDTO> subDepartments; // 하위 부서 목록
 
-  /**
+    public OrganizationStructureDTO(Object departmentId, String root, Object parentDepartmentId, int i, Object o) {
+    }
+
+    /**
    * Entity → DTO 변환 메서드
    */
   public static OrganizationStructureDTO fromEntity(DepartmentEntity department) {
