@@ -56,6 +56,20 @@
   3) 결재 문서 목록  
      ![011](https://github.com/user-attachments/assets/d11a6920-be13-4d5d-a8db-c8ae8ce2b706)
 
+- **즈소록 페이지**
+  1) 주소록 리스트
+  ![image](https://github.com/user-attachments/assets/95c33696-5691-4c52-84af-b7f253a1f8ef)
+  2) 사용자 추가
+  ![image](https://github.com/user-attachments/assets/f58c7c6d-c058-4231-a3f3-f855c0397acc)
+  3) 사용자 정보 수정
+  ![image](https://github.com/user-attachments/assets/d6a8f6a6-c9f6-4e76-b67c-d0ec4e1ccb3d)
+
+  3) 부서 추가 - 프론트 추가 중
+  4) 부서 삭제 - API 연결 중
+  5) 사용자 이동 - API 연결 중
+  6) 사용자 삭제 - API 연결 중
+
+
 - **설정 페이지**  
   ![001](https://github.com/user-attachments/assets/2a3d02b9-29ea-4940-9d6c-4194589e2f93)
 
