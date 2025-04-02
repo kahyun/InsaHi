@@ -5,12 +5,9 @@ server:
 jwt:
   header: Authorization
   secret: 4Hirx6BNM+kTbhOxA4cHCUz/BF0B0tokIgTRs2d5ORn3zF8fPAESoo/jXcUiBnWYoZWrxgunF3l3gvGCUi6JGQ==
-  #  token-validity-in-second: 86400000 #60*60*24*1000
-  token-validity-in-second: 86400000 #60*60*24*1000
+  token-validity-in-second: 86400000
 
 spring:
-  profiles:
-    active: dev   # default 환경: dev
   application:
     name: Gateway
 
@@ -23,7 +20,7 @@ spring:
         cors-configurations:
           '[/**]':
             #테스트용 *                   #'*'           #
-            allowedOrigins: 'http://127.0.0.1:3000'
+            allowedOrigins: http://13.209.196.244:3000
             allow-credentials: true
             allowedHeaders: '*'
             allowedMethods:
@@ -37,52 +34,54 @@ spring:
 
       routes:
         - id: HumanResourceManagement
-          uri: http://127.0.0.1:1010
+          uri: http://human-resource-service:8080
           predicates:
             - Path=/employee/**
             - Method=POST
           filters:
             #            - JwtAuthorizationFilter
             name: JwtAuthorizationFilter
+
         - id: static-files
-          uri: file:///C:/fullstack7/work/final-project/InsaHi/HumanResourceManagement/uploads/profile/
+          uri: file:/uploads/insahi/profile
           predicates:
             - Path=/uploads/profile/**
 
 
         - id: HumanResourceManagement
-          uri: http://127.0.0.1:1010
+          uri: http://human-resource-service:8080
           predicates:
             - Path=/employee/**
 
         - id: HumanResourceManagement
-          uri: http://127.0.0.1:1010
+          uri: http://human-resource-service:8080
           predicates:
             - Path=/company/**
 
         - id: HumanResourceManagement
-          uri: http://127.0.0.1:1010
+          uri: http://human-resource-service:8080
           predicates:
             - Path=/department/**
 
         - id: Chat
-          uri: http://127.0.0.1:1004
+          uri: http://chat-service:8080
           predicates:
             - Path=/chat/**
 
         - id: AttendanceSalary
-          uri: http://127.0.0.1:1000
+          uri: http://attendance-salary-service:8080
           predicates:
             - Path=/atdsal/**
+
         - id: ElectronicApproval
-          uri: http://127.0.0.1:1005
+          uri: http://approval-service:8080
           predicates:
             - Path=/approval/**
           filters:
             - PreserveHostHeader
 
         - id: AttendanceSalary
-          uri: http://127.0.0.1:1000
+          uri: http://attendance-salary-service:8080
           predicates:
             - Path=/leave/**
 
