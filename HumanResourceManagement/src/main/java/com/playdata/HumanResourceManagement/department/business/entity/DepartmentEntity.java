@@ -48,9 +48,6 @@ public class DepartmentEntity extends DateEntity {
   @JsonBackReference
   private DepartmentEntity parentDepartmentId; // 부모 부서
 
-  @Column(name = "department_level", columnDefinition = "INT default 0")
-  private int departmentLevel = 0;
-
   @Column(name = "company_code", length = 100, nullable = false)
   private String companyCode;
 
