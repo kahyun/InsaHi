@@ -34,7 +34,7 @@ spring:
 
       routes:
         - id: HumanResourceManagement
-          uri: http://human-resource-service:8080
+          uri: http://hrm-service:8080
           predicates:
             - Path=/employee/**
             - Method=POST
@@ -49,17 +49,17 @@ spring:
 
 
         - id: HumanResourceManagement
-          uri: http://human-resource-service:8080
+          uri: http://hrm-service:8080
           predicates:
             - Path=/employee/**
 
         - id: HumanResourceManagement
-          uri: http://human-resource-service:8080
+          uri: http://hrm-service:8080
           predicates:
             - Path=/company/**
 
         - id: HumanResourceManagement
-          uri: http://human-resource-service:8080
+          uri: http://hrm-service:8080
           predicates:
             - Path=/department/**
 
@@ -69,19 +69,19 @@ spring:
             - Path=/chat/**
 
         - id: AttendanceSalary
-          uri: http://attendance-salary-service:8080
+          uri: http://atdsal-service:8080
           predicates:
             - Path=/atdsal/**
 
         - id: ElectronicApproval
-          uri: http://approval-service:8080
+          uri: http://electronicepproval-service:8080
           predicates:
             - Path=/approval/**
           filters:
             - PreserveHostHeader
 
         - id: AttendanceSalary
-          uri: http://attendance-salary-service:8080
+          uri: http://atdsal-service:8080
           predicates:
             - Path=/leave/**
 
