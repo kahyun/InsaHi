@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import ContactList from "@/component/department/contact-list";
-import { Toolbar } from "@/component/department/toolbar";
-import { MemberContent, TableViewerContainer } from "./styled";
-import { Contact } from "@/type/EmployeeTable";
+import {Toolbar} from "@/component/department/toolbar";
+import {MemberContent, TableViewerContainer} from "./styled";
+import {Contact} from "@/type/EmployeeTable";
 import UserDetailCard from "@/component/department/userTable/UserDetailCard";
 import CalendarAction from "@/api/mypage/calendaraction";
 
 type TableViewerProps = {
-    selectedDepartment: string;
+    selectedDepartment: string,
+    departmentName?: string
 };
 
-const TableViewer: React.FC<TableViewerProps> = ({ selectedDepartment }) => {
+const TableViewer: React.FC<TableViewerProps> = ({selectedDepartment, departmentName}) => {
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [storedCompanyCode, setStoredCompanyCode] = useState<string | null>(null);
@@ -95,13 +96,13 @@ const TableViewer: React.FC<TableViewerProps> = ({ selectedDepartment }) => {
 
     return (
         <TableViewerContainer className="TableViewer">
-            <h1>{selectedDepartment}</h1> {/* 부서 이름 표시 */}
-            <Toolbar />
+            <h1>{departmentName}</h1> {/* 부서 이름 표시 */}
+            <Toolbar/>
             <MemberContent className="right">
                 {error ? (
-                    <p style={{ color: "red" }}>{error}</p>
+                    <p style={{color: "red"}}>{error}</p>
                 ) : (
-                    <ContactList contactsData={contacts} onSelectContact={handleSelectContact} />
+                    <ContactList contactsData={contacts} onSelectContact={handleSelectContact}/>
                 )}
 
                 {selectedEmployeeId && userDetails && (
@@ -112,7 +113,7 @@ const TableViewer: React.FC<TableViewerProps> = ({ selectedDepartment }) => {
                         userDetails={userDetails}
                         leaveData={leaveData}
                         error={error}
-                        onClose={() => setSelectedEmployeeId(null)} // 닫기 이벤트
+                        onClose={() => setSelectedEmployeeId(null)}
                     />
                 )}
             </MemberContent>

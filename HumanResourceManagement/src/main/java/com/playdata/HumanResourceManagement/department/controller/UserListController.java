@@ -3,12 +3,14 @@ package com.playdata.HumanResourceManagement.department.controller;
 import com.playdata.HumanResourceManagement.department.dto.UserDataDTO;
 import com.playdata.HumanResourceManagement.department.service.EmployeeDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("/api/{companyCode}")
+@RequestMapping("/api/{companyCode}/employee")
 @RequiredArgsConstructor
 public class UserListController {
 
@@ -21,19 +23,13 @@ public class UserListController {
      * @param employeeId 직원 ID
      * @return 해당 직원의 정보
      */
-    @GetMapping("/employee/{employeeId}")
+    @GetMapping("/{employeeId}")
     public ResponseEntity<UserDataDTO> getEmployeeById(@PathVariable String companyCode, @PathVariable String employeeId) {
-        try {
-            // 회사 코드와 직원 ID를 전달하여 직원 정보를 조회
-            UserDataDTO employee = employeeDataService.getEmployeeByCompanyCodeAndId(companyCode, employeeId);
-            if (employee != null) {
-                return new ResponseEntity<>(employee, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        UserDataDTO employee = employeeDataService.getEmployeeByCompanyCodeAndId(companyCode, employeeId);
+        if (employee == null) {
+            throw new ResponseStatusException(NOT_FOUND, "직원을 찾을 수 없습니다.");
         }
+        return ResponseEntity.ok(employee);
     }
 
     /**
@@ -43,14 +39,13 @@ public class UserListController {
      * @param employeeId 삭제할 직원 ID
      * @return 삭제된 직원 정보
      */
-    @DeleteMapping("/employee/{employeeId}")
+    @DeleteMapping("/{employeeId}")
     public ResponseEntity<UserDataDTO> deleteUser(@PathVariable String companyCode, @PathVariable String employeeId) {
-        try {
-            UserDataDTO deletedUser = employeeDataService.deleteUser(companyCode, employeeId);
-            return new ResponseEntity<>(deletedUser, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        UserDataDTO deletedUser = employeeDataService.deleteUser(companyCode, employeeId);
+        if (deletedUser == null) {
+            throw new ResponseStatusException(NOT_FOUND, "삭제할 직원을 찾을 수 없습니다.");
         }
+        return ResponseEntity.ok(deletedUser);
     }
 
     /**
@@ -61,31 +56,15 @@ public class UserListController {
      * @param userDTO 수정할 직원 정보
      * @return 수정된 직원 정보
      */
-    @PutMapping("/employee/{employeeId}")
-    public ResponseEntity<UserDataDTO> updateUser(@PathVariable String companyCode, @PathVariable String employeeId, @RequestBody UserDataDTO userDTO) {
-        try {
-            UserDataDTO updatedUser = employeeDataService.updateUser(companyCode, employeeId, userDTO);
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    @PutMapping("/{employeeId}")
+    public ResponseEntity<UserDataDTO> updateUser(
+            @PathVariable String companyCode,
+            @PathVariable String employeeId,
+            @RequestBody UserDataDTO userDTO) {
+        UserDataDTO updatedUser = employeeDataService.updateUser(companyCode, employeeId, userDTO);
+        if (updatedUser == null) {
+            throw new ResponseStatusException(NOT_FOUND, "수정할 직원을 찾을 수 없습니다.");
         }
-    }
-
-    /**
-     * 회사 코드 기반으로 직원 추가하기
-     *
-     * @param companyCode 회사 코드
-     * @param userDTO 직원 정보
-     * @return 추가된 직원 정보
-     */
-    @PostMapping("/employee")
-    public ResponseEntity<UserDataDTO> createUserByCompanyCode(@PathVariable String companyCode, @RequestBody UserDataDTO userDTO) {
-        try {
-            userDTO.setCompanyCode(companyCode); // userDTO에 회사 코드 포함
-            UserDataDTO createdUser = employeeDataService.createUser(userDTO);
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(updatedUser);
     }
 }

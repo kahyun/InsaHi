@@ -2,10 +2,11 @@
 import React from "react";
 
 interface NodeViewerProps {
-    selectedDepartment?: string
+    selectedDepartment?: string,
+    departmentName?: string
 }
 
-const NodeViewer = ({selectedDepartment}: NodeViewerProps) => {
+const NodeViewer = ({selectedDepartment, departmentName}: NodeViewerProps) => {
     return (
         <div className={"NodeViewer"}>
             <h3>Node Viewer</h3>
