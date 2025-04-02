@@ -20,7 +20,6 @@ const Calendar = ({leaveList}: CalendarProps) => {
 
   return (
       <div className={styles.calendarContainer}>
-        <h2 className="mb-2 text-lg font-semibold">내 연차 캘린더</h2>
         <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"

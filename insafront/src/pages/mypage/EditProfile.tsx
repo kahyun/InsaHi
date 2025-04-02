@@ -15,6 +15,10 @@ function EditProfile() {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const router = useRouter();
+  const formattedHireDate = employee?.hireDate
+      ? new Date(employee.hireDate).toISOString().slice(0, 10) // yyyy-mm-dd
+      : "-";
+
 
   useEffect(() => {
     // 클라이언트에서만 실행되도록 보장
@@ -79,6 +83,7 @@ function EditProfile() {
     }
   };
 
+
   return (
       <div className={styles.container}>
         <h2 className={styles.title}>개인정보 수정</h2>
@@ -127,15 +132,17 @@ function EditProfile() {
           {/* 부서 ID */}
           <div className={styles.formGroup}>
             <label>부서 ID</label>
-            <input type="text" name="departmentId" value={employee?.departmentId ?? " - "}
+            <input type="text" name="departmentName" value={employee?.departmentName ?? " - "}
                    disabled/>
           </div>
 
-          {/* 팀 ID */}
+          {/* 입사일 */}
           <div className={styles.formGroup}>
-            <label>팀 ID</label>
-            <input type="text" name="teamId" value={employee?.teamId ?? " - "} disabled/>
+            <label>입사일</label>
+            <input type="text" name="hireDate" value={formattedHireDate ?? " - "}
+                   disabled/>
           </div>
+
 
           <button type="submit" className={styles.submitButton}>수정 완료</button>
           <Link href="/mypage/UpdatePassword" className={styles.changePassword}>

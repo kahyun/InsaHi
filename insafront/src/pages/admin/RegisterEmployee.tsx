@@ -8,6 +8,7 @@ import {getParentDepartments} from "@/services/createDepartmentAction";
 import SelectDepartment from "@/component/department/SelectDepartment";
 import {usePositionActions} from "@/services/salaryAction";
 import {usePositionSalaryStepActions} from "@/services/positionSalaryStepAction";
+import {useRouter} from "next/router";
 
 
 export default function RegisterEmployee() {
@@ -15,15 +16,32 @@ export default function RegisterEmployee() {
   const {
     register,
     setValue,
+    reset,
     formState: {errors},
   } = useForm<RegisterEmployeeDTO>();
   const [submittedData, setSubmittedData] = useState<RegisterEmployeeDTO | null>(null);
+
+  const router = useRouter();
 
   async function onRegisterHandleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // FormData 객체 생성 (HTML 폼에서 가져옴)
     const formData = new FormData(event.currentTarget);
     console.log("최초 요청 데이터:", formData);
+
+    // 빈 필드 찾기
+    const requiredFields = ["name", "password", "email", "phoneNumber", "hireDate"];
+    const missingFields = requiredFields.filter(
+        (field) => !formData.get(field)
+    );
+
+    if (!selectedDepartment) missingFields.push("departmentId");
+    if (!selectedPositionSalaryId) missingFields.push("positionSalaryId");
+
+    if (missingFields.length > 0) {
+      alert(`입력되지 않은 항목: ${missingFields.join(", ")}`);
+      return; // 중단
+    }
 
     // departmentId와 positionSalaryId를 수동으로 추가
     formData.append("departmentId", selectedDepartment);
@@ -33,9 +51,12 @@ export default function RegisterEmployee() {
     const response = await RegisterEmployeeAction(formData);
     console.log("서버 응답:", response);
     alert("직원등록이 완료되었습니다!");
-
-
     console.log(response); //  응답 메시지 저장
+
+    // ✅ 모든 필드 초기화
+    reset(); // input 초기화
+    setSelectedDepartment(''); // 부서 선택 초기화
+    setSelectedPositionSalaryId(''); // 직급 선택 초기화
   };
 
 
@@ -57,16 +78,11 @@ export default function RegisterEmployee() {
 
   const {
     positions,
-    newPosition,
-    handlePositionChange,
-    handleSubmitPosition
   } = usePositionActions(companyCodeFromToken);
 
   const {
     positionSalarySteps,
-    newPositionSalaryStep,
-    handlePositionSalaryStepChange,
-    handleSubmitPositionSalaryStep
+
   } = usePositionSalaryStepActions(companyCodeFromToken);
 
   useEffect(() => {
@@ -81,7 +97,7 @@ export default function RegisterEmployee() {
 
   return (
       <div className={styles.container}>
-        <h2 className={styles.title}>직원 등록</h2>
+        <h2 className={styles.title}>👤 직원 등록</h2>
 
         {submittedData ? (
             <p> 등록이 완료되었습니다 !!!</p>
