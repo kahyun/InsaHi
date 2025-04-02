@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: dev
   application:
     name: Chat
 
@@ -9,7 +7,7 @@ spring:
 
   data:
     mongodb:
-      uri: "mongodb://localhost:27017/chat_db"
+      uri: "mongodb://43.201.109.71:27017/chat_db"
       database: chat_db
 
   mvc:
