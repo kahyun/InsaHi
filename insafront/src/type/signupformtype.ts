@@ -12,4 +12,5 @@ export interface Adminformtype {
   email: string;
   phoneNumber: string;
   department: string;
+  hireDate: string;
 }

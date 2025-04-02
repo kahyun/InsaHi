@@ -25,6 +25,7 @@ public class EmployeeResponseDTO {
   private LocalDate hireDate;
   private LocalDate retireDate;
   private String profileImage;
+  private String companyName;
 
 
 }
