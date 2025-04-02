@@ -7,12 +7,11 @@ import {
   getLeaveDetailById,
   approveLeave,
   rejectLeave,
-  approveAdditionalLeave
+  approveAdditionalLeave, getRemainingLeave
 } from '@/services/leaveService';
-import {AnnualLeaveRequestDTO} from '@/type/leave';
+import {AnnualLeaveDTO, AnnualLeaveRequestDTO} from '@/type/leave';
 import {toast} from 'react-toastify';
 import styles from '@/styles/atdsal/leave.module.css';
-import Calendar from '@/component/mypage/Calendar';
 
 const useLocalStorage = (key: string, defaultValue = '') => {
   const [value, setValue] = useState<string>(defaultValue);
@@ -35,6 +34,16 @@ export default function LeaveDetailPage() {
     queryKey: ['leaveDetail', leaveId],
     queryFn: () => getLeaveDetailById(Number(leaveId)),
     enabled: !!leaveId,
+  });
+
+  const {
+    data: remainingLeave,
+    isLoading: remainingLoading,
+    isError: remainingError
+  } = useQuery<AnnualLeaveDTO>({
+    queryKey: ['remainingLeave', leave?.employeeId],
+    queryFn: () => getRemainingLeave(leave!.employeeId),
+    enabled: !!leave?.employeeId, // leave가 있고 employeeId도 있을 때만 실행
   });
 
   const approveMutation = useMutation({
@@ -74,7 +83,7 @@ export default function LeaveDetailPage() {
       <div className={`${styles.leaveDetailWrapper}`}>
         {/* 왼쪽: 정보 및 버튼 */}
         <div className={styles.leaveDetailLeft}>
-          <h1 className={styles.leaveHeader}>휴가 신청 상세 정보</h1>
+          <h1 className={styles.leaveHeader}>휴가 신청 상세</h1>
           <div className={styles.leaveBox}>
             <p><strong>사번:</strong> {leave.employeeId}</p>
             <p><strong>회사 코드:</strong> {leave.companyCode}</p>
@@ -88,16 +97,16 @@ export default function LeaveDetailPage() {
           {!isFinalStatus && (
               <div className={styles.leaveButtonGroup}>
                 <button onClick={() => approveMutation.mutate(leave)}
-                        className={`${styles.leaveButton} bg-green-500 text-white`}>
-                  휴가 승인
+                        className={`${styles.leaveButton} `}>
+                  승인
                 </button>
                 <button onClick={() => rejectMutation.mutate(leave)}
-                        className={`${styles.leaveButton} bg-red-500 text-white`}>
-                  반려
+                        className={`${styles.leaveButton}`}>
+                  거절
                 </button>
                 <button onClick={() => additionalApproveMutation.mutate(leave)}
-                        className={`${styles.leaveButton} bg-yellow-500 text-white`}>
-                  추가 연차 승인
+                        className={`${styles.leaveButton} ${styles.leaveButton3}`}>
+                  추가 승인
                 </button>
               </div>
           )}
@@ -105,8 +114,24 @@ export default function LeaveDetailPage() {
           <button onClick={() => router.back()} className={styles.leaveBackButton}>뒤로 가기</button>
         </div>
 
-        {/* 오른쪽 해당 직원 연차 정보*/}
+        {/* 오른쪽 해당 직원 연차 정보 */}
+        <div className={styles.leaveDetailRight}>
+          <h2 className={styles.leaveHeader}>직원 연차 내역</h2>
+          {remainingLoading ? (
+              <p>남은 연차 로딩 중...</p>
+          ) : remainingError ? (
+              <p className="text-red-500">남은 연차 조회 실패</p>
+          ) : (
+              <div className={styles.leaveBox}>
+                <p>총 연차: <strong>{remainingLeave?.totalGrantedLeave ?? 0}</strong>일</p>
+                <p>기본 연차: <strong>{remainingLeave?.baseLeave ?? 0}</strong>일</p>
+                <p>추가 연차: <strong>{remainingLeave?.additionalLeave ?? 0}</strong>일</p>
+                <p>사용한 연차: <strong>{remainingLeave?.usedLeave ?? 0}</strong>일</p>
+                <p>남은 연차: <strong>{remainingLeave?.remainingLeave ?? 0}</strong>일</p>
+              </div>
+          )}
 
+        </div>
       </div>
   );
 }

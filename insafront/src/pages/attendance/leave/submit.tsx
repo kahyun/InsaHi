@@ -166,7 +166,7 @@ export default function LeaveSubmitPage() {
             ) : (
                 <ul className="space-y-2">
                   {filteredUsageList.length === 0 ? (
-                      <li className="text-gray-500">휴가 신청 내역이 없습니다.</li>
+                      <li className={styles.leaveSubmitCard}>휴가 신청 내역이 없습니다.</li>
                   ) : (
                       filteredUsageList.map((usage) => (
                           <li key={usage.annualLeaveUsageId} className={styles.leaveSubmitCard}>
