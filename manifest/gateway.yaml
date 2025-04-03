@@ -1,42 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hrm
+  name: gateway-deployment
   namespace: insahi
+  labels:
+    app: gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: insahi-hrm
+      app: gateway
   template:
     metadata:
       labels:
-        app: insahi-hrm
+        app: gateway
     spec:
       containers:
-        - name: hrm
-          image: jahee24/hrm-service:1.2
+        - name: gateway
+          image: jahee24/gateway-service:1.0
           ports:
-            - containerPort: 1010
+            - containerPort: 1006
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-
-
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: hrm-service
+  name: gateway-service
   namespace: insahi
 
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
-    app: insahi-hrm
-
+    app: gateway
   ports:
-    - port: 1010
-      targetPort: 1010
+    - port: 1006       # 클러스터 내부에서 쓸 포트
+      targetPort: 1006 # 컨테이너 내 gateway 포트

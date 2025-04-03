@@ -8,7 +8,7 @@ server:
 
 spring:
   profiles:
-    active: dev   # default 환경: dev
+    active: prod   # default 환경: dev
   security:
     user:
       name: admin

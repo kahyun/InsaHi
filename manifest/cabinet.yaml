@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      project: insahi
+      app: insahi-cabinet
   template:
     metadata:
       labels:
-        project: insahi
+        app: insahi-cabinet
     spec:
       containers:
         - name: cabinet
@@ -34,7 +34,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    project: insahi
+    app: insahi-cabinet
 
   ports:
     - port: 1002

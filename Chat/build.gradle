@@ -7,6 +7,13 @@ plugins {
 ext {
     springCloudVersion = "2023.0.5"
 }
+springBoot {
+    mainClass = 'com.playdata.Chat.ChatApplication'
+}
+
+bootJar {
+    mainClass = 'com.playdata.Chat.ChatApplication'
+}
 
 group = 'com.playdata'
 version = '0.0.1-SNAPSHOT'

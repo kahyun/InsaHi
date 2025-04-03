@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      project: insahi
+      app: insahi-appr
   template:
     metadata:
       labels:
-        project: insahi
+        app: insahi-appr
     spec:
       containers:
         - name: appr
@@ -34,7 +34,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    project: insahi
+    app: insahi-appr
 
   ports:
     - port: 1005
