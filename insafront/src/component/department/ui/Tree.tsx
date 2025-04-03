@@ -1,89 +1,114 @@
-    import React, { useState, useMemo, useEffect } from "react";
-    import { DndProvider } from "react-dnd";
-    import { Tree, NodeModel, MultiBackend, getBackendOptions } from "@minoru/react-dnd-treeview";
-    import { Department } from '@/type/DepartmentDTO'; // 부서 타입 임포트
+import React, { useState, useMemo, useEffect } from "react";
+import axios from "axios";
+import { DndProvider } from "react-dnd";
+import { Tree, NodeModel, MultiBackend, getBackendOptions } from "@minoru/react-dnd-treeview";
+import { Department } from "@/type/DepartmentDTO";
 
-    interface TreeProps {
-        departments?: Department[];
-        handleDepartmentClick: (departmentId: string) => void;
+interface TreeProps {
+    departments?: Department[];
+    handleDepartmentClick: (departmentId: string) => void;
+    companyCode: string;
+}
+
+const stringToNumber = (text: string) => {
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+        hash = text.charCodeAt(i) + ((hash << 5) - hash);
     }
+    return Math.abs(hash);
+};
 
-    const stringToNumber = (text: string) => parseInt(text.replace("D", ""));
+export default function DepartmentTree({ departments, handleDepartmentClick, companyCode }: TreeProps) {
+    const newData: NodeModel<Department>[] = useMemo(() => {
+        if (!departments) return [];
 
-    export default function ({ departments, handleDepartmentClick }: TreeProps) {
-        const filterNumber = (text: string) => {
-            const numbers = text.replace(/\D/g, ""); // 숫자만 추출
-            const letters = text.replace(/\d/g, ""); // 문자만 추출
-            return { numbers, letters };
-        };
+        return departments
+            .map<NodeModel<Department>>((dept) => {
+                const id = stringToNumber(dept.departmentId);
+                const parentId = dept.parentDepartmentId ? stringToNumber(dept.parentDepartmentId) : 0;
 
-        const toUnicodeNumbers = (letters: string): string => {
-            return letters
-                .split("")
-                .map((char) => char.charCodeAt(0))
-                .join(" ");
-        };
+                return {
+                    id,
+                    parent: parentId,
+                    text: dept.departmentName,
+                    droppable: true,
+                    data: dept,
+                };
+            })
+            .filter((node) => !isNaN(node.id) && !isNaN(node.parent))
+            .sort((a, b) => {
+                if (a.parent !== b.parent) return a.parent - b.parent;
+                return a.id - b.id;
+            });
+    }, [departments]);
 
-        // 부서 UI 변환 함수
-        const convertNumber = (text: string) => {
-            const { numbers, letters } = filterNumber(text);
-            return {
-                numbers: Number(numbers), // 문자열 숫자를 정수로 변환
-                unicode: toUnicodeNumbers(letters), // 유니코드 숫자로 변환
-            };
-        };
+    const [treeData, setTreeData] = useState<NodeModel<Department>[]>([]);
 
-        // 새 트리 데이터 생성
-        const newData: NodeModel<Department>[] = useMemo(
-            () =>
-                (departments || [])
-                    .map<NodeModel<Department>>((o) => {
-                        const { numbers } = convertNumber(o.departmentId);
+    useEffect(() => {
+        setTreeData(newData);
+    }, [newData]);
 
-                        return {
-                            id: numbers,
-                            parent: o.parentDepartmentId === null ? 0 : Number(o.parentDepartmentId),
-                            text: `${o.departmentName}`,
-                            droppable: true,
-                            data: o,
-                        };
-                    })
-                    .filter((node, index, self) => // 중복 제거
-                            index === self.findIndex((t) => (
-                                t.id === node.id && t.parent === node.parent
-                            ))
-                    ),
-            [departments]
-        );
+    const handleDrop = (newTree: NodeModel<Department>[]) => setTreeData(newTree);
 
-        const [treeData, setTreeData] = useState<NodeModel<Department>[]>([]);
+    /** 부서 삭제 함수 */
+    const handleDelete = async (id: number, departmentId: string) => {
+        try {
+            // 직원 이동
+            await axios.patch(`/api/${companyCode}/department/move`, null, {
+                params: { fromDepartmentId: departmentId, toDepartmentId: "1" }
+            });
 
-        useEffect(() => {
-            setTreeData(newData);
-        }, [newData]);
+            // 부서 삭제
+            await axios.delete(`/api/${companyCode}/department/${departmentId}`);
 
-        const handleDrop = (newTree: NodeModel<Department>[]) => setTreeData(newTree);
+            // 트리에서 삭제된 부서 제거
+            setTreeData((prev) => prev.filter((node) => node.id !== id && node.parent !== id));
+        } catch (error) {
+            console.error("부서 삭제 실패: ", error);
+        }
+    };
 
-        return (
-            <div>
-                <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-                    <Tree
-                        tree={treeData}
-                        rootId={0}
-                        render={(node, { depth, isOpen, onToggle }) => (
-                            <div
-                                onClick={() => handleDepartmentClick(node?.data?.departmentId || "D001")}
+    return (
+        <div>
+            <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+                <Tree
+                    tree={treeData}
+                    rootId={0}
+                    render={(node, { depth, isOpen, onToggle }) => (
+                        <div
+                            style={{
+                                marginLeft: depth * 20,
+                                display: "flex",
+                                alignItems: "center",
+                                cursor: "pointer",
+                            }}
+                            onClick={() => handleDepartmentClick(node?.data?.departmentId || "D001")}
+                        >
+                            {node.droppable && (
+                                <span onClick={onToggle} style={{ marginRight: 5 }}>
+                                    {isOpen ? "[-]" : "[+]" }
+                                </span>
+                            )}
+                            {node.text} ({node.data?.employees?.length || 0} 명)
+                            <button
+                                style={{ all: "unset", cursor: "pointer", marginLeft: "5px" }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (typeof node.id === "number" && node.data?.departmentId) {
+                                        handleDelete(node.id, node.data.departmentId);
+                                    } else {
+                                        console.error("삭제 실패: departmentId가 유효하지 않음", node);
+                                    }
+                                }}
                             >
-                                {node.droppable && (
-                                    <span onClick={onToggle}>{isOpen ? "[-]" : "[+]"}</span>
-                                )}
-                                {node.text} {node.data?.employees.length || 0} 명
-                            </div>
-                        )}
-                        dragPreviewRender={(monitorProps) => <div>{monitorProps.item.text}</div>}
-                        onDrop={handleDrop}
-                    />
-                </DndProvider>
-            </div>
-        );
-    }
+                                삭제
+                            </button>
+                        </div>
+                    )}
+                    dragPreviewRender={(monitorProps) => <div>{monitorProps.item.text}</div>}
+                    onDrop={handleDrop}
+                />
+            </DndProvider>
+        </div>
+    );
+}

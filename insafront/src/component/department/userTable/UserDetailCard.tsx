@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import MiniCalendar from "@/component/department/ui/miniCalendar";
-import {MemberView,MemberHeader} from "./styled";
-import { CalendarDTO } from "@/api/mypage/calendaraction";
+import {MemberView, MemberHeader} from "./styled";
+import {CalendarDTO} from "@/api/mypage/calendaraction";
 
 interface User {
     name: string;
@@ -20,18 +20,18 @@ interface User {
     authorityList?: string[];
     companyCode?: string | null;
     employeeId: string;
-    departmentName: string;
 }
 
 interface UserDetailCardProps {
-    employeeId: string;
-    departmentName: string;
-    userDetails: User;
-    error: string | null;
-    checkInTime?: string | null;
-    leaveData?: CalendarDTO[];
-    onClose?: () => void;
-    companyCode?: string | null;
+    employeeId: string,
+    departmentName: string,
+    userDetails: User,
+    error: string | null,
+    checkInTime?: string | null,
+    leaveData?: CalendarDTO[],
+    onClose?: () => void,
+    companyCode?: string | null,
+    departmentId?: unknown
 }
 
 const UserDetailCard: React.FC<UserDetailCardProps> = ({
@@ -43,6 +43,7 @@ const UserDetailCard: React.FC<UserDetailCardProps> = ({
                                                            leaveData = [],
                                                            onClose,
                                                            companyCode,
+                                                           departmentId
                                                        }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedUser, setEditedUser] = useState<User>(userDetails);
@@ -55,21 +56,16 @@ const UserDetailCard: React.FC<UserDetailCardProps> = ({
     }, [userDetails]);
 
     if (error) {
-        return <p className="text-red-500">{error}</p>;
+        return <p className="text-red-500">❌ 오류 발생: {error}</p>;
     }
 
     if (!userDetails) {
-        return <p className="text-gray-500">로딩 중...</p>;
+        return <p className="text-gray-500">⏳ 사용자 정보를 불러오는 중...</p>;
     }
 
-    const formatDate = (date: string) => new Date(date).toLocaleDateString("ko-KR");
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setEditedUser((prevState: User) => ({
-            ...prevState,
-            [name]: value,
-        }));
+        const {name, value} = e.target;
+        setEditedUser((prevState) => ({...prevState, [name]: value}));
     };
 
     const handleSaveClick = async () => {
@@ -83,29 +79,18 @@ const UserDetailCard: React.FC<UserDetailCardProps> = ({
             return;
         }
 
-        const userToSave = {
-            ...editedUser,
-            companyCode: companyCode,
-        };
-
         try {
             const response = await fetch(`/api/${companyCode}/employee/edit/${employeeId}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(userToSave),
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({...editedUser, companyCode}),
             });
 
-            if (!response.ok) {
-                throw new Error("사용자 정보 업데이트 실패");
-            }
+            if (!response.ok) throw new Error("사용자 정보 업데이트 실패");
 
-            const updatedUser = await response.json();
-            setEditedUser(updatedUser);
-            setSaveSuccess("사용자 정보가 성공적으로 저장되었습니다.");
+            setSaveSuccess("✅ 사용자 정보가 성공적으로 저장되었습니다.");
         } catch (err) {
-            setSaveError("사용자 정보를 저장하는데 실패했습니다. 다시 시도해주세요.");
+            setSaveError("❌ 사용자 정보를 저장하는데 실패했습니다.");
             console.error("오류 발생:", err);
         } finally {
             setIsLoading(false);
@@ -113,105 +98,44 @@ const UserDetailCard: React.FC<UserDetailCardProps> = ({
     };
 
     return (
-        <MemberView className="MemberView">
-            <MemberHeader className="MemberHeader">
+        <MemberView>
+            <MemberHeader>
                 <h2>사용자 상세 정보</h2>
                 <div>
-                {isEditing ? (
-                    <button
-                        type="button"
-                        onClick={handleSaveClick}
-                        disabled={isLoading}
-                        className="bg-blue-500 text-white p-2 rounded"
-                    >
-                        {isLoading ? "저장 중..." : "저장"}
-                    </button>
-                ) : (
-                    <button type="button" onClick={() => setIsEditing(true)} className="bg-green-500 text-white p-2 rounded">
-                        수정
-                    </button>
-                )}
-                <button
-                    type="button"
-                    onClick={() => {
-                        onClose && onClose();
-                        setIsEditing(false);
-                    }}
-                    className="bg-gray-500 text-white p-2 rounded"
-                >
-                    닫기
-                </button>
+                    {isEditing ? (
+                        <button onClick={handleSaveClick} disabled={isLoading}
+                                className="bg-blue-500 text-white p-2 rounded">
+                            {isLoading ? "저장 중..." : "저장"}
+                        </button>
+                    ) : (
+                        <button onClick={() => setIsEditing(true)} className="bg-green-500 text-white p-2 rounded">
+                            수정
+                        </button>
+                    )}
+                    <button onClick={onClose} className="bg-gray-500 text-white p-2 rounded">닫기</button>
                 </div>
             </MemberHeader>
 
             {saveError && <p className="text-red-500">{saveError}</p>}
             {saveSuccess && <p className="text-green-500">{saveSuccess}</p>}
 
-            <p>
-                <strong>이름:</strong>{" "}
-                {isEditing ? (
-                    <input
-                        type="text"
-                        name="name"
-                        value={editedUser.name}
-                        onChange={handleChange}
-                        className="border p-1"
-                    />
-                ) : (
-                    userDetails.name
-                )}
-            </p>
-
-            <p>
-                <strong>직급:</strong>{" "}
-                {isEditing ? (
-                    <input
-                        type="text"
-                        name="positionName"
-                        value={editedUser.positionName || ""}
-                        onChange={handleChange}
-                        className="border p-1"
-                    />
-                ) : (
-                    userDetails.positionName
-                )}
-            </p>
-
-            <p><strong>부서:</strong> {userDetails.departmentName}</p>
+            <p><strong>이름:</strong> {isEditing ?
+                <input type="text" name="name" value={editedUser.name} onChange={handleChange}
+                       className="border p-1"/> : userDetails.name}</p>
+            <p><strong>직급:</strong> {isEditing ?
+                <input type="text" name="positionName" value={editedUser.positionName} onChange={handleChange}
+                       className="border p-1"/> : userDetails.positionName}</p>
+            <p><strong>부서:</strong> {departmentName}</p> {/* ✅ departmentName 직접 사용 */}
             <p><strong>사번:</strong> {userDetails.employeeId}</p>
-
-            <p>
-                <strong>이메일:</strong>{" "}
-                {isEditing ? (
-                    <input
-                        type="email"
-                        name="email"
-                        value={editedUser.email}
-                        onChange={handleChange}
-                        className="border p-1"
-                    />
-                ) : (
-                    userDetails.email
-                )}
-            </p>
-
-            <p>
-                <strong>전화번호:</strong>{" "}
-                {isEditing ? (
-                    <input
-                        type="tel"
-                        name="phoneNumber"
-                        value={editedUser.phoneNumber}
-                        onChange={handleChange}
-                        className="border p-1"
-                    />
-                ) : (
-                    userDetails.phoneNumber
-                )}
-            </p>
+            <p><strong>이메일:</strong> {isEditing ?
+                <input type="email" name="email" value={editedUser.email} onChange={handleChange}
+                       className="border p-1"/> : userDetails.email}</p>
+            <p><strong>전화번호:</strong> {isEditing ?
+                <input type="tel" name="phoneNumber" value={editedUser.phoneNumber} onChange={handleChange}
+                       className="border p-1"/> : userDetails.phoneNumber}</p>
 
             <div className="mt-4">
-                <MiniCalendar leaveList={leaveData || []} />
+                <MiniCalendar leaveList={leaveData || []}/>
             </div>
         </MemberView>
     );

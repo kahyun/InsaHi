@@ -6,11 +6,8 @@ export interface EmployeeData {
     companyCode: string;
     email: string;
     phoneNumber: string;
-    address: string;
-    gender: "여성" | "남성" | "미정";
     departmentId: string;
     departmentName: string;
-    birthday: string;
     hireDate: string;
     retireDate: string;
     position: Position;

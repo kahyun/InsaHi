@@ -1,10 +1,17 @@
 import styled from '@emotion/styled';
 
+export const SideDepartment = styled('div')`
+    width: 320px;   
+    height: 100%;
+    border-left: 1px solid #1f2937;
+    
+`;
+
+
 export const TableContainer = styled('div')`
     width: 100%;
     flex: 1;
     background: #fff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 export const StyledTable = styled('table')`

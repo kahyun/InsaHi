@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 // Modal 배경
 export const ModalBackground = styled.div`
@@ -30,17 +30,55 @@ export const ModalHeader = styled.h3`
     margin-bottom: 16px;
 `;
 
-// 닫기 버튼 스타일
-export const CloseButton = styled.button`
-    background-color: #3b82f6;
-    color: white;
+// 입력 필드 스타일
+export const Input = styled.input`
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 4px;
+`;
+// 입력 필드 스타일
+export const SelectDepartment = styled.select`
+    width: 100%;
+`;
+
+// 에러 메시지 스타일
+export const ErrorMessage = styled.p`
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 4px;
+`;
+
+// 버튼 그룹 (하단 버튼 정렬)
+export const ButtonWrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+`;
+
+// 기본 버튼 스타일
+const Button = styled.button`
     padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
     border: none;
     font-size: 1rem;
-    margin-top: 16px;
+`;
+
+// 닫기 버튼 (파란색)
+export const CloseButton = styled(Button)`
+    background-color: #3b82f6;
+    color: white;
     &:hover {
         background-color: #2563eb;
+    }
+`;
+
+// 취소 버튼 (회색)
+export const CancelButton = styled(Button)`
+    background-color: #ccc;
+    &:hover {
+        background-color: #aaa;
     }
 `;
