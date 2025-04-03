@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+//123456
 @FeignClient(name = "hrm", url = "${hrm.service.url}", configuration = FeignClientConfig.class)
 public interface HrmFeignClient {
 
