@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/styles/paydetail.module.css';
+import styles from '@/styles/atdsal/paydetail.module.css';
 
 interface PaydetailList {
   지급항목합계: number;

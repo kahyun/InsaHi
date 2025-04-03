@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/styles/paystubsearch.module.css';
+import styles from '@/styles/atdsal/paystubsearch.module.css';
 
 interface PaystubSearchProps {
   selectedYear: string;

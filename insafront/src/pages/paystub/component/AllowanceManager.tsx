@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styles from '@/styles/AllowanceManager.module.css'
+import styles from '@/styles/atdsal/AllowanceManager.module.css'
 
 const AllowanceManager: React.FC = () => {
   const [allowances, setAllowances] = useState([

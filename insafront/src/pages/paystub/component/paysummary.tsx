@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/styles/paysummary.module.css';
+import styles from '@/styles/atdsal/paysummary.module.css';
 
 const PaySummary: React.FC = () => {
   return (
