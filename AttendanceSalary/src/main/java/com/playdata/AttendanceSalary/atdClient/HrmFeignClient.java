@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalTime;
 import java.util.List;
 
-@FeignClient(name = "hrm", url = "${hrm.service.url}")
+@FeignClient(name = "hrm", url = "${hrm.service.url}", configuration = FeignClientConfig.class)
 public interface HrmFeignClient {
 
     /**

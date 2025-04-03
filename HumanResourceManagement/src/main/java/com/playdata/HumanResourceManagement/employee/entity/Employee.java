@@ -62,7 +62,7 @@ public class Employee {
           joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "employee_id")},
           inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "authority_id")}
   )
-  private Set<Authority> authorityList = new HashSet<>(); // 권한 목록
+  private Set<Authority> authorityList; // 권한 목록
 
   // 권한 이름만 반환
   public Set<String> getAuthorityNames() {
@@ -95,11 +95,15 @@ public class Employee {
   // 엔티티 저장 전에 기본값 설정
   @PrePersist
   public void prePersist() {
-    if (this.password == null || this.password.isBlank()) {
-      this.password = "defaultPassword"; // 보안 고려하여 안전한 기본 비밀번호 설정
+    if (this.password == null) {
+      this.password = "1234";  // 기본 비밀번호 설정
+    }
+    if (this.authorityList == null) {
+      this.authorityList = new HashSet<>();  // 권한 목록 초기화
     }
     if (this.employeeId == null) {
-      this.employeeId = "2025" + UUID.randomUUID().toString().substring(0,4); // 전체 UUID 사용
+      this.employeeId = "2025" + UUID.randomUUID().toString()
+              .substring(0, 4);
     }
   }
 
