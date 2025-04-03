@@ -7,7 +7,7 @@ import Stomp, {Client} from "stompjs";
 import {useRouter} from "next/router";
 import RoomInfoModal from "@/component/chat/RoomInfoModal";
 
-
+//1231
 const SOCKET_URL = "http://127.0.0.1:1006/chat/ws-stomp"; //  Spring Boot와 일치
 
 interface Message {
