@@ -4,9 +4,15 @@ import Checkbox from '@mui/material/Checkbox';
 import { useState } from "react";
 import { Contact, ContactListProps } from '@/type/EmployeeTable';
 
-const ContactList: React.FC<ContactListProps> = ({ contactsData, onSelectContact }) => {
+const ContactList: React.FC<ContactListProps> = ({
+                                                   contactsData,
+                                                   onSelectContact,
+                                                   setSelectedContacts,
+                                                   selectedContacts,
+                                                   departmentName,
+                                                   companyCode
+                                                 }) => {
   const [selectAll, setSelectAll] = useState(false);
-  const [selectedContacts, setSelectedContacts] = useState<{ [key: string]: boolean }>({});
 
   const handleSelectAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
@@ -79,7 +85,7 @@ const ContactList: React.FC<ContactListProps> = ({ contactsData, onSelectContact
                         <StyledTableCell>{contact.name}</StyledTableCell>
                         <StyledTableCell>{contact.email || "이메일 없음"}</StyledTableCell>
                         <StyledTableCell>{contact.phoneNumber || "없음"}</StyledTableCell>
-                        <StyledTableCell>{contact.departmentName || "부서 없음"}</StyledTableCell>
+                        <StyledTableCell>{departmentName || "부서 없음"}</StyledTableCell>
                         <StyledTableCell>{contact.positionName || "미지정"}</StyledTableCell>
                       </SelectedRow>
                   );

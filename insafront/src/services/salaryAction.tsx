@@ -30,6 +30,12 @@ companyCode: string
         baseAnnualLeave: 0,
         companyCode: companyCode
     });
+    return { // 김민지 추가 salaary
+        stepSalary,
+        stepSalarys,
+        setStepSalary,
+        setStepSalaryes
+    };
 
 }
 
@@ -104,6 +110,10 @@ export const usePositionActions = (companyCode: string) => {
         }
     }, [companyCode]);
 
+
+
+
+
     const loadPositions = async () => {
         try {
             const data = await fetchPositions(companyCode);
@@ -113,6 +123,12 @@ export const usePositionActions = (companyCode: string) => {
             console.error(error);
         }
     };
+
+
+
+
+
+
 
     const handlePositionChange = (
         e: React.ChangeEvent<HTMLInputElement>

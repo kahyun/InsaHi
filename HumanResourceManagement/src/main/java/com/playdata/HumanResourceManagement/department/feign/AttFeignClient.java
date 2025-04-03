@@ -1,6 +1,5 @@
 package com.playdata.HumanResourceManagement.department.feign;
 
-import com.playdata.AttendanceSalary.atdClient.hrmDTO.PositionSendDTO;
 import com.playdata.HumanResourceManagement.department.dto.PositionDownloadDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ public interface AttFeignClient {
      * @return 추가된 직급 정보
      */
     @PostMapping("/positions/{companyCode}")
-    PositionSendDTO addPosition(@PathVariable String companyCode, @RequestBody PositionSendDTO positionDTO);
+    PositionDownloadDTO addPosition(@PathVariable String companyCode, @RequestBody PositionDownloadDTO positionDTO);
 
     /**
      * 직급을 삭제합니다.
@@ -38,4 +37,13 @@ public interface AttFeignClient {
      */
     @DeleteMapping("/positions/{companyCode}/{positionName}")
     boolean deletePosition(@PathVariable String companyCode, @PathVariable String positionName);
+
+    /**
+     * 직급 ID에 따른 직급명을 조회합니다.
+     *
+     * @param positionSalaryId 직급 ID
+     * @return 직급명
+     */
+    @GetMapping("/positions/name/{positionSalaryId}")
+    String getPositionName(@PathVariable Long positionSalaryId);
 }

@@ -28,7 +28,7 @@ public interface HrmFeignClient {
      * @param positionDTOs 직급 데이터 리스트
      */
     @PostMapping("/api/{companyCode}/position/list")
-    void sendPositionsToHRM(@RequestParam("companyCode") String companyCode, @RequestBody List<PositionSendDTO> positionDTOs);
+    void sendPositionsToHRM(@PathVariable("companyCode") String companyCode, @RequestBody List<PositionSendDTO> positionDTOs);
 
     /**
      * 특정 직원의 회사 시작 시간 조회

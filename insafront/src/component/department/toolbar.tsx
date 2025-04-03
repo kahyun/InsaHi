@@ -1,73 +1,110 @@
 import { FolderInput, UserMinus, UserPlus, UsersRound } from "lucide-react";
-import { useState } from "react";
-import RegisterEmployeeModal from "@/component/department/modal/RegisterModal"; // AddUserModal 컴포넌트 import
-import MoveModal from "@/component/department/modal/MoveModal"; // 부서 이동 모달 컴포넌트 import
+import { useState, useCallback, useEffect } from "react";
+import RegisterEmployeeModal from "@/component/department/modal/RegisterModal";
+import MoveModal from "@/component/department/modal/MoveModal";
 
-export function Toolbar() {
-    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);  // 선택된 사용자 ID 상태
-    const [selectedDepartmentId, setSelectedDepartmentId] = useState<string | null>(null);  // 선택된 부서 ID 상태
-    const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);  // 사용자 추가 모달 상태
-    const [isMoveUserModalOpen, setIsMoveUserModalOpen] = useState(false);  // 사용자 부서 이동 모달 상태
+interface IProps {
+    selectedContacts: { [key: string]: boolean };
+    setSelectedContacts: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
+}
 
-    // 부서 이동하기 기능
+export function Toolbar({ selectedContacts, setSelectedContacts }: IProps) {
+    const [companyCode, setCompanyCode] = useState<string | null>(null);
+
+    useEffect(() => {
+        const storedCompanyCode = localStorage.getItem("companyCode");
+        if (storedCompanyCode) {
+            setCompanyCode(storedCompanyCode);
+        } else {
+            alert("회사 코드가 없습니다. 다시 로그인해주세요.");
+        }
+    }, []);
+
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+    const [selectedDepartmentId, setSelectedDepartmentId] = useState<string | null>(null);
+    const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+    const [isMoveUserModalOpen, setIsMoveUserModalOpen] = useState(false);
+
+    /** 🔹 부서 이동 */
     const handleMoveDepartment = () => {
-        if (selectedUserId && selectedDepartmentId) {
-            setIsMoveUserModalOpen(true); // 부서 이동 모달 열기
-        } else {
-            alert("사용자와 부서를 선택해주세요.");  // 사용자 또는 부서 선택되지 않으면 알림
+        if (!selectedUserId || !selectedDepartmentId) {
+            alert("사용자와 부서를 선택해주세요.");
+            return;
         }
+        setIsMoveUserModalOpen(true);
     };
 
-    // 사용자 삭제하기 기능
-    const handleDeleteUser = () => {
-        if (selectedUserId) {
-            console.log(`Delete user ${selectedUserId}`);
-        } else {
-            alert("삭제할 사용자를 선택해주세요.");  // 사용자 선택되지 않으면 알림
+    /** 🔹 사용자 삭제 */
+    const handleDeleteUser = useCallback(async () => {
+        if (!companyCode) {
+            alert("회사 코드가 없습니다. 다시 로그인해주세요.");
+            return;
         }
-    };
 
-    // 사용자 추가하기 기능
-    const handleAddUser = () => {
-        setIsAddUserModalOpen(true);  // 사용자 추가 모달 열기
-    };
+        const selectedUserKeys = Object.keys(selectedContacts).filter((key) => selectedContacts[key]);
+        if (selectedUserKeys.length === 0) {
+            alert("삭제할 사용자를 선택해주세요.");
+            return;
+        }
 
-    // 모달 닫기
-    const closeAddUserModal = () => {
-        setIsAddUserModalOpen(false);  // 사용자 추가 모달 닫기
-    };
+        if (!window.confirm("정말 삭제하겠습니까?")) {
+            return;
+        }
 
-    const closeMoveUserModal = () => {
-        setIsMoveUserModalOpen(false);  // 사용자 부서 이동 모달 닫기
-    };
+        try {
+            await Promise.all(
+                selectedUserKeys.map(async (userId) => {
+                    const response = await fetch(`/api/${companyCode}/employee/${userId}`, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`사용자 삭제 실패: ${userId}`);
+                    }
+                })
+            );
+
+            alert("선택한 직원이 삭제되었습니다.");
+
+            // 상태 업데이트 (삭제된 직원 제거)
+            setSelectedContacts((prev) => {
+                const updatedContacts = { ...prev };
+                selectedUserKeys.forEach((userId) => delete updatedContacts[userId]);
+                return updatedContacts;
+            });
+
+        } catch (error) {
+            console.error("삭제 중 오류 발생:", error);
+            alert("삭제 중 오류가 발생했습니다.");
+        }
+    }, [selectedContacts, companyCode]);
 
     return (
-        <div>
-            <div>
-                <button onClick={handleDeleteUser}>
-                    <UserMinus size={16} />
-                    사용자 삭제하기
-                </button>
-                <button onClick={handleMoveDepartment}>
-                    <UsersRound size={16} />
-                    사용자 이동하기
-                </button>
-                <button onClick={handleAddUser}>
-                    <UserPlus size={16} />
-                    사용자 추가하기
-                </button>
+        <section className="toolbar">
+            <button onClick={handleDeleteUser}>
+                <UserMinus size={16} />
+                사용자 삭제하기
+            </button>
+            <button onClick={handleMoveDepartment}>
+                <UsersRound size={16} />
+                사용자 이동하기
+            </button>
+            <button onClick={() => setIsAddUserModalOpen(true)}>
+                <UserPlus size={16} />
+                사용자 추가하기
+            </button>
 
-                {/* 사용자 추가 모달 */}
-                <RegisterEmployeeModal closeModal={closeAddUserModal} isOpen={isAddUserModalOpen} />
+            {/* 사용자 추가 모달 */}
+            <RegisterEmployeeModal closeModal={() => setIsAddUserModalOpen(false)} isOpen={isAddUserModalOpen} />
 
-                {/* 사용자 부서 이동 모달 */}
-                <MoveModal
-                    closeModal={closeMoveUserModal}
-                    isOpen={isMoveUserModalOpen}
-                    userId={selectedUserId}
-                    departmentId={selectedDepartmentId}
-                />
-            </div>
-        </div>
+            {/* 사용자 부서 이동 모달 */}
+            <MoveModal
+                closeModal={() => setIsMoveUserModalOpen(false)}
+                isOpen={isMoveUserModalOpen}
+                userId={selectedUserId}
+                departmentId={selectedDepartmentId}
+            />
+        </section>
     );
 }

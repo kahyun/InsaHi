@@ -27,6 +27,7 @@ export interface AllowanceTypes {
 }
 
 export interface PositionEntity {
+    id: any;
   positionId: number;
   positionName: string;
   companyCode: string;

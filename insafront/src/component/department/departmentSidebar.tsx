@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ContactList from "@/component/department/contact-list";
+import { SideDepartment } from "./styled";
 import axios from "axios";
-import { Department, Employees } from "@/type/DepartmentDTO";
+import { Department } from "@/type/DepartmentDTO";
 import Tree from "@/component/department/ui/Tree";
 import { useQuery } from "@tanstack/react-query";
 import { UserPlus } from "lucide-react";
@@ -26,6 +26,7 @@ const DepartmentSidebar: React.FC<NavigationProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
+    /** 부서 데이터 가져오기 */
     const { data: departments } = useQuery({
         queryKey: ["department"],
         queryFn: async () => {
@@ -35,6 +36,7 @@ const DepartmentSidebar: React.FC<NavigationProps> = ({
         }
     });
 
+    /** 사용자 인증 및 회사 코드 로드 */
     useEffect(() => {
         const storedAuth = localStorage.getItem("auth");
         const storedEmployeeId = localStorage.getItem("employeeId");
@@ -49,6 +51,26 @@ const DepartmentSidebar: React.FC<NavigationProps> = ({
         if (storedCompanyCode) setCompanyCode(storedCompanyCode);
     }, []);
 
+    /** 페이지 로딩 시 항상 root 부서 선택 */
+    useEffect(() => {
+        if (departments && departments.length > 0) {
+            const rootDepartment = departments.find(dept => dept.departmentName === "root") || departments[0];
+
+            setSelectedDepartment(rootDepartment.departmentId);
+            if (setSelectedDepartmentName) {
+                setSelectedDepartmentName(rootDepartment.departmentName);
+            }
+
+            if (companyCode) {
+                fetch(`/api/${companyCode}/department/${rootDepartment.departmentId}/list`)
+                    .then(res => res.json())
+                    .then(data => setContacts(data))
+                    .catch(() => setError("사용자 목록을 불러오는 데 실패했습니다."));
+            }
+        }
+    }, [departments, companyCode, setSelectedDepartment, setSelectedDepartmentName]);
+
+    /** 부서 클릭 이벤트 */
     const handleDepartmentClick = (departmentId: string) => {
         console.log(`클릭한 부서 ID: ${departmentId}`);
         setSelectedDepartment(departmentId);
@@ -67,26 +89,24 @@ const DepartmentSidebar: React.FC<NavigationProps> = ({
     };
 
     return (
-        <div>
-            <div>
-                <button
-                    onClick={() => setIsAddUserModalOpen(true)}
-                    className="bg-blue-500 text-white p-2 rounded flex items-center"
-                >
-                    <UserPlus size={16} className="mr-2" />
-                    부서 추가하기
-                </button>
+        <SideDepartment>
+            <button
+                onClick={() => setIsAddUserModalOpen(true)}
+                className="bg-blue-500 text-white p-2 rounded flex items-center"
+            >
+                <UserPlus size={16} className="mr-2" />
+                부서 추가하기
+            </button>
 
-                {isAddUserModalOpen && (
-                    <CreateDepartmentModal
-                        isOpen={isAddUserModalOpen}
-                        closeModal={() => setIsAddUserModalOpen(false)}
-                    />
-                )}
+            {isAddUserModalOpen && (
+                <CreateDepartmentModal
+                    isOpen={isAddUserModalOpen}
+                    closeModal={() => setIsAddUserModalOpen(false)}
+                />
+            )}
 
-                <Tree departments={departments} handleDepartmentClick={handleDepartmentClick} />
-            </div>
-        </div>
+            <Tree departments={departments} handleDepartmentClick={handleDepartmentClick} />
+        </SideDepartment>
     );
 };
 

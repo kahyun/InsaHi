@@ -59,10 +59,11 @@ public class DepartmentEntity extends DateEntity {
 
   @PrePersist
   public void setDefaultDepartmentId() {
-    if (this.departmentId == null) {
-      this.departmentId = "Dept" + UUID.randomUUID().toString().substring(0, 2); // 임시 부서 ID
+    if (this.departmentId == null || this.departmentId.isEmpty()) {
+      this.departmentId = "Dept" + UUID.randomUUID().toString().substring(0, 8); // 8자리 UUID
     }
   }
+
 
   // Getter에서 null 처리하여 빈 리스트로 초기화
   public List<DepartmentEntity> getSubDepartments() {

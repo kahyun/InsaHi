@@ -4,21 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.playdata.HumanResourceManagement.company.entity.Company;
 import com.playdata.HumanResourceManagement.department.entity.DepartmentEntity;
 import com.playdata.HumanResourceManagement.publicEntity.FileEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -43,46 +31,44 @@ public class Employee {
   @Column(name = "start_time")
   private LocalTime startTime;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String password;
 
-  private String name; //2 이름
-  private String email; //3 이메일
-  private String phoneNumber; //4 전화번호
+  private String name; // 이름
+  private String email; // 이메일
+  private String phoneNumber; // 전화번호
 
   @ManyToOne(fetch = FetchType.LAZY, optional = true)
-  @JoinColumn(name = "department_id", nullable = true)  // 외래키 컬럼만 지정
-  @JsonBackReference  // 순환 참조 방지
+  @JoinColumn(name = "department_id", nullable = true)
+  @JsonBackReference
   private DepartmentEntity department; // 부서
+
   private String state; // 상태 (Active, Inactive 등)
-  private Long positionSalaryId; //직급호봉
+  private Long positionSalaryId; // 직급호봉
   private LocalDate hireDate;
   private LocalDate retireDate;
 
-
   @ManyToOne(fetch = FetchType.LAZY, optional = true)
   @JoinColumn(name = "company_code", referencedColumnName = "company_code", nullable = true)
-  @JsonBackReference  // 순환 참조 방지
+  @JsonBackReference
   private Company company; // 회사
 
   @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//  @JoinColumn(name = "profile_image", referencedColumnName = "profile_image", nullable = true)
-  private FileEntity profileImage;  // 프로필 이미지
+  private FileEntity profileImage; // 프로필 이미지
 
   @ManyToMany
   @JoinTable(
-      name = "employee_authority",
-      joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "employee_id")},
-      inverseJoinColumns = {
-          @JoinColumn(name = "authority_id", referencedColumnName = "authority_id")}
+          name = "employee_authority",
+          joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "employee_id")},
+          inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "authority_id")}
   )
-  private Set<Authority> authorityList;  // 권한 목록
+  private Set<Authority> authorityList; // 권한 목록
 
   // 권한 이름만 반환
   public Set<String> getAuthorityNames() {
     return authorityList.stream()
-        .map(Authority::getAuthorityName)
-        .collect(Collectors.toSet());
+            .map(Authority::getAuthorityName)
+            .collect(Collectors.toSet());
   }
 
   // 부서 ID 반환 (부서가 없는 경우 null 반환)
@@ -90,16 +76,20 @@ public class Employee {
     return department != null ? department.getDepartmentId() : null;
   }
 
-  /// 직급명 설정 (직급 ID로 외부에서 직급명 조회)
-//    public void setPositionNameFromClient() {
-//        if (this.positionSalaryId != null) {
-//            this.positionSalaryIdName = fetchPositionNameFromClient(positionId);
-//        }
-//    }
-
   // 외부 시스템에서 직급명 조회 (예시: API 호출)
   private String fetchPositionNameFromClient(String positionId) {
-    return "직급명";  // 외부 시스템에서 직급명을 조회해야 하는 부분
+    return positionSalaryId != null ? "직급명 조회 로직 필요" : "Position not available";
+  }
+
+  // 직급명 반환 (외부 API 연계 가능)
+  public String getPositionName() {
+    return fetchPositionNameFromClient(this.positionSalaryId != null ? this.positionSalaryId.toString() : null);
+  }
+
+
+  // 직급 설정
+  public void setPosition(String positionName) {
+    // 외부에서 직급명 설정이 필요하다면, positionSalaryId와 연계된 로직 추가 가능
   }
 
   // 엔티티 저장 전에 기본값 설정
@@ -113,7 +103,7 @@ public class Employee {
     }
     if (this.employeeId == null) {
       this.employeeId = "2025" + UUID.randomUUID().toString()
-          .substring(0, 4);  // UUID로 employeeId 생성 (전체 UUID 사용)
+              .substring(0, 4);
     }
   }
 
@@ -136,8 +126,6 @@ public class Employee {
     return state != null ? state : "Status not available";
   }
 
-  /// 직급 반환 (직급이 없는 경우 "Position not available" 반환)
-//    public String getPosition() {
-//        return positionName != null ? positionName : "Position not available";
-//    }
+    public void setDepartmentId(String toDepartmentId) {
+    }
 }

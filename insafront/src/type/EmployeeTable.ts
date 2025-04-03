@@ -1,3 +1,14 @@
+import React from "react";
+
+export type User = {
+    name: string;
+    email: string;
+    phoneNumber: string;
+    employeeId: string;
+    positionName?: string;
+};
+
+
 export type Contact = {
     employeeId: string;
     name: string;
@@ -16,6 +27,11 @@ export type Contact = {
 };
 
 export type ContactListProps = {
-    contactsData: Contact[]; // 연락처 데이터 배열
-    onSelectContact: (employeeId: string) => void; // 선택된 연락처의 employeeId를 부모로 전달하는 함수
+    contactsData: Contact[],
+    onSelectContact: (employeeId: string) => void,
+    selectedContacts: { [key: string]: boolean },
+    setSelectedContacts: React.Dispatch<React.SetStateAction<{ [p: string]: boolean }>>,
+    departmentName?: string,
+    departmentId ?: string,
+    companyCode?: string
 };

@@ -27,17 +27,14 @@ public class CreateDeptService {
     public OrganizationDTO createDepartment(String companyCode, OrganizationDTO request) {
         // 부모 부서가 있다면 가져오기
         DepartmentEntity parent = getParentDepartmentIfExists(request.getParentDepartmentId());
-
         // 새로운 부서 생성
         DepartmentEntity department = DepartmentEntity.builder()
                 .companyCode(companyCode)
                 .departmentName(request.getDepartmentName())
-                .parentDepartmentId(parent)  // 부모 부서 정보 연결
+                .parentDepartmentId(parent)
                 .build();
-
         // 부서 저장
         DepartmentEntity savedDepartment = departmentRepository.save(department);
-
         // 저장된 부서 정보를 DTO로 변환하여 반환
         return OrganizationDTO.fromEntity(savedDepartment, companyCode);
     }
