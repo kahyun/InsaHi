@@ -110,7 +110,9 @@ const TopBar = ({activeSidebar, setActiveSidebar}: TopBarProps) => {
       <div className={styles.topcontainer}>
         <header className={styles.toptopbar}>
           <nav className={styles.topnav}>
-            <Link href={"/mypage/MyPage"} className={styles.toplogo}>인사 HI</Link>
+            {/*<Link href={"/mypage/MyPage"} className={styles.toplogo}>인사 HI</Link>*/}
+            <Link href={"/mypage/MyPage"}
+                  className={styles.toplogo}>{employee?.companyName || "-"}</Link>
 
             <ul className={styles.topmenu}>
               <li>

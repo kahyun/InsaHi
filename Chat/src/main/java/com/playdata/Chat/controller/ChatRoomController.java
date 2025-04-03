@@ -41,8 +41,8 @@ public class ChatRoomController {
   }
 
   @PostMapping("/{roomId}/members")
-  public ChatRoom addMemberToRoom(@PathVariable("roomId") String roomId, @RequestParam String Id) {
-    return chatRoomService.addMember(roomId, Id);
+  public ChatRoom addMemberToRoom(@PathVariable("roomId") String roomId, @RequestParam String employeeId) {
+    return chatRoomService.addMember(roomId, employeeId);
   }
 
   @DeleteMapping("/{roomId}/members/{name}")

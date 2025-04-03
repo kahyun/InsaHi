@@ -45,10 +45,6 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Value("${file.upload-dir}")
   private String uploadDir;
 
-  @Value("${file.access-url}")
-  private String accessUrl;
-
-
   private final EmployeeDAO employeeDAO;
   private final AuthorityDAO authorityDAO;
   private final ModelMapper modelMapper;
@@ -178,7 +174,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     if (employee.getProfileImage() != null) {
       String imageUrl =
-          uploadDir + employee.getProfileImage().getStoreFilename();
+          "http://127.0.0.1:1010/uploads/profile/" + employee.getProfileImage().getStoreFilename();
       dto.setProfileImage(imageUrl);
     }
 
@@ -196,12 +192,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     responseDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
     responseDTO.setEmail(employee.getEmail());
     responseDTO.setHireDate(employee.getHireDate());
+    responseDTO.setCompanyName(employee.getCompany().getCompanyName());
 
     if (employee.getProfileImage() != null) {
       String imageUrl =
-          uploadDir + employee.getProfileImage().getStoreFilename();
+          "http://127.0.0.1:1010/uploads/profile/" + employee.getProfileImage().getStoreFilename();
       responseDTO.setProfileImage(imageUrl);
     }
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
+    System.out.println("profileinfo 회사이름 : :: : : :" + employee.getCompany().getCompanyName());
 
     return responseDTO;
   }

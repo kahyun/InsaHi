@@ -1,7 +1,7 @@
 // 인사관리
 import Link from 'next/link';
-import '../../styles/Sidebar1.module.css';
-import styles from "@/styles/Sidebar.module.css";
+import '@/styles/Sidebar1.module.css';
+import styles from '@/styles/Sidebar.module.css'
 
 export default function Sidebar6() {
   return (

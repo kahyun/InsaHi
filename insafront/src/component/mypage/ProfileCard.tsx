@@ -49,10 +49,16 @@ const ProfileCard = ({
         </div>
 
         <div className={styles.quickMenu}>
-          <h3>간편 메뉴</h3>
+          <h4>간편 메뉴</h4>
           <div className={styles.buttonContainer}>
             <Link href="/approval/submit" className={styles.menuItem}>기안하기</Link>
-            <Link href="/approval/file/[approvalFileId]]" className={styles.menuItem}>전자결재 보기</Link>
+            <Link href="/approval/file/[approvalFileId]]" className={styles.menuItem}>문서함</Link>
+            {/*<div className={styles.menuItem}>*/}
+            {/*  */}
+            {/*</div>*/}
+
+          </div>
+          <div className={styles.menuItem}>
             <AttendanceAction employeeId={employeeId!} attendanceRecords={attendanceRecords}/>
           </div>
         </div>
