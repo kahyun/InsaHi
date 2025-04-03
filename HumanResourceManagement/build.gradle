@@ -3,7 +3,13 @@ plugins {
     id 'org.springframework.boot' version '3.3.8'
     id 'io.spring.dependency-management' version '1.1.7'
 }
+springBoot {
+    mainClass = 'com.playdata.HumanResourceManagement.HumanResourceManagementApplication'
+}
 
+bootJar {
+    mainClass = 'com.playdata.HumanResourceManagement.HumanResourceManagementApplication'
+}
 ext {
     springCloudVersion = "2023.0.5"
 }
@@ -54,7 +60,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
     //javamailsender
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 

@@ -21,6 +21,7 @@ WORKDIR /myapp
 
 # 빌드 결과 JAR 파일 복사
 COPY --from=build /myapp/AttendanceSalary/build/libs/*.jar /myapp/atdsal.jar
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # 포트
 EXPOSE 1000

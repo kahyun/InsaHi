@@ -11,7 +11,8 @@ COPY . /myapp
 RUN chmod +x gradlew
 
 # 테스트 생략하고 빌드 (더 빠르게)
-RUN ./gradlew clean build --no-daemon -x test
+#RUN ./gradlew clean build --no-daemon -x test
+RUN ./gradlew :HumanResourceManagement:clean :HumanResourceManagement:bootJar --no-daemon -x test
 
 # 실행 환경 (경량 Alpine)
 FROM openjdk:17-alpine
@@ -26,7 +27,8 @@ ENV TZ=Asia/Seoul
 ENV SPRING_PROFILES_ACTIVE=prod
 
 # 빌드 결과 JAR 파일 복사
-COPY --from=build /myapp/build/libs/*.jar /myapp/hrm.jar
+#COPY --from=build /myapp/build/libs/*.jar /myapp/hrm.jar
+COPY --from=build /myapp/HumanResourceManagement/build/libs/*.jar /myapp/hrm.jar
 
 # 포트
 EXPOSE 1010

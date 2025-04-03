@@ -1,7 +1,6 @@
 hrm:
   service:
-    url: hrm-service.insahi.svc.cluster.local
-
+    url: http://hrm-service.insahi:1010
 
 server:
   port: 1000

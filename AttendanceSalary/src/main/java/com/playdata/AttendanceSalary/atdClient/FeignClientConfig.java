@@ -12,6 +12,7 @@ public class FeignClientConfig {
 
   @Bean
   public RequestInterceptor requestInterceptor() {
+
     return requestTemplate -> {
       String token = extractTokenFromRequest();
       if (token != null) {
