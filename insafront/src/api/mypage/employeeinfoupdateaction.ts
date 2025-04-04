@@ -1,6 +1,8 @@
+import {API_BASE_URL_Employee} from "@/api/api_base_url";
+
 //개인정보수정페이지
 export default async function EmployeeInfoUpdateAction(employeeId: string, formData: FormData): Promise<employeeInfoDTO | null> {
-  const url = `http://127.0.0.1:1006/employee/${employeeId}/update`;
+  const url = `${API_BASE_URL_Employee}/${employeeId}/profilecard`;
   try {
 
     let token = "";

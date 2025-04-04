@@ -27,7 +27,7 @@ public class FeignClientConfig {
       HttpServletRequest request = attributes.getRequest();
       String authHeader = request.getHeader("Authorization");
       if (authHeader != null && authHeader.startsWith("Bearer ")) {
-        return authHeader.substring(7); // "Bearer " 제거 후 반환
+        return authHeader.substring(7); // Bearer  제거 후 반환
       }
     }
     return null;
