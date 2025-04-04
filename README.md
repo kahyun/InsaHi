@@ -92,13 +92,16 @@
 <img width="1100" alt="system" src="https://github.com/user-attachments/assets/2a8a488d-c5a4-4346-9ac7-79a64b9e8d92" />
 
 ### 📌 사용 기술 및 도구
-- **운영체제:** AWS(EC2 Ubuntu22.04)  
+
 - **언어:** Java (Spring Boot)  
 - **빌드 도구:** Gradle  
-- **컨테이너화:** Docker  
+- **컨테이너화:** Docker
+- 프론트 기술: Full Calendar, TypeScript, React
+- *백엔드 기술: Sping Data, Spring Security, Spring JPA, Spring Data MongdDb, SSE, Websocket, Java mail, JWT, Feign Clinet
+- AWS: EC2(MONGODB),EC2(Ubuntu22.04) 
 - **CI/CD 도구:** Jenkins, ArgoCD  
 - **배포 인프라:** Kubernetes  
-- **데이터베이스:** AWS RDS(MySQL), AWS EC2(MONGODB)
+- **데이터베이스:** AWS RDS(MySQL)
 
 ### 🔄 CI/CD 개요
 1. **Jenkins**: 소스 코드 관리 및 CI/CD 트리거  
