@@ -33,7 +33,7 @@ metadata:
   namespace: insahi
 
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: insahi-hrm
 

@@ -1,6 +1,6 @@
 hrm:
   service:
-    url: http://hrm-service.insahi:1010
+    url: http://hrm-service:1010
 
 server:
   port: 1000

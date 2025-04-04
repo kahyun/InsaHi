@@ -11,10 +11,12 @@ import com.playdata.HumanResourceManagement.department.business.dto.newDto.Organ
 import com.playdata.HumanResourceManagement.department.business.service.CreateDeptService;
 import com.playdata.HumanResourceManagement.employee.dto.AdminRequestDTO;
 import com.playdata.HumanResourceManagement.employee.entity.Employee;
+import com.playdata.HumanResourceManagement.employee.repository.EmployeeRepository;
 import com.playdata.HumanResourceManagement.employee.service.EmployeeService;
 import jakarta.mail.MessagingException;
 import java.time.LocalTime;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,7 @@ public class CompanyController {
   private final CreateDeptService createDeptService;
   private final ResourceRepository resourceRepository;
   private final ModelMapper modelMapper;
+  private final EmployeeRepository employeeRepository;
 
   //회사 && 대표자 정보 입력
   @PostMapping("/signup")
@@ -59,19 +62,33 @@ public class CompanyController {
     employeeService.addAdminAndUserRoles(employee);
 
     // 회원가입 완료 후 이메일 전송
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("employeeId", employee.getEmployeeId());
+    response.put("message", "회원가입 성공");
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/email/{employeeId}")
+  public ResponseEntity<?> email(@PathVariable("employeeId") String employeeId) {
+
+    Employee employee = employeeRepository.findByEmployeeId(employeeId);
+    // 회원가입 완료 후 이메일 전송
+
     try {
-      emailService.sendRegistrationInfo(employee.getName(), employee.getEmail(),
-          savedCompany.getCompanyCode(), employee.getEmployeeId(),
-          savedCompany.getCompanyName());
+      emailService.sendRegistrationInfo(
+          employee.getName(),
+          employee.getEmail(),
+          employee.getCompanyCode(),
+          employee.getEmployeeId(),
+          employee.getCompany().getCompanyName());
     } catch (MessagingException e) {
+      e.printStackTrace();
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
           .body("회원가입은 완료되었으나 이메일 전송 중 오류가 발생했습니다.");
     }
-
-    System.out.println("=====================================");
-    System.out.println(signupRequestDTO);
-
     return ResponseEntity.ok(HttpStatus.OK);
+
   }
 
   //김다울 추가

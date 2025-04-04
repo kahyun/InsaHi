@@ -24,6 +24,7 @@ WORKDIR /myapp
 
 # Timezone 설정 (optional)
 ENV TZ=Asia/Seoul
+
 ENV SPRING_PROFILES_ACTIVE=prod
 
 # 빌드 결과 JAR 파일 복사

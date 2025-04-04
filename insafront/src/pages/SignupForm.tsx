@@ -2,7 +2,7 @@ import {FormEvent, useState} from "react";
 import {useForm} from "react-hook-form";
 import styles from "@/styles/form/SignupForm.module.css";
 import {Adminformtype, CompanyFormtype} from "@/type/signupformtype";
-import {signup} from "@/api/action";
+import {mail, signup} from "@/api/action";
 import {useRouter} from "next/router";
 
 
@@ -33,15 +33,27 @@ export default function SignupForm() {
       return; // 중단
     }
 
+
     // 서버 액션 호출
     const response = await signup(formData);
-    console.log("서버 응답:", response);
-    alert("회원가입이 완료되었습니다!");
-    alert("이메일을 확인해주세요 !!!!!");
 
+    alert("회원가입이 완료되었습니다! 이메일을 확인해주세요!");
+    router.push(/*response.redirectUrl ||*/ "/");
+
+    try {
+      if (response?.employeeId) {
+        console.log(response?.employeeId);
+        await mail(response?.employeeId); // employeeId 넘기기
+      }
+
+      
+    } catch (err) {
+      alert("회원가입은 완료되었지만, 이메일 전송 중 문제가 발생했습니다.");
+    }
+    // alert("회원가입이 완료되었습니다! " +
+    //     "이메일을 확인해주세요 !!!!!");
 
     console.log(response); //  응답 메시지 저장
-    router.push("/");
 
   }
 
