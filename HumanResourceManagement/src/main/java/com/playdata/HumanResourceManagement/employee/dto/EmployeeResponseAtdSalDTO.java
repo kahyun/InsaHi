@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeResponseAtdSalDTO {
 
+  private String name;
   private String employeeId;
   private String role;
   private String companyCode;

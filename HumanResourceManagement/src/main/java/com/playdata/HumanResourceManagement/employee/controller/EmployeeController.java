@@ -132,6 +132,7 @@ public class EmployeeController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 직원을 찾을 수 없습니다.");
     }
     EmployeeResponseAtdSalDTO responseAtdSalDTO = new EmployeeResponseAtdSalDTO(
+        employeeResponseDTO.getName(),
         employeeResponseDTO.getEmployeeId(), employeeResponseDTO.getRole(),
         employeeResponseDTO.getCompanyCode(), employeeResponseDTO.getPositionSalaryId(),
         employeeResponseDTO.getHireDate());

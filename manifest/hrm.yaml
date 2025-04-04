@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: hrm
-          image: jahee24/hrm-service:1.2
+          image: daul0519/hrm-service
           ports:
             - containerPort: 1010
           env:
@@ -33,7 +33,7 @@ metadata:
   namespace: insahi
 
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: insahi-hrm
 

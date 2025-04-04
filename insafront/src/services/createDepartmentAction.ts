@@ -5,8 +5,9 @@ import {
   DepartmentListForCreate
 } from "@/type/DepartmentListForCreate";
 import accessToken from "@/lib/accessToken";
+import {API_BASE_URL_Department} from "@/api/api_base_url";
 
-const BASE_URL = "http://127.0.0.1:1006/department";
+const BASE_URL = `${API_BASE_URL_Department}`;
 
 // 상위 부서 리스트 조회
 /*export const getParentDepartments = async (

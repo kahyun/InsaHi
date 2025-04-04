@@ -3,13 +3,14 @@
 
 //Company && Admin 회원가입 action
 
+import {API_BASE_URL_Company, API_BASE_URL_Employee} from "@/api/api_base_url";
+
 export async function signup(formData: FormData) {
   console.log("서버 액션 실행됨!");
 
   const formObject = Object.fromEntries(formData);
   console.log("폼 데이터:", formObject);
-
-  const response = await fetch("http://127.0.0.1:1006/company/signup", {
+  const response = await fetch(`${API_BASE_URL_Company}/signup`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(formObject),
@@ -28,7 +29,7 @@ export async function signup(formData: FormData) {
 }
 
 export async function mail(employeeId: string) {
-  const response = await fetch(`http://127.0.0.1:1006/company/email/${employeeId}`, {
+  const response = await fetch(`${API_BASE_URL_Company}/email/${employeeId}`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
   });
@@ -48,7 +49,7 @@ export async function login(loginData: FormData) {
   const formObject = Object.fromEntries(loginData);
   console.log("폼 데이터:", formObject);
 
-  const res = await fetch("http://127.0.0.1:1006/employee/login", {
+  const res = await fetch(`${API_BASE_URL_Employee}/login`, {
     method: "POST",
     headers: {
       "Accept": "application/json",
