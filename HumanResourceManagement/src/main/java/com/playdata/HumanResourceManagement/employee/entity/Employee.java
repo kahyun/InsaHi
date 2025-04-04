@@ -56,7 +56,7 @@ public class Employee {
   private DepartmentEntity department; // 부서
   private String state; // 상태 (Active, Inactive 등)
   private Long positionSalaryId; //직급호봉
-  private LocalDate hireDate;
+  private Date hireDate;
   private LocalDate retireDate;
 
 
