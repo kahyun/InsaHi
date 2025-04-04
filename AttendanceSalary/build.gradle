@@ -7,10 +7,6 @@ springBoot {
     mainClass = 'com.playdata.AttendanceSalary.AttendanceSalaryApplication'
 }
 
-bootJar {
-    mainClass = 'com.playdata.AttendanceSalary.AttendanceSalaryApplication'
-}
-
 ext {
     springCloudVersion = "2023.0.5"
 }

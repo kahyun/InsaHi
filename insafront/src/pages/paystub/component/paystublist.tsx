@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/styles/paystublist.module.css';
+import styles from '@/styles/atdsal/paystublist.module.css';
 
 type PaystubItem = {
   month: string;

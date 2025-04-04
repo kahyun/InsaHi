@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/styles/EmployeeSearch.module.css'
+import styles from '@/styles/atdsal/EmployeeSearch.module.css'
 
 const EmployeeListPanel: React.FC = () => {
   const employeeList = [

@@ -1,7 +1,8 @@
-## 확인용1231234123123123123123
 url:
   service:
-    att: 127.0.0.1:1000
+    att: atdsal-service.insahi.svc.cluster.local
+
+
 
 server:
   #  port: 0

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-//123456
-@FeignClient(name = "hrm", url = "${hrm.service.url}", configuration = FeignClientConfig.class)
+
+@FeignClient(name = "hrm-service", url = "${hrm.service.url}", configuration = FeignClientConfig.class)
 public interface HrmFeignClient {
 
   @GetMapping(value = "/employee/find", produces = {MediaType.APPLICATION_JSON_VALUE,
