@@ -18,7 +18,7 @@ public class ProfileCardDTO {
   private String email;
   private String profileImage;
   private String departmentName;
-  private LocalDate hireDate;
+  private Date hireDate;
 
 
 }

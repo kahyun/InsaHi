@@ -13,8 +13,10 @@ import com.playdata.AttendanceSalary.atdSalEntity.atd.LeaveApprovalStatus;
 import com.playdata.AttendanceSalary.atdSalEntity.sal.PositionSalaryStepEntity;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -260,11 +262,15 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
   private void grantLeaveToEmployee(String employeeId) {
     log.info("employeeId::{}", employeeId);
     // feign으로 employee 에서 입사 일시 받아와서 재직 기간 계산
-    LocalDate hireDate = findEmployee(employeeId).getHireDate();
+    Date hireDate = findEmployee(employeeId).getHireDate();
+    LocalDate localHireDate = hireDate.toInstant()
+        .atZone(ZoneId.systemDefault())  // 시스템 기본 시간대 사용
+        .toLocalDate();  // LocalDate로 변환
+
     String companyCode = findEmployee(employeeId).getCompanyCode();
     LocalDate today = LocalDate.now();
 
-    Period period = Period.between(hireDate, today);
+    Period period = Period.between(localHireDate, today);
     int totalMonths = period.getYears() * 12 + period.getMonths();
     int yearsWorked = period.getYears();
 
@@ -286,7 +292,7 @@ public class AnnualLeaveServiceImpl implements AnnualLeaveService {
     }
 
     // 1년 이상 재직자 → 매년 입사달에 지급 (1일마다 조회하므로 입사한 달 1일에 지급)
-    if (today.getMonthValue() == hireDate.getMonthValue()) {
+    if (today.getMonthValue() == localHireDate.getMonthValue()) {
       setAnnualLeave(dto, yearsWorked);
       annualLeaveDAO.save(convertToAnnualLeaveEntity(dto));
       log.info("[연차 지급] {} / {}년차 연차 지급 완료", employeeId, yearsWorked);
