@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {AnnualLeaveDTO, AnnualLeaveRequestDTO, PageResponseDTO} from '@/type/leave';
+import {API_BASE_URL_Leave} from "@/api/api_base_url";
 
-const API_BASE = 'http://127.0.0.1:1006/leave';
+const API_BASE = `${API_BASE_URL_Leave}`;
 
 // 휴가 신청
 export const submitLeave = async (data: AnnualLeaveRequestDTO): Promise<string> => {
