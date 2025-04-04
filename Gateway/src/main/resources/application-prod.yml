@@ -12,6 +12,8 @@ spring:
     name: Gateway
 
   cloud:
+
+
     gateway:
       default-filters:
         # 헤더의 중복을 제거하기 위한 필터
@@ -33,8 +35,8 @@ spring:
               - Authorization
 
       routes:
-        - id: HumanResourceManagement
-          uri: http://hrm-service:8080
+        - id: HumanResourceManagement-employee-POST
+          uri: http://hrm-service:1010
           predicates:
             - Path=/employee/**
             - Method=POST
@@ -48,40 +50,40 @@ spring:
             - Path=/uploads/profile/**
 
 
-        - id: HumanResourceManagement
-          uri: http://hrm-service:8080
+        - id: HumanResourceManagement-employee
+          uri: http://hrm-service:1010
           predicates:
             - Path=/employee/**
 
-        - id: HumanResourceManagement
-          uri: http://hrm-service:8080
+        - id: HumanResourceManagement-company
+          uri: http://hrm-service:1010
           predicates:
             - Path=/company/**
 
-        - id: HumanResourceManagement
-          uri: http://hrm-service:8080
+        - id: HumanResourceManagement-department
+          uri: http://hrm-service:1010
           predicates:
             - Path=/department/**
 
         - id: Chat
-          uri: http://chat-service:8080
+          uri: http://chat-service:1004
           predicates:
             - Path=/chat/**
 
         - id: AttendanceSalary
-          uri: http://atdsal-service:8080
+          uri: http://atdsal-service:1000
           predicates:
             - Path=/atdsal/**
 
         - id: ElectronicApproval
-          uri: http://electronicepproval-service:8080
+          uri: http://appr-service:1005
           predicates:
             - Path=/approval/**
           filters:
             - PreserveHostHeader
 
-        - id: AttendanceSalary
-          uri: http://atdsal-service:8080
+        - id: AttendanceSalary-leave
+          uri: http://atdsal-service:1000
           predicates:
             - Path=/leave/**
 
