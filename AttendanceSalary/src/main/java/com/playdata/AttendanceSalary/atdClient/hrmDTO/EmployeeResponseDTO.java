@@ -17,7 +17,7 @@ public class EmployeeResponseDTO {
   private String role;
   private String companyCode;
   private Long positionSalaryId;
-  private LocalDate hireDate;
+  private Date hireDate;
 
 
 }

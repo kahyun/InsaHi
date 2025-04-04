@@ -1,6 +1,6 @@
 package com.playdata.HumanResourceManagement.employee.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,6 @@ public class EmployeeResponseAtdSalDTO {
   private String role;
   private String companyCode;
   private Long positionSalaryId;
-  private LocalDate hireDate;
+  private Date hireDate;
 
 }

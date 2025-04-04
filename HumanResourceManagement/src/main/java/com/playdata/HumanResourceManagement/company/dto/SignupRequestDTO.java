@@ -34,6 +34,6 @@ public class SignupRequestDTO {
 
   public AdminRequestDTO AdminSignupRequestDTO() {
     return new AdminRequestDTO(employeeId, password, name, companyCode, departmentId, email,
-        phoneNumber, hireDate);
+        phoneNumber, hireDate != null ? hireDate : new Date());
   }
 }
