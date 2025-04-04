@@ -1,17 +1,14 @@
-package com.playdata.AttendanceSalary.atdClient.hrmDTO;
-
+package com.playdata.HumanResourceManagement.employee.dto;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeResponseDTO {
+@NoArgsConstructor
+public class EmployeeResponseAtdSalDTO {
 
   private String employeeId;
   private String role;
@@ -19,6 +16,4 @@ public class EmployeeResponseDTO {
   private Long positionSalaryId;
   private LocalDate hireDate;
 
-
 }
-

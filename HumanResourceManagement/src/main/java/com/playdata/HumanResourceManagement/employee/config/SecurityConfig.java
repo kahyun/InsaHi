@@ -45,6 +45,7 @@ public class SecurityConfig {
                 "/company/signup",
                 "/employee/login",
                 "/employee/getallemployeeids",
+                "/employee/find",
                 "/uploads/**"
 //                "/employee/find",
 //                "/approavl/submit",

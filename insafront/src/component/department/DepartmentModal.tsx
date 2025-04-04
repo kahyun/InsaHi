@@ -1,4 +1,4 @@
-import {Department} from '../../../../../../04021800/type/Employee';
+import {Department} from "@/type/Employee";
 
 
 interface DepartmentModalProps {

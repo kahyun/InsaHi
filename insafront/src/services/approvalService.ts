@@ -16,7 +16,7 @@ export async function fetchAllEmployees(companyCode: string): Promise<{
   name: string
 }[]> {
   const response = await accessToken.get('/employee/all');
-  const all = response.data;
+  const all = response.data as any[];
   return all.filter((user: any) => user.companyCode === companyCode);
 }
 
