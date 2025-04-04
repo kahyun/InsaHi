@@ -1,7 +1,7 @@
 import React from 'react';
 import EmployeeSearch from './EmployeeSearch';
 import AllowanceManager from './AllowanceManager';
-import styles from '../../../../../../../04021800/styles/atdsal/AllowanceManager.module.css';
+import styles from '@/styles/atdsal/AllowanceManager.module.css';
 
 const EmployeeAllowanceManagement: React.FC = () => {
   return (

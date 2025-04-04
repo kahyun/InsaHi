@@ -6,6 +6,7 @@ import com.playdata.HumanResourceManagement.employee.authentication.TokenManager
 import com.playdata.HumanResourceManagement.employee.dto.AuthorityResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmpAuthResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeRequestDTO;
+import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseAtdSalDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeResponseDTO;
 import com.playdata.HumanResourceManagement.employee.dto.EmployeeUpdateDTO;
 import com.playdata.HumanResourceManagement.employee.dto.LoginDTO;
@@ -124,13 +125,17 @@ public class EmployeeController {
   }
 
   @GetMapping(value = "/find", produces = "application/json")
-  public ResponseEntity<EmployeeResponseDTO> findEmployee(
+  public ResponseEntity<EmployeeResponseAtdSalDTO> findEmployee(
       @RequestParam("employeeId") String employeeId) {
     EmployeeResponseDTO employeeResponseDTO = employeeService.findEmployeeById(employeeId);
     if (employeeResponseDTO == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 직원을 찾을 수 없습니다.");
     }
-    return ResponseEntity.ok(employeeResponseDTO);
+    EmployeeResponseAtdSalDTO responseAtdSalDTO = new EmployeeResponseAtdSalDTO(
+        employeeResponseDTO.getEmployeeId(), employeeResponseDTO.getRole(),
+        employeeResponseDTO.getCompanyCode(), employeeResponseDTO.getPositionSalaryId(),
+        employeeResponseDTO.getHireDate());
+    return ResponseEntity.ok(responseAtdSalDTO);
   }
 
 //  @GetMapping(value = "/find")
