@@ -19,6 +19,19 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({
   const [members, setMembers] = useState<string[]>([]);
   const [allUsers, setAllUsers] = useState<{ employeeId: string; name: string }[]>([]);
 
+
+    function decodeToken(token: string) {
+        try {
+            // 실제 프로젝트에선 jwt-decode 라이브러리를 써도 됩니다.
+            const base64Payload = token.split(".")[1];
+            const payload = JSON.parse(window.atob(base64Payload));
+            return payload; // { companyCode: "...", sub: "...", iat: ..., ... }
+        } catch (err) {
+            console.error("토큰 디코딩 실패", err);
+            return null;
+        }
+    }
+
   useEffect(() => {
     if (!visible) return;
 
@@ -34,6 +47,14 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({
       return; // ❌ 토큰이 없으면 요청을 보내지 않음
     }
 
+      // 디코딩해서 companyCode 추출
+      const decoded = decodeToken(token);
+      const myCompanyCode = decoded?.companyCode;  // 백엔드 JWT payload 안에 companyCode가 들어 있어야 합니다.
+      if (!myCompanyCode) {
+          console.error("❌ 토큰 payload에 companyCode가 없습니다.");
+          return;
+      }
+
     fetch("http://127.0.0.1:1006/employee/all", {
       method: "GET",
       headers: {
@@ -47,9 +68,10 @@ const RoomCreateModal: React.FC<RoomCreateModalProps> = ({
       }
       return res.json();
     })
-    .then((data: { employeeId: string; name: string }[]) => {
-      const filteredUsers = data.filter(user => user.employeeId !== currentUserId);
-      setAllUsers(filteredUsers); // 👈 전체 사용자 정보 보관
+    .then((data: { employeeId: string; name: string; companyCode?: string }[]) => {
+        const filteredUsers = data.filter(user =>
+            user.companyCode === myCompanyCode && user.employeeId !== currentUserId);
+      setAllUsers(filteredUsers); //  전체 사용자 정보 보관
     })
     .catch((err) => console.error("회원 목록 불러오기 실패:", err));
   }, [visible]);

@@ -156,9 +156,18 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
   //우클릭 메뉴처리
   const handleContextMenu = (event: React.MouseEvent, chatId: string) => {
     event.preventDefault();
+
+    const container = document.getElementById("chat-area-container");
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top + container.scrollTop;
+
     setContextMenu({
-      x: event.clientX + window.scrollX,
-      y: event.clientY + window.scrollY,
+      x,
+      y,
       visible: true,
       chatId,
     });
@@ -192,6 +201,24 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
       console.error("삭제 오류:", err);
     }
   };
+  //삭제 모달 이후 다른 곳 클릭시 모달 닫기
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const contextMenuEl = document.getElementById("context-menu");
+      if (contextMenuEl && !contextMenuEl.contains(e.target as Node)) {
+        setContextMenu((prev) => ({ ...prev, visible: false }));
+      }
+    };
+
+    if (contextMenu.visible) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [contextMenu.visible]);
+
   //메시지 읽음 표시 구현
   useEffect(() => {
     if (!currentRoomId || !currentUserName) return;
@@ -245,6 +272,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
 
      return (
          <div
+             id = "chat-area-container"
              style={{
                position: "absolute",
                top: "60px", // 헤더 높이
@@ -285,7 +313,11 @@ const ChatArea: React.FC<ChatAreaProps> = ({currentUserName, currentRoomId, stom
                    }}>
                      {/* 말풍선 박스 */}
                      <div
-                         onContextMenu={(e) => handleContextMenu(e, msg.chatId ?? "")}
+                         onContextMenu={(e) => {
+                           if (msg.name === currentUserName) {
+                             handleContextMenu(e, msg.chatId ?? "");
+                           }
+                         }}
                          style={{
                            backgroundColor: msg.name === currentUserName ? "#d4f8c4" : "#f1f1f1",
                            padding: "10px",
