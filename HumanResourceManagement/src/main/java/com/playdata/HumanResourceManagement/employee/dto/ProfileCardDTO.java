@@ -1,5 +1,6 @@
 package com.playdata.HumanResourceManagement.employee.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class ProfileCardDTO {
   private String email;
   private String profileImage;
   private String departmentName;
-  private Date hireDate;
+  private LocalDate hireDate;
 
 
 }
