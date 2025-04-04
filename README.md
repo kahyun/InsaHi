@@ -61,20 +61,7 @@
 
 ---
 
-### 3. 시스템 아키텍처
-
-- **프론트엔드**: Next.js + TypeScript
-- **백엔드(MSA 구조)**: Spring Boot + Spring Cloud
-- **인증 서비스**: Spring Security + JWT
-- **API Gateway**: Spring Cloud Gateway
-- **서비스 간 통신**: OpenFeign
-- **데이터베이스**: MySQL, MongoDB
-- **CI/CD**: Docker, GitHub Actions, Kubernetes
-- **배포 환경**: AWS EC2 or Local Docker Compose
-
----
-
-### 4. 사용자 유형
+### 3. 사용자 유형
 
 | 사용자 유형 | 권한 설명 |
 | --- | --- |
@@ -83,7 +70,7 @@
 
 ---
 
-### 5. 개발 로드맵 (예시)
+### 4. 개발 로드맵 (예시)
 
 | 단계 | 작업 내용 | 기간 |
 | --- | --- | --- |
@@ -96,7 +83,7 @@
 
 ---
 
-### 6. 기대성과
+### 5. 기대성과
 
 - 기업 맞춤형 인사/업무 시스템의 실무형 구현 경험
 - Spring 기반의 MSA 설계 및 개발 능력 향상
@@ -221,9 +208,9 @@
 - **언어:** Java (Spring Boot)  
 - **빌드 도구:** Gradle  
 - **컨테이너화:** Docker
-- 프론트 기술: Full Calendar, TypeScript, React
-- *백엔드 기술:Spring클라우드, Sping Data, Spring Security, Spring JPA, Spring Data MongdDb, SSE, Websocket, Java mail, JWT, Feign Clinet
-- AWS: EC2(MONGODB),EC2(Ubuntu22.04) 
+- **프론트 기술**: Full Calendar, TypeScript, React
+- **백엔드 기술**: Spring cloud, Sping Data, Spring Security, Spring JPA, Spring Data MongdDb, SSE, Websocket, Java mail, JWT, Feign Clinet
+- AWS: EC2(MONGODB), EC2(Ubuntu22.04) 
 - **CI/CD 도구:** Jenkins, ArgoCD  
 - **배포 인프라:** Kubernetes  
 - **데이터베이스:** AWS RDS(MySQL)
