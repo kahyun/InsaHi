@@ -192,14 +192,7 @@
 </details>
 
 <details>
-<summary>🚀 6. 테스트 결과서</summary>
-
-- GoogleSheets 링크 또는 내용
-
-</details>
-
-<details>
-<summary>🚀 7. 빌드 및 배포 개요 (시스템 아키텍처)</summary>
+<summary>🚀 6. 빌드 및 배포 개요 (시스템 아키텍처)</summary>
 
 <img width="1100" alt="system" src="https://github.com/user-attachments/assets/2a8a488d-c5a4-4346-9ac7-79a64b9e8d92" />
 
