@@ -3,14 +3,14 @@
 <details>
 <summary>🚀 1. 요구사항 명세서</summary>
 
-- [GoogleSheets 링크 또는 내용](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1900060456#gid=1900060456)
+- [요구사항 명세서 구글시트](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1900060456#gid=1900060456)
 
 </details>
 
 <details>
 <summary>🚀 2. 테스트 계획서</summary>
 
-- [GoogleSheets 링크 또는 내용](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1796381502#gid=1796381502)
+- [테스트 계획서](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1796381502#gid=1796381502)
 
 </details>
 
