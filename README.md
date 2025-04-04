@@ -3,14 +3,14 @@
 <details>
 <summary>🚀 1. 요구사항 명세서</summary>
 
-- GoogleSheets 링크 또는 내용
+- [GoogleSheets 링크 또는 내용](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1900060456#gid=1900060456)
 
 </details>
 
 <details>
 <summary>🚀 2. 테스트 계획서</summary>
 
-- GoogleSheets 링크 또는 내용
+- [GoogleSheets 링크 또는 내용](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1796381502#gid=1796381502)
 
 </details>
 
@@ -30,6 +30,28 @@
 
 <details>
 <summary>🚀 5. 화면 정의서</summary>
+
+- **회사 회원가입 페이지**  
+![회원가입페이지](https://github.com/user-attachments/assets/9d13c514-bb96-4648-b9b5-fc3bf923d0a0)
+
+- **로그인페이지**
+![로그인페이지](https://github.com/user-attachments/assets/7285b4bc-8006-4170-8e67-e23309dcbeec)**
+
+- **마이페이지**
+![마이페이지](https://github.com/user-attachments/assets/1f981aa5-9ee6-433d-9276-6be25653164f)
+
+- **개인정보수정페이지**
+![개인정보수정페이지](https://github.com/user-attachments/assets/58de7cba-f9a1-4c39-9d89-ed48042a1494)
+
+
+- **비밀번호 변경 페이지**
+![비밀번호변경페이지](https://github.com/user-attachments/assets/8e2d3ea2-f7f4-48b3-a0c7-f03db4438040)
+
+
+- **직원등록페이지**
+![직원등록페이지](https://github.com/user-attachments/assets/4dde8132-3972-43ab-98c2-39cce01e8a8d)
+
+  
 
 - **관리자 설정 페이지**  
   ![004](https://github.com/user-attachments/assets/13e9d16e-b32b-4ac1-b220-a2a5eaf251ee)
