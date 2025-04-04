@@ -51,14 +51,6 @@
 - 급여 명세서 조회
 - 시스템을 통한 자동 급여 계산 처리
 
-### 🏢 조직 관리 서비스
-
-- 부서 계층 구조 조회
-- 부서 별 직원 리스트 조회
-- 직원 상세 정보 조회 및 수정 (※ 수정 기능은 미완)
-- 부서 생성 및 삭제
-- 직원 추가 모달
-
 ### 📄 전자결재 서비스
 
 - 결재 문서 상신 및 결재선 지정
@@ -230,7 +222,7 @@
 - **빌드 도구:** Gradle  
 - **컨테이너화:** Docker
 - 프론트 기술: Full Calendar, TypeScript, React
-- *백엔드 기술: Sping Data, Spring Security, Spring JPA, Spring Data MongdDb, SSE, Websocket, Java mail, JWT, Feign Clinet
+- *백엔드 기술:Spring클라우드, Sping Data, Spring Security, Spring JPA, Spring Data MongdDb, SSE, Websocket, Java mail, JWT, Feign Clinet
 - AWS: EC2(MONGODB),EC2(Ubuntu22.04) 
 - **CI/CD 도구:** Jenkins, ArgoCD  
 - **배포 인프라:** Kubernetes  
