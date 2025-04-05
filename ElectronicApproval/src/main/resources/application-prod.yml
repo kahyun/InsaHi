@@ -38,3 +38,14 @@ logging:
 file:
   dir: /Users/insahiTest
 
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static-region: ap-northeast-2
+    s3:
+      bucket: insahi
+    stack:
+      auto: false
