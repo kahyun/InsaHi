@@ -5,9 +5,8 @@ import com.playdata.Chat.dto.RoomCreateRequest;
 import com.playdata.Chat.entity.ChatRoom;
 import com.playdata.Chat.repository.ChatRoomRepository;
 import com.playdata.Chat.service.ChatRoomService;
-import java.util.List;
-
 import com.playdata.Chat.service.ChatService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +40,8 @@ public class ChatRoomController {
   }
 
   @PostMapping("/{roomId}/members")
-  public ChatRoom addMemberToRoom(@PathVariable("roomId") String roomId, @RequestParam String employeeId) {
+  public ChatRoom addMemberToRoom(@PathVariable("roomId") String roomId,
+      @RequestParam("employeeId") String employeeId) {
     return chatRoomService.addMember(roomId, employeeId);
   }
 
@@ -57,8 +57,10 @@ public class ChatRoomController {
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
+
   @PostMapping("/{roomId}/read")
-  public ResponseEntity<?> markAsRead(@PathVariable("roomId") String roomId, @RequestParam String name) {
+  public ResponseEntity<?> markAsRead(@PathVariable("roomId") String roomId,
+      @RequestParam("name") String name) {
     chatService.markMessageAsRead(roomId, name);
     return ResponseEntity.ok().build();
   }
