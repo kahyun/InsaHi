@@ -194,12 +194,12 @@
 <details>
 <summary>🎥 6. 시연 영상 </summary>
 
-- step1: ** 회원가입 **
+- step1:  회원가입 
 
 
 https://github.com/user-attachments/assets/9423f43b-0441-4eab-8952-6ff17bef4ce6
 
-- step2: ** 서비스 **
+- step2:  서비스 
 
   
 https://github.com/user-attachments/assets/295c5182-6032-4fdb-affe-1ac558860a64
