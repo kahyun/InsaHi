@@ -112,7 +112,7 @@
 </details>
 
 <details>
-<summary> 📈. WBS (Work Breakdown Structure)</summary>
+<summary>📈 4. WBS (Work Breakdown Structure)</summary>
 
 <img width="1100" alt="WBS" src="https://github.com/user-attachments/assets/5914a2a1-cbf6-4338-8138-42e6d45c8cf7" />
 
