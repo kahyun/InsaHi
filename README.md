@@ -1,5 +1,3 @@
-
-https://github.com/user-attachments/assets/e122f5fa-87cc-4b5c-91a5-203e48678048
 ## 📝 개요. 서비스 기획서
 
 1. MSA 기반 업무/인사관리 플랫폼
