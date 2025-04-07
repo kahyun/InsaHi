@@ -1,3 +1,5 @@
+
+https://github.com/user-attachments/assets/e122f5fa-87cc-4b5c-91a5-203e48678048
 ## 📝 개요. 서비스 기획서
 
 1. MSA 기반 업무/인사관리 플랫폼
@@ -91,35 +93,35 @@
 - 사용자/역할 기반 RBAC 시스템 이해 및 구현 능력 강화
 
 <details>
-<summary>🚀 1. 요구사항 명세서</summary>
+<summary>📑 1. 요구사항 명세서</summary>
 
 - [요구사항 명세서 구글시트](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1900060456#gid=1900060456)
 
 </details>
 
 <details>
-<summary>🚀 2. 테스트 계획서</summary>
+<summary>📋 2. 테스트 계획서</summary>
 
 - [테스트 계획서](https://docs.google.com/spreadsheets/d/1C_o3BqHqdRivUo3Bq-F3Qa8QamxaHs0BxE9J6SA4qGc/edit?gid=1796381502#gid=1796381502)
 
 </details>
 
 <details>
-<summary>🚀 3. ERD (Entity Relationship Diagram)</summary>
+<summary>📀 3. ERD (Entity Relationship Diagram)</summary>
 
 <img width="1100" alt="ERD" src="https://github.com/user-attachments/assets/2d63d405-3822-4f46-8702-c723f939e422" />
 
 </details>
 
 <details>
-<summary>🚀 4. WBS (Work Breakdown Structure)</summary>
+<summary> 📈. WBS (Work Breakdown Structure)</summary>
 
 <img width="1100" alt="WBS" src="https://github.com/user-attachments/assets/5914a2a1-cbf6-4338-8138-42e6d45c8cf7" />
 
 </details>
 
 <details>
-<summary>🚀 5. 화면 정의서</summary>
+<summary>🛜 5. 화면 정의서</summary>
 
 - **회사 회원가입 페이지**  
 ![회원가입페이지](https://github.com/user-attachments/assets/9d13c514-bb96-4648-b9b5-fc3bf923d0a0)
@@ -192,7 +194,18 @@
 </details>
 
 <details>
-<summary>🚀 6. 빌드 및 배포 개요 (시스템 아키텍처)</summary>
+<summary>🎥 6. 시연 영상 </summary>
+
+
+https://github.com/user-attachments/assets/9423f43b-0441-4eab-8952-6ff17bef4ce6
+
+https://github.com/user-attachments/assets/295c5182-6032-4fdb-affe-1ac558860a64
+
+
+  
+</details>
+<details>
+<summary>🎞️ 7. 빌드 및 배포 개요 (시스템 아키텍처)</summary>
 
 <img width="1100" alt="system" src="https://github.com/user-attachments/assets/2a8a488d-c5a4-4346-9ac7-79a64b9e8d92" />
 
