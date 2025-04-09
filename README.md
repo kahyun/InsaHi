@@ -211,6 +211,9 @@ https://github.com/user-attachments/assets/295c5182-6032-4fdb-affe-1ac558860a64
 
 <img width="1100" alt="system" src="https://github.com/user-attachments/assets/2a8a488d-c5a4-4346-9ac7-79a64b9e8d92" />
 
+
+
+
 ### 📌 사용 기술 및 도구
 
 - **언어:** Java (Spring Boot)  
@@ -229,6 +232,11 @@ https://github.com/user-attachments/assets/295c5182-6032-4fdb-affe-1ac558860a64
 3. **Docker Hub**: 빌드된 이미지를 저장하고 Kubernetes에서 사용  
 4. **ArgoCD**: Kubernetes 클러스터에 자동 배포
 
+###. 역할 분배
+1. 프론트: 김다울, 김재희, 박가현, 유준모, 이규상
+2. 백엔드: 김다울, 김재희, 박가현, 유준모, 이규상
+3. CI/CD: 김다울, 김재희
+4. PPT&발표자: 유준모
 </details>
 
 ---
