@@ -232,14 +232,16 @@ https://github.com/user-attachments/assets/295c5182-6032-4fdb-affe-1ac558860a64
 3. **Docker Hub**: 빌드된 이미지를 저장하고 Kubernetes에서 사용  
 4. **ArgoCD**: Kubernetes 클러스터에 자동 배포
 
+</details>
+
 
 ---
 
 
 📌 **InsaHi 레포지토리:** [GitHub - PlayData Final](https://github.com/05Daul/insahi)
+
 ###.👥 역할 분배
 1. 프론트: 김다울, 김재희, 박가현, 유준모, 이규상
 2. 백엔드: 김다울, 김재희, 박가현, 유준모, 이규상
 3. CI/CD: 김다울, 김재희
 4. PPT&발표자: 유준모
-</details>
