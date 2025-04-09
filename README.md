@@ -192,6 +192,10 @@ https://github.com/user-attachments/assets/9423f43b-0441-4eab-8952-6ff17bef4ce6
 https://github.com/user-attachments/assets/295c5182-6032-4fdb-affe-1ac558860a64
 
 
+- step3:  cicd
+
+ [영상 보러가기](https://drive.google.com/file/d/1NL7RW4-r32_2dkUqllJWd9y32-M4T8GQ/view?usp=drive_link)
+
 </details>
 <details>
 <summary>🎞️ 7. 빌드 및 배포 개요 (시스템 아키텍처)</summary>
